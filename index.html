@@ -123,11 +123,7 @@ input[type=number]{width:110px;padding:12px;font-size:20px;border:2px solid var(
 
 <section id="v-lib" hidden>
 <div class="card"><h2 style="font-size:18px;margin-bottom:10px">Add videos</h2>
-<div class="note"><b>File naming:</b> NNN_TYPE_DIR_SETTER, e.g. <b>001_IN_F_SUB</b><br><b>NNN</b> = number 001–999<br><b>TYPE:</b> <b>IN</b> = IN-SYSTEM &nbsp;·&nbsp; <b>OUT</b> = OUT-OF-SYSTEM<br><b>DIR:</b> <b>F</b> = FORWARD (ZONE IV) &nbsp;·&nbsp; <b>B</b> = BACKWARD (ZONE II)<br><b>SETTER:</b> <b>EVK</b> = EVKA &nbsp;·&nbsp; <b>LEA</b> = LEA &nbsp;·&nbsp; <b>PRO</b> = PROKY &nbsp;·&nbsp; <b>SUB</b> = ŠUBI &nbsp;·&nbsp; <b>NON</b> = NON-SETTER<br>Type, direction and setter are read from the file name automatically.</div>
-<label class="l">Type</label>
-<div class="seg" id="a-type"><button data-v="FAST" aria-pressed="true">IN-SYSTEM</button><button data-v="HIGH" aria-pressed="false">OUT-OF-SYSTEM</button></div>
-<label class="l">SETTING DIRECTION</label>
-<div class="seg" id="a-dir"><button data-v="F" aria-pressed="true">FORWARD (ZONE IV)</button><button data-v="B" aria-pressed="false">BACKWARD (ZONE II)</button></div>
+<div class="note"><b>File naming:</b> NNN_TYPE_DIR_SETTER, e.g. <b>001_IN_F_SUB</b><br><b>NNN</b> = number 001–999<br><b>TYPE:</b> <b>IN</b> = IN-SYSTEM &nbsp;·&nbsp; <b>OUT</b> = OUT-OF-SYSTEM<br><b>DIR:</b> <b>F</b> = FORWARD (ZONE IV) &nbsp;·&nbsp; <b>B</b> = BACKWARD (ZONE II)<br><b>SETTER:</b> <b>EVK</b> = EVKA &nbsp;·&nbsp; <b>LEA</b> = LEA &nbsp;·&nbsp; <b>PRO</b> = PROKY &nbsp;·&nbsp; <b>SUB</b> = ŠUBI &nbsp;·&nbsp; <b>NON</b> = NON-SETTER<br>Type, direction and setter are read from the file name. Files with a different name are not uploaded.</div>
 <input type="file" id="file" accept="video/*" multiple hidden>
 <button class="big" id="pick">Choose videos from iPad</button>
 <p class="muted" id="msg" style="margin:10px 0 0"></p></div>
@@ -181,8 +177,7 @@ function detect(n){var u=n.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpp
 function setterOf(c){return c.setter!==undefined?c.setter:detect(c.name)}
 var rec=0;
 function parseName(n){var m=n.replace(/\.[^.]*$/,"").toUpperCase().match(/^\d{3}_(IN|OUT)_(F|B)_(EVK|LEA|PRO|SUB|NON)/);
-  if(m)return{type:m[1]==="IN"?"FAST":"HIGH",dir:m[2],setter:m[3],ok:1};
-  return{type:sel.aType,dir:sel.aDir,setter:detect(n)}}seg("g-dir","dir");seg("a-type","aType");seg("a-dir","aDir");
+  return m?{type:m[1]==="IN"?"FAST":"HIGH",dir:m[2],setter:m[3]}:null}
 function pool(){return clips.filter(function(c){return (sel.type==="MIX"||c.type===sel.type)&&(sel.dir==="BOTH"||c.dir===sel.dir)&&(SET.ALL||SET[setterOf(c)])})}
 function avail(){mixUI();var n=pool().length;$("avail").textContent="available: "+n+" videos";$("start").disabled=!n}
 
@@ -203,11 +198,12 @@ function render(){
     l.appendChild(d)})}
 $("pick").onclick=function(){$("file").click()};
 $("file").onchange=async function(e){
-  var fs=[].slice.call(e.target.files);if(!fs.length)return;
-  for(var i=0;i<fs.length;i++){rec=i?rec:0;$("msg").textContent="Saving "+(i+1)+" of "+fs.length+"…";
-    var p=parseName(fs[i].name);if(p.ok)rec++;delete p.ok;p.name=fs[i].name;p.blob=fs[i];await put("clips",p)}
+  var fs=[].slice.call(e.target.files);if(!fs.length)return;var ok=0,bad=[];
+  for(var i=0;i<fs.length;i++){$("msg").textContent="Saving "+(i+1)+" of "+fs.length+"…";
+    var p=parseName(fs[i].name);if(!p){bad.push(fs[i].name);continue}
+    p.name=fs[i].name;p.blob=fs[i];await put("clips",p);ok++}
   e.target.value="";await reload();
-  $("msg").textContent="Added "+fs.length+" videos ("+rec+" read from file name, "+(fs.length-rec)+" used the selection above)."+(useMem?" Warning: browser storage is unavailable, videos will be lost when you close the page.":"")};
+  $("msg").textContent="Added "+ok+" of "+fs.length+" videos."+(bad.length?" Not recognized (check the file name): "+bad.join(", "):"")+(useMem?" Warning: browser storage is unavailable.":"")};
 
 var vids={};
 var BT=[["BLOCKING BASICS",["Výchozí blokařské postavení","3 druhy bloků dle míry přesahu paží","Blokařské úkroky","Blokařské výskoky","Prohnutí trupu při blokování"]],
