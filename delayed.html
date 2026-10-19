@@ -2489,7 +2489,7 @@ var segSpeed=seg("s-speed","speed",num);
 rng("r-delay","delay","o-delay",function(v){return v+" S"});rng("r-len","len","o-len",function(v){return v+" S"});rng("r-max","max","o-max",function(v){return v});
 (function(){var h="",o="";for(var s=10;s<=100;s+=10){h+='<button data-v="'+s+'">'+s+'%</button>';o+='<option value="'+s+'">'+s+'%</option>'}$("s-speed").innerHTML=h;$("psp").innerHTML=o;segSpeed.repaint();$("psp").value=CFG.speed})();
 $("psp").onchange=function(){CFG.speed=+this.value;saveCfg();segSpeed.repaint();afterCfg("speed")};
-function afterCfg(k){if(k==="n"||k==="save")uiSave();
+function afterCfg(k){if(k==="n"||k==="save")uiSave();if(k==="n")drawQR();
   if(k==="cam"){CFG.mirror=CFG.cam==="user"?1:0;saveCfg();segMirror.repaint()}
   if(k==="speed")$("psp").value=CFG.speed;
   if(running){tiles.forEach(function(t){applyRate(t);setBlend(t);t.el.classList.toggle("mir",!!CFG.mirror)});info()}
@@ -2601,7 +2601,7 @@ function record(t){var mime=pickMime(),chunks=[],rec;
 
 /* ---------- remote link on the iPad ---------- */
 var relayOK=false,remoteTs=0;
-function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 6 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
+function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 7 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
   $("rstat2").textContent=remoteTs?"IPHONE CONNECTED - LAST SIGNAL "+Math.round((Date.now()-remoteTs)/1000)+" S AGO":"NO IPHONE CONNECTED YET."}
 function handleMain(m){
   if(m.t==="hello"){remoteSeen=true;remoteTs=Date.now();if(running||document.visibilityState==="visible")sendCfg();if(running)info();diag()}
@@ -2649,7 +2649,9 @@ async function shareFilm(p){var b=films[p];if(!b)return;var ext=/mp4/.test(b.typ
 var rch=null,rcfg=null,rb=[],rtimer=null,rhello=null,rbuilt=0,rlast=0,rstart=0,relay=false,act=null;
 function rStatus(t){$("rstat").textContent=t}
 function rAge(){return rlast?Date.now()-rlast:1e9}
-function rSig(){if(!rch)return;var age=rAge(),ok=!!rcfg&&age<100000,t;
+var rN=+(new URLSearchParams(location.search).get("n"))||0;
+function rSig(){if(!rch)return;if(!rcfg&&relay&&rN>0&&Date.now()-rstart>4000){applyCfg({n:Math.min(rN,9),run:true,d:0,l:0});$("rretry").hidden=true;rStatus("CONNECTED - SENDING COMMANDS (THE IPAD DOES NOT REPLY)");return}
+  var age=rAge(),ok=!!rcfg&&age<100000,t;
   if(ok)t="IPAD CONNECTED";else if(!relay)t="NO CONNECTION TO THE RELAY"+(rch.err?" ("+rch.err+")":"");else t="LOOKING FOR THE IPAD...";
   rStatus(t);
   if(!rcfg){$("rgrid").hidden=true;$("rmsg").hidden=false;
@@ -2692,7 +2694,7 @@ document.addEventListener("visibilitychange",function(){if(document.visibilitySt
   if(mainChan)mainChan.reopen();if(rch){rch.reopen();setTimeout(function(){if(rch)rch.send({t:"hello"})},600)}});
 
 /* ---------- init ---------- */
-function drawQR(){try{var q=qrcode(0,"M");q.addData(location.origin+location.pathname+"?r="+CODE);q.make();$("qr").innerHTML='<img alt="QR" src="'+q.createDataURL(8,2)+'">'}catch(e){$("qr").textContent=location.origin+location.pathname+"?r="+CODE}}
+function drawQR(){var u=location.origin+location.pathname+"?r="+CODE+"&n="+CFG.n;try{var q=qrcode(0,"M");q.addData(u);q.make();$("qr").innerHTML='<img alt="QR" src="'+q.createDataURL(8,2)+'">'}catch(e){$("qr").textContent=u}}
 function init(){
   try{localStorage.removeItem("nvcdv-code");localStorage.removeItem("nvcdv-rcode")}catch(e){}
   drawQR();uiSave();
