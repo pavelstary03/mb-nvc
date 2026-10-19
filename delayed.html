@@ -41,7 +41,7 @@ input[type=text]{width:100%;padding:14px;font-size:22px;border:2px solid var(--l
 .clip{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line)}
 .clip .n{flex:1;min-width:0}
 .code{font:800 40px/1 ui-monospace,Menlo,monospace;letter-spacing:6px;margin:6px 0 12px}
-#qr{background:#fff;border-radius:12px;padding:10px;display:inline-block}#qr img{display:block;width:200px;height:200px}
+#qr{background:#fff;border-radius:12px;padding:10px;display:inline-block}#qr img{display:block;width:240px;height:240px}
 .fb video{width:100%;max-height:260px;background:#000;border-radius:10px;margin-top:10px}
 #pv{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;flex-direction:column;z-index:70;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
 #pv.on{display:flex}#pv video{flex:1;min-height:0;width:100%;background:#000}
@@ -123,21 +123,16 @@ input[type=text]{width:100%;padding:14px;font-size:22px;border:2px solid var(--l
 
 <section id="v-remote" hidden>
 <div class="g3">
-<div class="card"><h2>CONNECT AN IPHONE AS REMOTE</h2>
-<p class="muted" style="margin:0 0 8px">ON THE IPHONE, SCAN THIS QR CODE WITH THE CAMERA AND OPEN THE LINK. THE IPHONE THEN SHOWS BUTTONS A-I.</p>
+<div class="card"><h2>IPHONE REMOTE</h2>
+<p class="muted" style="margin:0 0 10px">ON THE IPHONE, SCAN THIS QR CODE WITH THE CAMERA AND OPEN THE LINK. THE IPHONE THEN SHOWS THE BUTTONS A-I. THE QR CODE NEVER CHANGES.</p>
 <div id="qr"></div>
-<p class="muted" style="margin:12px 0 4px">OR OPEN THIS APP ON THE IPHONE, GO TO THIS TAB AND TYPE THE SAME CODE:</p>
-<input type="text" id="mycode" maxlength="12" autocapitalize="off" autocomplete="off" spellcheck="false" style="font-weight:800;font-size:30px;letter-spacing:6px;margin:6px 0 10px"><button class="btn pri" id="setcode">SET OWN CODE</button><p class="muted" id="rcnote" style="margin:8px 0 12px">YOU CAN TYPE YOUR OWN CODE (6-12 LETTERS OR DIGITS) AND KEEP IT FOREVER. USE THE SAME CODE ON THE IPHONE.</p>
-<p class="muted" id="rstat2" style="margin:0">NO REMOTE CONNECTED YET.</p>
-</div>
-<div class="card"><h2>USE THIS DEVICE AS THE REMOTE</h2>
-<p class="muted" style="margin:0 0 10px">ON THE IPHONE: TYPE THE CODE SHOWN ON THE IPAD.</p>
-<input type="text" id="rcode" maxlength="8" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="CODE">
-<button class="big" id="ropen" style="margin-top:12px">OPEN REMOTE</button>
-<div class="note" style="margin:14px 0 0">TIP: AFTER OPENING THE REMOTE ON THE IPHONE VIA THE QR CODE, ADD THAT PAGE TO THE HOME SCREEN (SHARE &rarr; ADD TO HOME SCREEN). IT THEN OPENS DIRECTLY AS THE REMOTE.</div>
+<p class="muted" id="rrelay" style="margin:14px 0 4px">CONNECTION: ...</p>
+<p class="muted" id="rstat2" style="margin:0">NO IPHONE CONNECTED YET.</p>
 </div>
 <div class="card"><h2>HOW IT WORKS</h2>
-<p class="muted" style="margin:0">THE IPHONE AND THE IPAD EXCHANGE ONLY SHORT COMMANDS (&ldquo;A PRESSED&rdquo;) OVER THE INTERNET, NO VIDEO. BOTH DEVICES NEED AN INTERNET CONNECTION (WI-FI OR MOBILE DATA). IF THE LINK IS NOT AVAILABLE, TAP THE SCREEN ON THE IPAD INSTEAD.</p>
+<p class="muted" style="margin:0 0 10px">THE IPAD RECORDS. THE IPHONE ONLY SENDS SHORT COMMANDS (&ldquo;A PRESSED&rdquo;) OVER THE INTERNET, NO VIDEO. BOTH DEVICES NEED INTERNET (WI-FI OR MOBILE DATA).</p>
+<p class="muted" style="margin:0 0 10px">1. START THE RECORDING ON THE IPAD.<br>2. SCAN THE QR CODE WITH THE IPHONE (ANY TIME, BEFORE OR AFTER START).<br>3. PRESS A-I ON THE IPHONE.</p>
+<p class="muted" style="margin:0">IF THE IPHONE CAN NOT CONNECT, TAP THE SCREEN OF THE PERSON ON THE IPAD INSTEAD.</p>
 </div>
 </div>
 </section>
@@ -150,7 +145,7 @@ input[type=text]{width:100%;padding:14px;font-size:22px;border:2px solid var(--l
 <button id="pstop">STOP</button></div></div>
 
 <div id="rem"><div class="rtop"><button class="btn" id="rexit">EXIT</button><span class="muted" id="rstat">CONNECTING...</span></div>
-<div id="rmsg"><div id="rmt">WAITING FOR THE IPAD...</div><div id="rfix" hidden style="width:100%;max-width:420px"><input type="text" id="rcode2" maxlength="12" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="CODE FROM THE IPAD"><button class="big" id="rgo" style="margin-top:12px">CONNECT WITH THIS CODE</button></div></div><div id="rgrid" hidden></div></div>
+<div id="rmsg"><div id="rmt">CONNECTING TO THE IPAD...</div><button class="big" id="rretry" hidden style="width:100%;max-width:420px">TRY AGAIN</button></div><div id="rgrid" hidden></div></div>
 
 <div id="pv"><video id="pvv" controls playsinline></video><div class="pb"><button class="btn pri" id="pvx">CLOSE</button></div></div>
 
@@ -2465,7 +2460,7 @@ var CFG={n:2,save:1,who:"ALL",delay:3,len:5,max:5,speed:50,blend:1,mirror:1,tap:
 try{Object.assign(CFG,JSON.parse(ls("nvcdv-cfg")||"{}"))}catch(e){}
 if(!(CFG.speed>=10))CFG.speed=50;
 function saveCfg(){ls("nvcdv-cfg",JSON.stringify(CFG))}
-var CODE=ls("nvcdv-code");if(!CODE){CODE=rnd(8);ls("nvcdv-code",CODE)}
+var CODE="nvcmgnp7pfg6tfz";
 var RVFC="requestVideoFrameCallback" in HTMLVideoElement.prototype;
 function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
 function pickMime(){var c=["video/mp4;codecs=avc1.42E01E","video/mp4","video/webm;codecs=vp9","video/webm;codecs=vp8","video/webm"];
@@ -2515,13 +2510,14 @@ function show(v){VIEWS.forEach(function(x){$("v-"+x).hidden=x!==v});[].forEach.c
 document.addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(b)show(b.dataset.go)});
 
 /* ---------- messaging (ntfy.sh pub/sub) ---------- */
-function Chan(code,onmsg,onstate){var topic="nvcdv"+code,es=null;
-  this.open=function(){try{es=new EventSource(BASE+topic+"/sse")}catch(e){onstate(false);return}
+function Chan(code,onmsg,onstate){var topic="nvcdv"+code,es=null,me=this;me.err="";
+  function open(){try{if(es)es.close();es=new EventSource(BASE+topic+"/sse")}catch(e){onstate(false);return}
     es.addEventListener("open",function(){onstate(true)});
     es.onmessage=function(e){try{var d=JSON.parse(e.data);if(d.event&&d.event!=="message")return;var m=JSON.parse(d.message);if(m&&m.from!==ID)onmsg(m)}catch(x){}};
-    es.onerror=function(){onstate(false)}};
-  this.send=function(o){o.from=ID;try{return fetch(BASE+topic,{method:"POST",body:JSON.stringify(o)}).catch(function(){})}catch(e){}};
-  this.close=function(){if(es)es.close();es=null}}
+    es.onerror=function(){onstate(false)}}
+  me.open=open;me.reopen=open;
+  me.send=function(o){o.from=ID;try{return fetch(BASE+topic,{method:"POST",body:JSON.stringify(o)}).then(function(r){me.err=r.ok?"":(r.status===429?"TOO MANY REQUESTS, WAIT A MINUTE":"SERVER ERROR "+r.status)}).catch(function(){me.err="NO INTERNET"})}catch(e){}};
+  me.close=function(){if(es)es.close();es=null}}
 var seen={};function fresh(id){if(!id)return true;if(seen[id])return false;seen[id]=1;return true}
 
 /* ---------- camera + projection ---------- */
@@ -2572,7 +2568,7 @@ async function startProj(){
   running=true;$("proj").classList.add("on");var g=$("grid");g.innerHTML="";tiles=[];
   for(var i=0;i<CFG.n;i++){var t=mkTile(i,false);tiles.push(t);g.appendChild(t.el)}
   layout();
-  tiles.forEach(function(t){updOverlay(t)});info();wake(true);sendCfg();clearInterval(hb);hb=setInterval(sendCfg,8000);requestAnimationFrame(rafLoop);
+  tiles.forEach(function(t){updOverlay(t)});info();wake(true);sendCfg();clearInterval(hb);hb=setInterval(sendCfg,10000);requestAnimationFrame(rafLoop);
   tickT=setInterval(function(){var now=performance.now();tiles.forEach(function(t){
     if(t.state==="wait"){var r=Math.ceil((t.d*1000-(now-t.t0))/1000);t.cd.textContent=Math.max(r,1);t.st.textContent=L[t.i]+" STARTS IN "+Math.max(r,1)+" S"}
     else if(t.state==="rec"){var e=Math.min(t.l,(now-t.t0)/1000);t.cd.textContent="";t.st.textContent="REC "+e.toFixed(1)+" / "+t.l+" S"}})},150)}
@@ -2603,9 +2599,12 @@ function record(t){var mime=pickMime(),chunks=[],rec;
   rec.start();setTimeout(function(){if(rec.state!=="inactive")rec.stop()},t.l*1000)}
 
 /* ---------- remote link on the iPad ---------- */
+var relayOK=false,remoteTs=0;
+function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
+  $("rstat2").textContent=remoteTs?"IPHONE CONNECTED - LAST SIGNAL "+Math.round((Date.now()-remoteTs)/1000)+" S AGO":"NO IPHONE CONNECTED YET."}
 function handleMain(m){
-  if(m.t==="hello"){remoteSeen=true;sendCfg();$("rstat2").textContent="REMOTE CONNECTED.";if(running)info()}
-  else if(m.t==="press"&&fresh(m.id)){remoteSeen=true;$("rstat2").textContent="REMOTE CONNECTED.";press(m.p,"remote")}}
+  if(m.t==="hello"){remoteSeen=true;remoteTs=Date.now();if(running||document.visibilityState==="visible")sendCfg();if(running)info();diag()}
+  else if(m.t==="press"&&fresh(m.id)){remoteSeen=true;remoteTs=Date.now();press(m.p,"remote");diag()}}
 
 /* ---------- clips tab ---------- */
 var films={},building=false;
@@ -2646,22 +2645,36 @@ async function shareFilm(p){var b=films[p];if(!b)return;var ext=/mp4/.test(b.typ
   else{var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=nm;document.body.appendChild(a);a.click();a.remove()}}
 
 /* ---------- remote control (iPhone) ---------- */
-var rcodeNow="",rnf=null,rch=null,rcfg=null,rb=[],rtimer=null,rhello=null,rbuilt=0;
+var rch=null,rcfg=null,rb=[],rtimer=null,rhello=null,rbuilt=0,rlast=0,rstart=0,relay=false,act=null;
 function rStatus(t){$("rstat").textContent=t}
-function openRemote(code){code=(code||"").toLowerCase().replace(/[^a-z0-9]/g,"");if(code.length<4)return;ls("nvcdv-rcode",code);
-  $("rem").classList.add("on");rcfg=null;rbuilt=0;$("rgrid").hidden=true;$("rmsg").hidden=false;$("rmt").textContent="WAITING FOR THE IPAD...";$("rfix").hidden=true;rStatus("CODE "+code.toUpperCase()+" - CONNECTING...");rcodeNow=code;clearTimeout(rnf);wake(true);
-  rch=new Chan(code,onRemote,function(ok){if(!rcfg)rStatus("CODE "+code.toUpperCase()+(ok?" - LOOKING FOR THE IPAD...":" - OFFLINE, RETRYING..."))});rch.open();
-  rnf=setTimeout(function(){if(!rcfg){$("rmt").textContent="NO IPAD ANSWERS ON CODE "+code.toUpperCase()+". OPEN THE REMOTE TAB ON THE IPAD, CHECK ITS CODE AND TYPE IT BELOW. THE IPAD MUST BE ONLINE.";$("rcode2").value=code;$("rfix").hidden=false}},8000);
-  var hello=function(){if(rch&&!rcfg)rch.send({t:"hello"})};setTimeout(hello,600);rhello=setInterval(hello,6000);
-  rtimer=setInterval(rUpdate,250)}
-function closeRemote(){clearTimeout(rnf);if(rch)rch.close();rch=null;clearInterval(rhello);clearInterval(rtimer);$("rem").classList.remove("on");wake(false);
+function rAge(){return rlast?Date.now()-rlast:1e9}
+function rSig(){if(!rch)return;var age=rAge(),ok=!!rcfg&&age<40000,t;
+  if(ok)t="IPAD CONNECTED";else if(!relay)t="NO CONNECTION TO THE RELAY"+(rch.err?" ("+rch.err+")":"");else t="LOOKING FOR THE IPAD...";
+  rStatus(t);
+  if(!rcfg){$("rgrid").hidden=true;$("rmsg").hidden=false;
+    if(Date.now()-rstart>10000){$("rmt").textContent=relay?"NO IPAD FOUND. ON THE IPAD, OPEN THE APP AND THE REMOTE TAB, THEN SCAN ITS QR CODE AGAIN.":"THE IPHONE HAS NO INTERNET CONNECTION TO THE RELAY"+(rch.err?" ("+rch.err+")":"")+". CHECK WI-FI OR MOBILE DATA.";$("rretry").hidden=false}
+    else{$("rmt").textContent="CONNECTING TO THE IPAD...";$("rretry").hidden=true}}
+  else if(!ok){$("rgrid").hidden=true;$("rmsg").hidden=false;$("rmt").textContent="NO SIGNAL FROM THE IPAD. CHECK THAT THE IPAD IS ONLINE AND THE APP IS OPEN.";$("rretry").hidden=false}
+  else{$("rretry").hidden=true;applyCfg(rcfg)}}
+function openRemote(code){code=(code||"").toLowerCase().replace(/[^a-z0-9]/g,"");if(code.length<4)return;
+  $("rem").classList.add("on");rcfg=null;act=null;rbuilt=0;rlast=0;relay=false;rstart=Date.now();$("rgrid").hidden=true;$("rmsg").hidden=false;$("rmt").textContent="CONNECTING TO THE IPAD...";$("rretry").hidden=true;rStatus("CONNECTING...");wake(true);
+  rch=new Chan(code,onRemote,function(ok){relay=ok;rSig()});rch.open();
+  setTimeout(function(){if(rch&&!rcfg)rch.send({t:"hello"})},700);
+  rhello=setInterval(function(){if(rch&&(!rcfg||rAge()>15000))rch.send({t:"hello"})},6000);
+  rtimer=setInterval(function(){rSig();rUpdate()},500)}
+function closeRemote(){if(rch)rch.close();rch=null;clearInterval(rhello);clearInterval(rtimer);$("rem").classList.remove("on");wake(false);
   if(location.search){try{history.replaceState(null,"",location.pathname)}catch(e){}}}
+function applyCfg(m){
+  if(rbuilt!==m.n){rbuilt=m.n;var h="";rb=[];for(var i=0;i<m.n;i++){rb.push({s:"idle",t0:0,d:m.d,l:m.l,n:0});h+='<button class="rb" data-i="'+i+'"><b>'+L[i]+'</b><small>READY</small></button>'}
+    var g=$("rgrid");g.className="n"+m.n;g.innerHTML=h}
+  $("rgrid").hidden=!m.run;$("rmsg").hidden=!!m.run;if(!m.run)$("rmt").textContent="THE IPAD IS CONNECTED BUT NOT RECORDING YET. PRESS START ON THE IPAD.";
+  rb.forEach(function(x){x.d=m.d;x.l=m.l})}
 function onRemote(m){
-  if(m.t==="cfg"){rcfg=m;clearTimeout(rnf);$("rfix").hidden=true;rStatus("IPAD CONNECTED - CODE "+rcodeNow.toUpperCase());
-    if(rbuilt!==m.n){rbuilt=m.n;var h="";rb=[];for(var i=0;i<m.n;i++){rb.push({s:"idle",t0:0,d:m.d,l:m.l,n:0});h+='<button class="rb" data-i="'+i+'"><b>'+L[i]+'</b><small>READY</small></button>'}
-      var g=$("rgrid");g.className="n"+m.n;g.innerHTML=h}
-    $("rgrid").hidden=!m.run;$("rmsg").hidden=!!m.run;$("rmt").textContent="THE IPAD IS CONNECTED BUT NOT RECORDING YET. PRESS START ON THE IPAD.";rb.forEach(function(x){x.d=m.d;x.l=m.l})}
-  else if(m.t==="st"&&rb[m.p]){var x=rb[m.p];x.t0=performance.now();if(m.n!==undefined)x.n=m.n;
+  var now=Date.now();
+  if(act&&act.from!==m.from&&now-act.ts<25000&&!(m.t==="cfg"&&m.run))return;
+  rlast=now;
+  if(m.t==="cfg"){if(m.run)act={from:m.from,ts:now};else if(act&&act.from===m.from)act=null;rcfg=m;applyCfg(m);rSig()}
+  else if(m.t==="st"&&rb[m.p]){if(act&&act.from===m.from)act.ts=now;var x=rb[m.p];x.t0=performance.now();if(m.n!==undefined)x.n=m.n;
     if(m.s==="wait"){x.s="wait";x.d=m.d;x.l=m.l}else if(m.s==="rec"){x.s="rec";x.l=m.l}else if(m.s==="done"){x.s="done"}else if(m.s==="busy"){x.s="busy"}}
   rUpdate()}
 function rUpdate(){var now=performance.now();[].forEach.call($("rgrid").children,function(el,i){var x=rb[i];if(!x)return;var sm=el.querySelector("small"),txt="READY",cls="rb";
@@ -2673,20 +2686,16 @@ function rUpdate(){var now=performance.now();[].forEach.call($("rgrid").children
   el.className=cls;sm.textContent=txt})}
 $("rgrid").addEventListener("click",function(e){var b=e.target.closest(".rb");if(!b||!rch)return;var i=+b.dataset.i;rb[i].s="sent";rb[i].t0=performance.now();rch.send({t:"press",p:i,id:rnd(8)});rUpdate()});
 $("rexit").onclick=closeRemote;
-$("rgo").onclick=function(){var c=$("rcode2").value;closeRemote();openRemote(c)};
-$("ropen").onclick=function(){openRemote($("rcode").value)};
-$("rcode").value=ls("nvcdv-rcode")||"";
+$("rretry").onclick=function(){if(!rch)return;rstart=Date.now();$("rretry").hidden=true;$("rmt").textContent="CONNECTING TO THE IPAD...";rch.reopen();setTimeout(function(){if(rch)rch.send({t:"hello"})},600)};
+document.addEventListener("visibilitychange",function(){if(document.visibilityState!=="visible")return;
+  if(mainChan)mainChan.reopen();if(rch){rch.reopen();setTimeout(function(){if(rch)rch.send({t:"hello"})},600)}});
 
 /* ---------- init ---------- */
-function drawQR(){$("mycode").value=CODE;
-  try{var q=qrcode(0,"M");q.addData(location.origin+location.pathname+"?r="+CODE);q.make();$("qr").innerHTML='<img alt="QR" src="'+q.createDataURL(6,2)+'">'}catch(e){$("qr").textContent=location.origin+location.pathname+"?r="+CODE}}
-function connectMain(){if(mainChan)mainChan.close();mainChan=new Chan(CODE,handleMain,function(){});mainChan.open()}
-$("setcode").onclick=function(){var v=($("mycode").value||"").toLowerCase().replace(/[^a-z0-9]/g,"");
-  if(v.length<6){$("rcnote").textContent="THE CODE MUST HAVE AT LEAST 6 LETTERS OR DIGITS.";return}
-  CODE=v;ls("nvcdv-code",CODE);drawQR();connectMain();remoteSeen=false;$("rstat2").textContent="NO REMOTE CONNECTED YET.";
-  $("rcnote").textContent="CODE SET: "+CODE.toUpperCase()+". USE THE SAME CODE ON THE IPHONE.";sendCfg()};
+function drawQR(){try{var q=qrcode(0,"M");q.addData(location.origin+location.pathname+"?r="+CODE);q.make();$("qr").innerHTML='<img alt="QR" src="'+q.createDataURL(8,2)+'">'}catch(e){$("qr").textContent=location.origin+location.pathname+"?r="+CODE}}
 function init(){
-  drawQR();uiSave();connectMain();
+  try{localStorage.removeItem("nvcdv-code");localStorage.removeItem("nvcdv-rcode")}catch(e){}
+  drawQR();uiSave();
+  mainChan=new Chan(CODE,handleMain,function(ok){relayOK=ok;diag()});mainChan.open();setInterval(diag,2000);diag();
   var r=new URLSearchParams(location.search).get("r");if(r)openRemote(r);
   idbOpen().then(idbAll).then(function(a){store=a;stat();renderClips()})}
 init();
