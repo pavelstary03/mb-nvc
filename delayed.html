@@ -2516,7 +2516,7 @@ function Chan(code,onmsg,onstate){var topic="nvcdv"+code,es=null,me=this;me.err=
     es.onmessage=function(e){try{var d=JSON.parse(e.data);if(d.event&&d.event!=="message")return;var m=JSON.parse(d.message);if(m&&m.from!==ID)onmsg(m)}catch(x){}};
     es.onerror=function(){onstate(false)}}
   me.open=open;me.reopen=open;
-  me.send=function(o){o.from=ID;try{return fetch(BASE+topic,{method:"POST",body:JSON.stringify(o)}).then(function(r){me.err=r.ok?"":(r.status===429?"TOO MANY REQUESTS, WAIT A MINUTE":"SERVER ERROR "+r.status)}).catch(function(){me.err="NO INTERNET"})}catch(e){}};
+  me.block=0;me.send=function(o){o.from=ID;if(o.t!=="press"&&Date.now()<me.block)return;try{return fetch(BASE+topic,{method:"POST",body:JSON.stringify(o)}).then(function(r){if(r.status===429)me.block=Date.now()+30000;me.err=r.ok?"":(r.status===429?"TOO MANY REQUESTS, WAIT A MINUTE":"SERVER ERROR "+r.status)}).catch(function(){me.err="NO INTERNET"})}catch(e){}};
   me.close=function(){if(es)es.close();es=null}}
 var seen={};function fresh(id){if(!id)return true;if(seen[id])return false;seen[id]=1;return true}
 
@@ -2524,7 +2524,7 @@ var seen={};function fresh(id){if(!id)return true;if(seen[id])return false;seen[
 var running=false,stream=null,tiles=[],vw=1280,vh=720,wl=null,tickT=null,remoteSeen=false,mainChan=null,hb=null;
 async function wake(on){try{if(on&&navigator.wakeLock){wl=await navigator.wakeLock.request("screen")}else if(wl){await wl.release();wl=null}}catch(e){}}
 document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"&&(running||$("rem").classList.contains("on")))wake(true)});
-function sendCfg(){if(mainChan)mainChan.send({t:"cfg",n:CFG.n,run:running,d:CFG.delay,l:CFG.len})}
+var cfgT=null,cfgLast=0;function sendCfg(){if(!mainChan||cfgT)return;var w=Math.max(300,4000-(Date.now()-cfgLast));cfgT=setTimeout(function(){cfgT=null;cfgLast=Date.now();mainChan.send({t:"cfg",n:CFG.n,run:running,d:CFG.delay,l:CFG.len})},w)}
 function notify(i,s,extra){if(!mainChan)return;var o={t:"st",p:i,s:s};if(extra)for(var k in extra)o[k]=extra[k];mainChan.send(o)}
 function mkTile(i,liveOnly){
   var d=document.createElement("div");d.className="tile"+(CFG.mirror?" mir":"");
@@ -2568,7 +2568,7 @@ async function startProj(){
   running=true;$("proj").classList.add("on");var g=$("grid");g.innerHTML="";tiles=[];
   for(var i=0;i<CFG.n;i++){var t=mkTile(i,false);tiles.push(t);g.appendChild(t.el)}
   layout();
-  tiles.forEach(function(t){updOverlay(t)});info();wake(true);sendCfg();clearInterval(hb);hb=setInterval(sendCfg,10000);requestAnimationFrame(rafLoop);
+  tiles.forEach(function(t){updOverlay(t)});info();wake(true);sendCfg();clearInterval(hb);hb=setInterval(sendCfg,20000);requestAnimationFrame(rafLoop);
   tickT=setInterval(function(){var now=performance.now();tiles.forEach(function(t){
     if(t.state==="wait"){var r=Math.ceil((t.d*1000-(now-t.t0))/1000);t.cd.textContent=Math.max(r,1);t.st.textContent=L[t.i]+" STARTS IN "+Math.max(r,1)+" S"}
     else if(t.state==="rec"){var e=Math.min(t.l,(now-t.t0)/1000);t.cd.textContent="";t.st.textContent="REC "+e.toFixed(1)+" / "+t.l+" S"}})},150)}
@@ -2648,7 +2648,7 @@ async function shareFilm(p){var b=films[p];if(!b)return;var ext=/mp4/.test(b.typ
 var rch=null,rcfg=null,rb=[],rtimer=null,rhello=null,rbuilt=0,rlast=0,rstart=0,relay=false,act=null;
 function rStatus(t){$("rstat").textContent=t}
 function rAge(){return rlast?Date.now()-rlast:1e9}
-function rSig(){if(!rch)return;var age=rAge(),ok=!!rcfg&&age<40000,t;
+function rSig(){if(!rch)return;var age=rAge(),ok=!!rcfg&&age<70000,t;
   if(ok)t="IPAD CONNECTED";else if(!relay)t="NO CONNECTION TO THE RELAY"+(rch.err?" ("+rch.err+")":"");else t="LOOKING FOR THE IPAD...";
   rStatus(t);
   if(!rcfg){$("rgrid").hidden=true;$("rmsg").hidden=false;
@@ -2660,7 +2660,7 @@ function openRemote(code){code=(code||"").toLowerCase().replace(/[^a-z0-9]/g,"")
   $("rem").classList.add("on");rcfg=null;act=null;rbuilt=0;rlast=0;relay=false;rstart=Date.now();$("rgrid").hidden=true;$("rmsg").hidden=false;$("rmt").textContent="CONNECTING TO THE IPAD...";$("rretry").hidden=true;rStatus("CONNECTING...");wake(true);
   rch=new Chan(code,onRemote,function(ok){relay=ok;rSig()});rch.open();
   setTimeout(function(){if(rch&&!rcfg)rch.send({t:"hello"})},700);
-  rhello=setInterval(function(){if(rch&&(!rcfg||rAge()>15000))rch.send({t:"hello"})},6000);
+  rhello=setInterval(function(){if(rch&&(!rcfg||rAge()>45000))rch.send({t:"hello"})},15000);
   rtimer=setInterval(function(){rSig();rUpdate()},500)}
 function closeRemote(){if(rch)rch.close();rch=null;clearInterval(rhello);clearInterval(rtimer);$("rem").classList.remove("on");wake(false);
   if(location.search){try{history.replaceState(null,"",location.pathname)}catch(e){}}}
