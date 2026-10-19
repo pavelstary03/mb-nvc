@@ -25,7 +25,7 @@ h2{font-size:19px;margin:0 0 12px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
 .g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px;align-items:start}.g3 .card{margin:0}
 .seg{display:flex;gap:6px;margin:6px 0 16px}.seg.wrap{flex-wrap:wrap}
-.seg button{flex:1;min-width:64px;white-space:nowrap;padding:15px 6px;border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;font-weight:600;font-size:16px;font-family:inherit}
+.seg.wrap#s-n button{min-width:96px}.seg button{flex:1;min-width:64px;white-space:nowrap;padding:15px 6px;border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;font-weight:600;font-size:16px;font-family:inherit}
 .seg button[aria-pressed="true"]{border-color:var(--blue);background:var(--blue);color:var(--onblue)}
 label.l{display:block;color:var(--mute);font-size:14px;font-weight:700}
 .fld{margin:0 0 16px}.lr{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.lr b{font-size:22px;white-space:nowrap}
@@ -66,10 +66,10 @@ input[type=text]{width:100%;padding:14px;font-size:22px;border:2px solid var(--l
 #rem{position:fixed;inset:0;background:var(--bg);display:none;flex-direction:column;z-index:80;padding:env(safe-area-inset-top,0px) 10px env(safe-area-inset-bottom,0px)}
 #rem.on{display:flex}
 .rtop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0}
-#rgrid{flex:1;min-height:0;display:grid;gap:10px;grid-template-columns:1fr;padding-bottom:10px}
-#rgrid.n2,#rgrid.n3,#rgrid.n4{grid-template-columns:1fr 1fr}
-@media(orientation:portrait){#rgrid.n2{grid-template-columns:1fr;grid-template-rows:1fr 1fr}}
-#rgrid.n3 .rb:last-child{grid-column:1/3}
+#rgrid{flex:1;min-height:0;display:grid;gap:10px;grid-template-columns:1fr;grid-auto-rows:1fr;padding-bottom:10px}
+#rgrid.n2,#rgrid.n3,#rgrid.n4,#rgrid.n5,#rgrid.n6{grid-template-columns:1fr 1fr}
+@media(orientation:portrait){#rgrid.n2{grid-template-columns:1fr}}
+#rgrid.n3 .rb:last-child,#rgrid.n5 .rb:last-child{grid-column:1/3}#rgrid.n5 .rb b,#rgrid.n6 .rb b{font-size:min(22vw,13vh,110px)}
 .rb{border:0;border-radius:18px;background:var(--blue);color:var(--onblue);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-family:inherit}
 .rb b{font-size:min(30vw,26vh,160px);line-height:1}.rb small{font-size:clamp(14px,3.2vw,22px);font-weight:700}
 .rb.act{background:var(--yellow);color:#1a1400}.rb.rc{background:var(--red);color:#fff}.rb:disabled{opacity:.4}
@@ -88,10 +88,13 @@ input[type=text]{width:100%;padding:14px;font-size:22px;border:2px solid var(--l
 <div class="g3">
 <div class="card"><h2>RECORDING</h2>
 <label class="l">PEOPLE TO FOLLOW</label>
-<div class="seg" id="s-n"><button data-v="1">1 (A)</button><button data-v="2">2 (A-B)</button><button data-v="3">3 (A-C)</button><button data-v="4">4 (A-D)</button></div>
+<div class="seg wrap" id="s-n"><button data-v="1">1 (A)</button><button data-v="2">2 (A-B)</button><button data-v="3">3 (A-C)</button><button data-v="4">4 (A-D)</button><button data-v="5">5 (A-E)</button><button data-v="6">6 (A-F)</button></div>
+<label class="l">SAVE CLIPS FOR THE FILM</label>
+<div class="seg" id="s-save"><button data-v="0">NO - DELAYED VIDEO ONLY</button><button data-v="1">YES - SAVE CLIPS</button></div>
+<div id="f-sv"><label class="l">SAVE CLIPS OF</label><div class="seg wrap" id="s-who"></div></div>
 <div class="fld"><div class="lr"><label class="l" for="r-delay">START RECORDING AFTER BUTTON PRESS</label><b id="o-delay"></b></div><input type="range" id="r-delay" min="1" max="60" step="1"></div>
 <div class="fld"><div class="lr"><label class="l" for="r-len">CLIP LENGTH</label><b id="o-len"></b></div><input type="range" id="r-len" min="1" max="60" step="1"></div>
-<div class="fld"><div class="lr"><label class="l" for="r-max">MAX CLIPS PER PERSON (FOR THE FILM)</label><b id="o-max"></b></div><input type="range" id="r-max" min="1" max="10" step="1"></div>
+<div class="fld" id="f-max"><div class="lr"><label class="l" for="r-max">MAX CLIPS PER PERSON (FOR THE FILM)</label><b id="o-max"></b></div><input type="range" id="r-max" min="1" max="10" step="1"></div>
 </div>
 <div class="card"><h2>PLAYBACK</h2>
 <label class="l">SLOW-MOTION SPEED</label>
@@ -121,7 +124,7 @@ input[type=text]{width:100%;padding:14px;font-size:22px;border:2px solid var(--l
 <section id="v-remote" hidden>
 <div class="g3">
 <div class="card"><h2>CONNECT AN IPHONE AS REMOTE</h2>
-<p class="muted" style="margin:0 0 8px">ON THE IPHONE, SCAN THIS QR CODE WITH THE CAMERA AND OPEN THE LINK. THE IPHONE THEN SHOWS BUTTONS A-D.</p>
+<p class="muted" style="margin:0 0 8px">ON THE IPHONE, SCAN THIS QR CODE WITH THE CAMERA AND OPEN THE LINK. THE IPHONE THEN SHOWS BUTTONS A-F.</p>
 <div id="qr"></div>
 <p class="muted" style="margin:12px 0 4px">OR OPEN THIS APP ON THE IPHONE, GO TO THIS TAB AND TYPE THE CODE:</p>
 <div class="code" id="mycode"></div>
@@ -2453,12 +2456,12 @@ var qrcode = function() {
 </script>
 <script>
 (function(){
-var $=function(i){return document.getElementById(i)},L=["A","B","C","D"];
+var $=function(i){return document.getElementById(i)},L=["A","B","C","D","E","F"];
 var BASE=new URLSearchParams(location.search).get("srv")||"https://ntfy.sh/";
 var ID=Math.random().toString(36).slice(2,10);
 function rnd(n){var a="abcdefghjkmnpqrstuvwxyz23456789",s="";for(var i=0;i<n;i++)s+=a[Math.floor(Math.random()*a.length)];return s}
 function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){}return null}
-var CFG={n:2,delay:3,len:5,max:5,speed:50,blend:1,mirror:1,tap:1,cam:"user",res:720,fps:30};
+var CFG={n:2,save:1,who:"ALL",delay:3,len:5,max:5,speed:50,blend:1,mirror:1,tap:1,cam:"user",res:720,fps:30};
 try{Object.assign(CFG,JSON.parse(ls("nvcdv-cfg")||"{}"))}catch(e){}
 if(!(CFG.speed>=40))CFG.speed=50;
 function saveCfg(){ls("nvcdv-cfg",JSON.stringify(CFG))}
@@ -2485,18 +2488,27 @@ function seg(id,key,conv){var g=$(id);function paint(){[].forEach.call(g.childre
   g.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;CFG[key]=conv?conv(b.dataset.v):b.dataset.v;saveCfg();paint();afterCfg(key)});g.repaint=paint;paint();return g}
 function rng(id,key,out,fmt){var r=$(id);r.value=CFG[key];function u(){$(out).textContent=fmt(r.value)}u();r.addEventListener("input",function(){CFG[key]=+r.value;u();saveCfg();afterCfg(key)})}
 var num=function(v){return +v};
-seg("s-n","n",num);seg("s-blend","blend",num);var segMirror=seg("s-mirror","mirror",num);seg("s-tap","tap",num);
+seg("s-n","n",num);seg("s-save","save",num);seg("s-blend","blend",num);var segMirror=seg("s-mirror","mirror",num);seg("s-tap","tap",num);
 seg("s-cam","cam");seg("s-res","res",num);seg("s-fps","fps",num);
 var segSpeed=seg("s-speed","speed",num);
 rng("r-delay","delay","o-delay",function(v){return v+" S"});rng("r-len","len","o-len",function(v){return v+" S"});rng("r-max","max","o-max",function(v){return v});
 (function(){var h="",o="";for(var s=40;s<=100;s+=10){h+='<button data-v="'+s+'">'+s+'%</button>';o+='<option value="'+s+'">'+s+'%</option>'}$("s-speed").innerHTML=h;$("psp").innerHTML=o;segSpeed.repaint();$("psp").value=CFG.speed})();
 $("psp").onchange=function(){CFG.speed=+this.value;saveCfg();segSpeed.repaint();afterCfg("speed")};
-function afterCfg(k){
+function afterCfg(k){if(k==="n"||k==="save")uiSave();
   if(k==="cam"){CFG.mirror=CFG.cam==="user"?1:0;saveCfg();segMirror.repaint()}
   if(k==="speed")$("psp").value=CFG.speed;
   if(running){tiles.forEach(function(t){applyRate(t);setBlend(t);t.el.classList.toggle("mir",!!CFG.mirror)});info()}
   if(k==="n"||k==="delay"||k==="len")sendCfg()}
 
+function whoList(){return CFG.who==="ALL"?null:String(CFG.who).split(",").map(Number).filter(function(i){return i<CFG.n})}
+function whoTxt(){var w=whoList();return !w||!w.length?"ALL":w.map(function(i){return L[i]}).join(",")}
+function shouldSave(i){if(!CFG.save)return false;var w=whoList();return !w||!w.length||w.indexOf(i)>=0}
+function uiSave(){$("f-sv").hidden=!CFG.save;$("f-max").hidden=!CFG.save;var g=$("s-who"),h="",w=whoList();
+  for(var i=0;i<CFG.n;i++)h+='<button data-i="'+i+'" aria-pressed="'+(!!w&&w.indexOf(i)>=0)+'">'+L[i]+'</button>';
+  h+='<button data-i="all" aria-pressed="'+(!w||!w.length)+'">ALL</button>';g.innerHTML=h}
+$("s-who").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var w=whoList()||[];
+  if(b.dataset.i==="all")w=[];else{var i=+b.dataset.i,k=w.indexOf(i);if(k>=0)w.splice(k,1);else w.push(i);w.sort()}
+  CFG.who=w.length?w.join(","):"ALL";saveCfg();uiSave();if(running)info()});
 /* ---------- tabs ---------- */
 var VIEWS=["setup","clips","remote"];
 function show(v){VIEWS.forEach(function(x){$("v-"+x).hidden=x!==v});[].forEach.call(document.querySelectorAll(".tab"),function(t){t.setAttribute("aria-selected",t.dataset.go===v)});if(v==="clips")renderClips();window.scrollTo(0,0)}
@@ -2541,10 +2553,11 @@ function rafLoop(){if(!running)return;tiles.forEach(function(t){if(!t.blendOn||!
   if(!t.nb){x.globalAlpha=Math.min(1,(performance.now()-t.tf)/t.dW);x.drawImage(t.B,0,0);x.globalAlpha=1}else x.drawImage(t.B,0,0)});requestAnimationFrame(rafLoop)}
 function showClip(t,rec){if(t.url)URL.revokeObjectURL(t.url);t.url=URL.createObjectURL(rec.blob);t.clip=rec;
   t.tv.src=t.url;t.tv.style.display="block";t.tl.style.display="none";applyRate(t);t.tv.play().catch(function(){});setBlend(t)}
-function layout(){var g=$("grid"),W=g.clientWidth-8,H=g.clientHeight-8,a=vw/vh||16/9,n=CFG.n,best=null;
-  for(var c=1;c<=n;c++){var r=Math.ceil(n/c),tw=W/c,th=H/r,sw=Math.min(tw,th*a),area=sw*sw/a;if(!best||area>best.area+1)best={c:c,r:r,area:area}}
-  g.style.gridTemplateColumns="repeat("+best.c+",1fr)";g.style.gridTemplateRows="repeat("+best.r+",1fr)";return best}
-function info(){$("pinfo").textContent=vw+"x"+vh+" - "+Math.round(fpsReal)+" FPS - SPEED "+CFG.speed+"%"+(CFG.blend&&RVFC?" - SMOOTHED":"")+" - DELAY "+CFG.delay+" S - CLIP "+CFG.len+" S - "+(remoteSeen?"REMOTE CONNECTED":"NO REMOTE")}
+var LAY={1:{rows:1,t:[[1,12,1]]},2:{rows:2,t:[[1,12,1],[1,12,2]]},3:{rows:2,t:[[1,6,1],[7,6,1],[4,6,2]]},4:{rows:2,t:[[1,6,1],[7,6,1],[1,6,2],[7,6,2]]},
+ 5:{rows:2,t:[[1,4,1],[5,4,1],[9,4,1],[3,4,2],[7,4,2]]},6:{rows:2,t:[[1,4,1],[5,4,1],[9,4,1],[1,4,2],[5,4,2],[9,4,2]]}};
+function layout(){var g=$("grid"),Ls=LAY[CFG.n];g.style.gridTemplateColumns="repeat(12,1fr)";g.style.gridTemplateRows="repeat("+Ls.rows+",1fr)";
+  tiles.forEach(function(t,i){var q=Ls.t[i];t.el.style.gridColumn=q[0]+" / span "+q[1];t.el.style.gridRow=String(q[2])})}
+function info(){$("pinfo").textContent=vw+"x"+vh+" - "+Math.round(fpsReal)+" FPS - SPEED "+CFG.speed+"%"+(CFG.blend&&RVFC?" - SMOOTHED":"")+" - DELAY "+CFG.delay+" S - CLIP "+CFG.len+" S - "+(CFG.save?"SAVING "+whoTxt():"NOT SAVING")+" - "+(remoteSeen?"REMOTE CONNECTED":"NO REMOTE")}
 var fpsReal=0;
 async function startProj(){
   $("setmsg").textContent="";
@@ -2555,13 +2568,13 @@ async function startProj(){
   var s=stream.getVideoTracks()[0].getSettings();vw=s.width||1280;vh=s.height||720;fpsReal=s.frameRate||CFG.fps;
   running=true;$("proj").classList.add("on");var g=$("grid");g.innerHTML="";tiles=[];
   for(var i=0;i<CFG.n;i++){var t=mkTile(i,false);tiles.push(t);g.appendChild(t.el)}
-  var lo=layout(),extra=lo.c*lo.r-CFG.n;for(var k=0;k<extra;k++){g.appendChild(mkTile(0,true).el)}
+  layout();
   tiles.forEach(function(t){updOverlay(t)});info();wake(true);sendCfg();requestAnimationFrame(rafLoop);
   tickT=setInterval(function(){var now=performance.now();tiles.forEach(function(t){
     if(t.state==="wait"){var r=Math.ceil((t.d*1000-(now-t.t0))/1000);t.cd.textContent=Math.max(r,1);t.st.textContent=L[t.i]+" STARTS IN "+Math.max(r,1)+" S"}
     else if(t.state==="rec"){var e=Math.min(t.l,(now-t.t0)/1000);t.cd.textContent="";t.st.textContent="REC "+e.toFixed(1)+" / "+t.l+" S"}})},150)}
 function updOverlay(t){if(t.state!=="idle")return;t.cd.textContent="";var n=store.filter(function(c){return c.p===t.i}).length;
-  t.st.textContent=t.clip?"LOOP - CLIP "+n:(CFG.tap?"LIVE - TAP TO RECORD":"LIVE")}
+  t.st.textContent=t.clip?("LOOP"+(t.saved?" - CLIP "+n:"")):(CFG.tap?"LIVE - TAP TO RECORD":"LIVE")}
 function stopProj(){running=false;clearInterval(tickT);tiles.forEach(function(t){clearTimeout(t.timer);if(t.rec&&t.rec.state!=="inactive"){t.rec.onstop=null;try{t.rec.stop()}catch(e){}}if(t.url)URL.revokeObjectURL(t.url)});
   tiles=[];$("grid").innerHTML="";if(stream){stream.getTracks().forEach(function(x){x.stop()});stream=null}$("proj").classList.remove("on");wake(false);sendCfg();renderClips()}
 $("start").onclick=startProj;$("pstop").onclick=stopProj;window.addEventListener("resize",function(){if(running)layout()});
@@ -2578,10 +2591,11 @@ function record(t){var mime=pickMime(),chunks=[],rec;
   rec.onstop=async function(){t.rec=null;t.el.classList.remove("rec");var dur=(performance.now()-t.t0)/1000;
     var blob=new Blob(chunks,{type:rec.mimeType||mime||"video/mp4"});
     if(!blob.size){t.state="idle";updOverlay(t);return}
-    var c={p:t.i,blob:blob,mime:blob.type,dur:dur,ts:Date.now()};await idbPut(c);store.push(c);
-    var mine=store.filter(function(x){return x.p===t.i}).sort(function(a,b){return a.ts-b.ts});
-    while(mine.length>CFG.max){var o=mine.shift();await idbDel(o.id);store.splice(store.indexOf(o),1)}
-    t.state="idle";if(running){showClip(t,c);updOverlay(t)}notify(t.i,"done",{n:mine.length});stat()};
+    var c={p:t.i,blob:blob,mime:blob.type,dur:dur,ts:Date.now()},keep=shouldSave(t.i),mine=[];
+    if(keep){await idbPut(c);store.push(c);
+      mine=store.filter(function(x){return x.p===t.i}).sort(function(a,b){return a.ts-b.ts});
+      while(mine.length>CFG.max){var o=mine.shift();await idbDel(o.id);store.splice(store.indexOf(o),1)}}
+    t.saved=keep;t.state="idle";if(running){showClip(t,c);updOverlay(t)}notify(t.i,"done",{n:keep?mine.length:-1});stat()};
   rec.start();setTimeout(function(){if(rec.state!=="inactive")rec.stop()},t.l*1000)}
 
 /* ---------- remote link on the iPad ---------- */
@@ -2593,7 +2607,7 @@ function handleMain(m){
 var films={},building=false;
 function fmtT(ts){var d=new Date(ts);return d.toTimeString().slice(0,5)}
 function renderClips(){var h="";
-  for(var p=0;p<4;p++){var list=store.filter(function(c){return c.p===p}).sort(function(a,b){return a.ts-b.ts}),tot=list.reduce(function(a,c){return a+c.dur},0);
+  for(var p=0;p<6;p++){var list=store.filter(function(c){return c.p===p}).sort(function(a,b){return a.ts-b.ts}),tot=list.reduce(function(a,c){return a+c.dur},0);
     h+='<div class="card"><h2>PERSON '+L[p]+' - '+list.length+' CLIPS ('+Math.round(tot)+' S)</h2>';
     if(!list.length)h+='<p class="muted" style="margin:0">NO CLIPS YET.</p>';
     list.forEach(function(c,k){h+='<div class="clip"><span class="n">CLIP '+(k+1)+' - '+c.dur.toFixed(1)+' S - '+fmtT(c.ts)+'</span><button class="btn" data-pv="'+c.id+'">PLAY</button><button class="btn danger" data-del="'+c.id+'">DELETE</button></div>'});
@@ -2642,14 +2656,14 @@ function onRemote(m){
     if(rbuilt!==m.n){rbuilt=m.n;var h="";rb=[];for(var i=0;i<m.n;i++){rb.push({s:"idle",t0:0,d:m.d,l:m.l,n:0});h+='<button class="rb" data-i="'+i+'"><b>'+L[i]+'</b><small>READY</small></button>'}
       var g=$("rgrid");g.className="n"+m.n;g.innerHTML=h}
     $("rgrid").hidden=!m.run;$("rmsg").hidden=!!m.run;$("rmsg").textContent="THE IPAD IS NOT RECORDING YET. PRESS START ON THE IPAD.";rb.forEach(function(x){x.d=m.d;x.l=m.l})}
-  else if(m.t==="st"&&rb[m.p]){var x=rb[m.p];x.t0=performance.now();x.n=m.n||x.n;
+  else if(m.t==="st"&&rb[m.p]){var x=rb[m.p];x.t0=performance.now();if(m.n!==undefined)x.n=m.n;
     if(m.s==="wait"){x.s="wait";x.d=m.d;x.l=m.l}else if(m.s==="rec"){x.s="rec";x.l=m.l}else if(m.s==="done"){x.s="done"}else if(m.s==="busy"){x.s="busy"}}
   rUpdate()}
 function rUpdate(){var now=performance.now();[].forEach.call($("rgrid").children,function(el,i){var x=rb[i];if(!x)return;var sm=el.querySelector("small"),txt="READY",cls="rb";
   if(x.s==="sent"){txt="SENT...";cls="rb act";if(now-x.t0>5000)x.s="idle"}
   else if(x.s==="wait"){var r=Math.ceil((x.d*1000-(now-x.t0))/1000);txt="STARTS IN "+Math.max(r,0)+" S";cls="rb act"}
   else if(x.s==="rec"){var e=Math.max(0,Math.ceil(x.l-(now-x.t0)/1000));txt="RECORDING - "+e+" S";cls="rb rc"}
-  else if(x.s==="done"){txt="DONE - "+x.n+" CLIPS";if(now-x.t0>2500)x.s="idle"}
+  else if(x.s==="done"){txt=x.n<0?"DONE":"DONE - "+x.n+" CLIPS";if(now-x.t0>2500)x.s="idle"}
   else if(x.s==="busy"){txt="BUSY - RECORDING";if(now-x.t0>2000)x.s="idle"}
   el.className=cls;sm.textContent=txt})}
 $("rgrid").addEventListener("click",function(e){var b=e.target.closest(".rb");if(!b||!rch)return;var i=+b.dataset.i;rb[i].s="sent";rb[i].t0=performance.now();rch.send({t:"press",p:i,id:rnd(8)});rUpdate()});
@@ -2661,7 +2675,7 @@ $("rcode").value=ls("nvcdv-rcode")||"";
 function init(){
   $("mycode").textContent=CODE;
   try{var q=qrcode(0,"M");q.addData(location.origin+location.pathname+"?r="+CODE);q.make();$("qr").innerHTML='<img alt="QR" src="'+q.createDataURL(6,2)+'">'}catch(e){$("qr").textContent=location.origin+location.pathname+"?r="+CODE}
-  mainChan=new Chan(CODE,handleMain,function(){});mainChan.open();
+  uiSave();mainChan=new Chan(CODE,handleMain,function(){});mainChan.open();
   var r=new URLSearchParams(location.search).get("r");if(r)openRemote(r);
   idbOpen().then(idbAll).then(function(a){store=a;stat();renderClips()})}
 init();
