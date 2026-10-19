@@ -25,7 +25,7 @@ h2{font-size:19px;margin:0 0 12px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
 .g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px;align-items:start}.g3 .card{margin:0}
 .seg{display:flex;gap:6px;margin:6px 0 16px}.seg.wrap{flex-wrap:wrap}
-.seg.wrap#s-n button{min-width:96px}.seg button{flex:1;min-width:64px;white-space:nowrap;padding:15px 6px;border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;font-weight:600;font-size:16px;font-family:inherit}
+.seg.wrap#s-n button{min-width:96px}#s-save button{white-space:normal;line-height:1.2;padding:12px 8px}.seg button{flex:1;min-width:64px;white-space:nowrap;padding:15px 6px;border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;font-weight:600;font-size:16px;font-family:inherit}
 .seg button[aria-pressed="true"]{border-color:var(--blue);background:var(--blue);color:var(--onblue)}
 label.l{display:block;color:var(--mute);font-size:14px;font-weight:700}
 .fld{margin:0 0 16px}.lr{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.lr b{font-size:22px;white-space:nowrap}
@@ -90,7 +90,7 @@ input[type=text]{width:100%;padding:14px;font-size:22px;border:2px solid var(--l
 <label class="l">PEOPLE TO FOLLOW</label>
 <div class="seg wrap" id="s-n"><button data-v="1">1 (A)</button><button data-v="2">2 (A-B)</button><button data-v="3">3 (A-C)</button><button data-v="4">4 (A-D)</button><button data-v="5">5 (A-E)</button><button data-v="6">6 (A-F)</button></div>
 <label class="l">SAVE CLIPS FOR THE FILM</label>
-<div class="seg" id="s-save"><button data-v="0">NO - DELAYED VIDEO ONLY</button><button data-v="1">YES - SAVE CLIPS</button></div>
+<div class="seg" id="s-save"><button data-v="0">DELAYED VIDEO ONLY</button><button data-v="1">SAVE CLIPS</button></div>
 <div id="f-sv"><label class="l">SAVE CLIPS OF</label><div class="seg wrap" id="s-who"></div></div>
 <div class="fld"><div class="lr"><label class="l" for="r-delay">START RECORDING AFTER BUTTON PRESS</label><b id="o-delay"></b></div><input type="range" id="r-delay" min="1" max="60" step="1"></div>
 <div class="fld"><div class="lr"><label class="l" for="r-len">CLIP LENGTH</label><b id="o-len"></b></div><input type="range" id="r-len" min="1" max="60" step="1"></div>
@@ -2463,7 +2463,7 @@ function rnd(n){var a="abcdefghjkmnpqrstuvwxyz23456789",s="";for(var i=0;i<n;i++
 function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){}return null}
 var CFG={n:2,save:1,who:"ALL",delay:3,len:5,max:5,speed:50,blend:1,mirror:1,tap:1,cam:"user",res:720,fps:30};
 try{Object.assign(CFG,JSON.parse(ls("nvcdv-cfg")||"{}"))}catch(e){}
-if(!(CFG.speed>=40))CFG.speed=50;
+if(!(CFG.speed>=10))CFG.speed=50;
 function saveCfg(){ls("nvcdv-cfg",JSON.stringify(CFG))}
 var CODE=ls("nvcdv-code");if(!CODE){CODE=rnd(8);ls("nvcdv-code",CODE)}
 var RVFC="requestVideoFrameCallback" in HTMLVideoElement.prototype;
@@ -2492,7 +2492,7 @@ seg("s-n","n",num);seg("s-save","save",num);seg("s-blend","blend",num);var segMi
 seg("s-cam","cam");seg("s-res","res",num);seg("s-fps","fps",num);
 var segSpeed=seg("s-speed","speed",num);
 rng("r-delay","delay","o-delay",function(v){return v+" S"});rng("r-len","len","o-len",function(v){return v+" S"});rng("r-max","max","o-max",function(v){return v});
-(function(){var h="",o="";for(var s=40;s<=100;s+=10){h+='<button data-v="'+s+'">'+s+'%</button>';o+='<option value="'+s+'">'+s+'%</option>'}$("s-speed").innerHTML=h;$("psp").innerHTML=o;segSpeed.repaint();$("psp").value=CFG.speed})();
+(function(){var h="",o="";for(var s=10;s<=100;s+=10){h+='<button data-v="'+s+'">'+s+'%</button>';o+='<option value="'+s+'">'+s+'%</option>'}$("s-speed").innerHTML=h;$("psp").innerHTML=o;segSpeed.repaint();$("psp").value=CFG.speed})();
 $("psp").onchange=function(){CFG.speed=+this.value;saveCfg();segSpeed.repaint();afterCfg("speed")};
 function afterCfg(k){if(k==="n"||k==="save")uiSave();
   if(k==="cam"){CFG.mirror=CFG.cam==="user"?1:0;saveCfg();segMirror.repaint()}
