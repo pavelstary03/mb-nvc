@@ -2510,21 +2510,22 @@ function show(v){VIEWS.forEach(function(x){$("v-"+x).hidden=x!==v});[].forEach.c
 document.addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(b)show(b.dataset.go)});
 
 /* ---------- messaging (ntfy.sh pub/sub) ---------- */
-function Chan(code,onmsg,onstate){var topic="nvcdv"+code,es=null,me=this;me.err="";
-  function open(){try{if(es)es.close();es=new EventSource(BASE+topic+"/sse")}catch(e){onstate(false);return}
-    es.addEventListener("open",function(){onstate(true)});
+function Chan(code,onmsg,onstate){var topic="nvcdv"+code,es=null,me=this,wait=5000,tm=null;me.err="";me.block=0;
+  function open(force){clearTimeout(tm);if(es&&!force&&es.readyState!==2)return;try{if(es)es.close();es=new EventSource(BASE+topic+"/sse")}catch(e){onstate(false);return}
+    var mine=es;
+    es.addEventListener("open",function(){wait=5000;me.err="";onstate(true)});
     es.onmessage=function(e){try{var d=JSON.parse(e.data);if(d.event&&d.event!=="message")return;var m=JSON.parse(d.message);if(m&&m.from!==ID)onmsg(m)}catch(x){}};
-    es.onerror=function(){onstate(false)}}
-  me.open=open;me.reopen=open;
-  me.block=0;me.send=function(o){o.from=ID;if(o.t!=="press"&&Date.now()<me.block)return;try{return fetch(BASE+topic,{method:"POST",body:JSON.stringify(o)}).then(function(r){if(r.status===429)me.block=Date.now()+30000;me.err=r.ok?"":(r.status===429?"TOO MANY REQUESTS, WAIT A MINUTE":"SERVER ERROR "+r.status)}).catch(function(){me.err="NO INTERNET"})}catch(e){}};
-  me.close=function(){if(es)es.close();es=null}}
+    es.onerror=function(){onstate(false);if(es!==mine)return;try{mine.close()}catch(x){}es=mine;wait=Math.min(wait*2,60000);tm=setTimeout(function(){open(true)},wait)}}
+  me.open=open;me.reopen=function(){open(false)};
+  me.send=function(o){o.from=ID;if(o.t!=="press"&&Date.now()<me.block)return;try{return fetch(BASE+topic,{method:"POST",body:JSON.stringify(o)}).then(function(r){if(r.status===429)me.block=Date.now()+30000;me.err=r.ok?"":(r.status===429?"TOO MANY REQUESTS, WAIT A MINUTE":"SERVER ERROR "+r.status)}).catch(function(){me.err="NO INTERNET"})}catch(e){}};
+  me.close=function(){clearTimeout(tm);if(es)es.close();es=null}}
 var seen={};function fresh(id){if(!id)return true;if(seen[id])return false;seen[id]=1;return true}
 
 /* ---------- camera + projection ---------- */
 var running=false,stream=null,tiles=[],vw=1280,vh=720,wl=null,tickT=null,remoteSeen=false,mainChan=null,hb=null;
 async function wake(on){try{if(on&&navigator.wakeLock){wl=await navigator.wakeLock.request("screen")}else if(wl){await wl.release();wl=null}}catch(e){}}
 document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"&&(running||$("rem").classList.contains("on")))wake(true)});
-var cfgT=null,cfgLast=0;function sendCfg(){if(!mainChan||cfgT)return;var w=Math.max(300,4000-(Date.now()-cfgLast));cfgT=setTimeout(function(){cfgT=null;cfgLast=Date.now();mainChan.send({t:"cfg",n:CFG.n,run:running,d:CFG.delay,l:CFG.len})},w)}
+var cfgT=null,cfgLast=0;function sendCfg(now){if(!mainChan)return;if(cfgT){if(!now)return;clearTimeout(cfgT)}var w=now?200:Math.max(300,4000-(Date.now()-cfgLast));cfgT=setTimeout(function(){cfgT=null;cfgLast=Date.now();mainChan.send({t:"cfg",n:CFG.n,run:running,d:CFG.delay,l:CFG.len})},w)}
 function notify(i,s,extra){if(!mainChan)return;var o={t:"st",p:i,s:s};if(extra)for(var k in extra)o[k]=extra[k];mainChan.send(o)}
 function mkTile(i,liveOnly){
   var d=document.createElement("div");d.className="tile"+(CFG.mirror?" mir":"");
@@ -2568,14 +2569,14 @@ async function startProj(){
   running=true;$("proj").classList.add("on");var g=$("grid");g.innerHTML="";tiles=[];
   for(var i=0;i<CFG.n;i++){var t=mkTile(i,false);tiles.push(t);g.appendChild(t.el)}
   layout();
-  tiles.forEach(function(t){updOverlay(t)});info();wake(true);sendCfg();clearInterval(hb);hb=setInterval(sendCfg,20000);requestAnimationFrame(rafLoop);
+  tiles.forEach(function(t){updOverlay(t)});info();wake(true);sendCfg(true);clearInterval(hb);hb=setInterval(sendCfg,20000);requestAnimationFrame(rafLoop);
   tickT=setInterval(function(){var now=performance.now();tiles.forEach(function(t){
     if(t.state==="wait"){var r=Math.ceil((t.d*1000-(now-t.t0))/1000);t.cd.textContent=Math.max(r,1);t.st.textContent=L[t.i]+" STARTS IN "+Math.max(r,1)+" S"}
     else if(t.state==="rec"){var e=Math.min(t.l,(now-t.t0)/1000);t.cd.textContent="";t.st.textContent="REC "+e.toFixed(1)+" / "+t.l+" S"}})},150)}
 function updOverlay(t){if(t.state!=="idle")return;t.cd.textContent="";var n=store.filter(function(c){return c.p===t.i}).length;
   t.st.textContent=t.clip?("LOOP"+(t.saved?" - CLIP "+n:"")):(CFG.tap?"LIVE - TAP TO RECORD":"LIVE")}
 function stopProj(){running=false;clearInterval(tickT);clearInterval(hb);tiles.forEach(function(t){clearTimeout(t.timer);if(t.rec&&t.rec.state!=="inactive"){t.rec.onstop=null;try{t.rec.stop()}catch(e){}}if(t.url)URL.revokeObjectURL(t.url)});
-  tiles=[];$("grid").innerHTML="";if(stream){stream.getTracks().forEach(function(x){x.stop()});stream=null}$("proj").classList.remove("on");wake(false);sendCfg();renderClips()}
+  tiles=[];$("grid").innerHTML="";if(stream){stream.getTracks().forEach(function(x){x.stop()});stream=null}$("proj").classList.remove("on");wake(false);sendCfg(true);renderClips()}
 $("start").onclick=startProj;$("pstop").onclick=stopProj;window.addEventListener("resize",function(){if(running)layout()});
 
 /* ---------- capture ---------- */
@@ -2600,7 +2601,7 @@ function record(t){var mime=pickMime(),chunks=[],rec;
 
 /* ---------- remote link on the iPad ---------- */
 var relayOK=false,remoteTs=0;
-function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
+function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 5 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
   $("rstat2").textContent=remoteTs?"IPHONE CONNECTED - LAST SIGNAL "+Math.round((Date.now()-remoteTs)/1000)+" S AGO":"NO IPHONE CONNECTED YET."}
 function handleMain(m){
   if(m.t==="hello"){remoteSeen=true;remoteTs=Date.now();if(running||document.visibilityState==="visible")sendCfg();if(running)info();diag()}
