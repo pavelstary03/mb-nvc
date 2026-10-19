@@ -2460,7 +2460,7 @@ var CFG={n:2,save:1,who:"ALL",delay:3,len:5,max:5,speed:50,blend:1,mirror:1,tap:
 try{Object.assign(CFG,JSON.parse(ls("nvcdv-cfg")||"{}"))}catch(e){}
 if(!(CFG.speed>=10))CFG.speed=50;
 function saveCfg(){ls("nvcdv-cfg",JSON.stringify(CFG))}
-var CODE="nvcmgnp7pfg6tfz";
+var CODE="nvcn726pjn2dh89";
 var RVFC="requestVideoFrameCallback" in HTMLVideoElement.prototype;
 function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
 function pickMime(){var c=["video/mp4;codecs=avc1.42E01E","video/mp4","video/webm;codecs=vp9","video/webm;codecs=vp8","video/webm"];
@@ -2569,7 +2569,7 @@ async function startProj(){
   running=true;$("proj").classList.add("on");var g=$("grid");g.innerHTML="";tiles=[];
   for(var i=0;i<CFG.n;i++){var t=mkTile(i,false);tiles.push(t);g.appendChild(t.el)}
   layout();
-  tiles.forEach(function(t){updOverlay(t)});info();wake(true);sendCfg(true);clearInterval(hb);hb=setInterval(sendCfg,20000);requestAnimationFrame(rafLoop);
+  tiles.forEach(function(t){updOverlay(t)});info();wake(true);sendCfg(true);clearInterval(hb);hb=setInterval(sendCfg,30000);requestAnimationFrame(rafLoop);
   tickT=setInterval(function(){var now=performance.now();tiles.forEach(function(t){
     if(t.state==="wait"){var r=Math.ceil((t.d*1000-(now-t.t0))/1000);t.cd.textContent=Math.max(r,1);t.st.textContent=L[t.i]+" STARTS IN "+Math.max(r,1)+" S"}
     else if(t.state==="rec"){var e=Math.min(t.l,(now-t.t0)/1000);t.cd.textContent="";t.st.textContent="REC "+e.toFixed(1)+" / "+t.l+" S"}})},150)}
@@ -2601,7 +2601,7 @@ function record(t){var mime=pickMime(),chunks=[],rec;
 
 /* ---------- remote link on the iPad ---------- */
 var relayOK=false,remoteTs=0;
-function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 5 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
+function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 6 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
   $("rstat2").textContent=remoteTs?"IPHONE CONNECTED - LAST SIGNAL "+Math.round((Date.now()-remoteTs)/1000)+" S AGO":"NO IPHONE CONNECTED YET."}
 function handleMain(m){
   if(m.t==="hello"){remoteSeen=true;remoteTs=Date.now();if(running||document.visibilityState==="visible")sendCfg();if(running)info();diag()}
@@ -2649,7 +2649,7 @@ async function shareFilm(p){var b=films[p];if(!b)return;var ext=/mp4/.test(b.typ
 var rch=null,rcfg=null,rb=[],rtimer=null,rhello=null,rbuilt=0,rlast=0,rstart=0,relay=false,act=null;
 function rStatus(t){$("rstat").textContent=t}
 function rAge(){return rlast?Date.now()-rlast:1e9}
-function rSig(){if(!rch)return;var age=rAge(),ok=!!rcfg&&age<70000,t;
+function rSig(){if(!rch)return;var age=rAge(),ok=!!rcfg&&age<100000,t;
   if(ok)t="IPAD CONNECTED";else if(!relay)t="NO CONNECTION TO THE RELAY"+(rch.err?" ("+rch.err+")":"");else t="LOOKING FOR THE IPAD...";
   rStatus(t);
   if(!rcfg){$("rgrid").hidden=true;$("rmsg").hidden=false;
@@ -2660,8 +2660,8 @@ function rSig(){if(!rch)return;var age=rAge(),ok=!!rcfg&&age<70000,t;
 function openRemote(code){code=(code||"").toLowerCase().replace(/[^a-z0-9]/g,"");if(code.length<4)return;
   $("rem").classList.add("on");rcfg=null;act=null;rbuilt=0;rlast=0;relay=false;rstart=Date.now();$("rgrid").hidden=true;$("rmsg").hidden=false;$("rmt").textContent="CONNECTING TO THE IPAD...";$("rretry").hidden=true;rStatus("CONNECTING...");wake(true);
   rch=new Chan(code,onRemote,function(ok){relay=ok;rSig()});rch.open();
-  setTimeout(function(){if(rch&&!rcfg)rch.send({t:"hello"})},700);
-  rhello=setInterval(function(){if(rch&&(!rcfg||rAge()>45000))rch.send({t:"hello"})},15000);
+  setTimeout(function(){if(rch&&!rcfg)rch.send({t:"hello"})},700);setTimeout(function(){if(rch&&!rcfg)rch.send({t:"hello"})},6000);
+  rhello=setInterval(function(){if(rch&&(!rcfg||rAge()>90000))rch.send({t:"hello"})},30000);
   rtimer=setInterval(function(){rSig();rUpdate()},500)}
 function closeRemote(){if(rch)rch.close();rch=null;clearInterval(rhello);clearInterval(rtimer);$("rem").classList.remove("on");wake(false);
   if(location.search){try{history.replaceState(null,"",location.pathname)}catch(e){}}}
