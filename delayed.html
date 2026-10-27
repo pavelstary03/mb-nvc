@@ -91,6 +91,8 @@ input[type=text]{width:100%;padding:14px;font-size:22px;border:2px solid var(--l
 #s-tm button{white-space:normal;line-height:1.2;padding:12px 6px}#s-who button{min-width:0;flex:1 1 90px;overflow:hidden;text-overflow:ellipsis;font-size:14px;padding:12px 4px}
 .big.wa{background:#25d366;color:#06260f}.big small,.big .wn{display:block;font-size:14px;font-weight:700;opacity:.85}
 .chips button{flex:1;min-width:110px;white-space:normal;line-height:1.2}.chips button small{font-weight:600;opacity:.8;font-size:12px}
+.g3.g2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr));align-items:stretch}@media(max-width:900px){.g3.g2{grid-template-columns:1fr}}
+#v-setup>.card{margin-bottom:14px}
 .names{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px;margin:6px 0 0}
 .nm{display:flex;align-items:center;gap:8px;padding:12px 10px;border:2px solid var(--line);border-radius:10px;background:transparent;color:var(--ink);font-weight:700;font-size:15px;font-family:inherit;text-align:left;text-transform:none}
 .nm i{width:22px;height:22px;border-radius:6px;border:2px solid #8a97ab;flex:none;display:grid;place-items:center;font-style:normal;font-size:14px;color:#fff}
@@ -122,9 +124,8 @@ details#ted-tr{margin-top:18px}details#ted-tr summary{cursor:pointer;font-weight
 <div class="card"><h2>MODE</h2>
 <div class="seg" id="s-mode"><button data-v="1">1 · DELAYED VIDEO</button><button data-v="2">2 · SELECT INDIVIDUALS IN ADVANCE</button><button data-v="3">3 · REPLAY AFTER THE ACTION</button></div>
 <p class="muted" id="mode-d" style="margin:0"></p></div>
-<div class="g3">
-<div class="card"><h2>RECORDING</h2>
-<div data-m="2,3"><label class="l">WHO IS IN THE PICTURE</label>
+<div class="card" data-m="2,3"><h2>WHO IS IN THE PICTURE</h2>
+
 <div class="seg" id="s-tm"><button data-v="1">SAVED TEAM</button><button data-v="0">NO TEAM (NUMBERS)</button></div>
 <div id="tm-box"><label class="l">TEAM</label><div class="seg wrap chips" id="tm-chips"></div>
 <div class="row" style="margin:0 0 14px"><button class="btn" id="tm-edit">✎ EDIT TEAMS</button></div>
@@ -134,18 +135,24 @@ details#ted-tr{margin-top:18px}details#ted-tr summary{cursor:pointer;font-weight
 <p class="muted" style="margin:0 0 16px">THE TILES FOLLOW THE ORDER IN WHICH YOU TAP THE NAMES.</p></div>
 <div id="n-box"><label class="l">PEOPLE TO FOLLOW</label>
 <div class="seg wrap" id="s-n"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button><button data-v="5">5</button><button data-v="6">6</button><button data-v="7">7</button><button data-v="8">8</button><button data-v="9">9</button><button data-v="10">10</button><button data-v="11">11</button><button data-v="12">12</button><button data-v="13">13</button><button data-v="14">14</button></div></div>
-<label class="l">SAVE CLIPS FOR THE FILM</label>
-<div class="seg" id="s-save"><button data-v="0">DELAYED VIDEO ONLY</button><button data-v="1">SAVE CLIPS</button></div></div>
+</div>
+<div class="card" data-m="2,3"><h2>SAVE CLIPS FOR THE FILM</h2>
+<div class="seg" id="s-save"><button data-v="0">DELAYED VIDEO ONLY</button><button data-v="1">SAVE CLIPS</button></div>
 <div data-m="2,3"><div id="f-sv"><label class="l">SAVE CLIPS OF</label><div class="seg wrap" id="s-who"></div></div></div>
+</div>
+<div class="card" data-m="2,3"><h2>PLAYBACK</h2>
+<label class="l">SLOW-MOTION SPEED</label>
+<div class="seg wrap" id="s-speed"></div>
+</div>
+<div class="g3 g2">
+<div class="card"><h2>RECORDING</h2>
 <div data-m="1"><div class="fld"><div class="lr"><label class="l" for="r-m1max">MAX CLIPS IN THE CLIPS TAB (RECORDED WITH THE REC BUTTON)</label><b id="o-m1max"></b></div><input type="range" id="r-m1max" min="1" max="50" step="1"></div><div class="fld"><div class="lr"><label class="l" for="r-ldelay">DELAY OF THE PICTURE</label><b id="o-ldelay"></b></div><input type="range" id="r-ldelay" min="1" max="60" step="1"></div></div>
 <div data-m="2"><div class="fld"><div class="lr"><label class="l" for="r-delay">START RECORDING AFTER BUTTON PRESS</label><b id="o-delay"></b></div><input type="range" id="r-delay" min="0" max="60" step="1"></div>
 <div class="fld"><div class="lr"><label class="l" for="r-len">CLIP LENGTH</label><b id="o-len"></b></div><input type="range" id="r-len" min="1" max="60" step="1"></div></div>
 <div data-m="3"><div class="fld"><div class="lr"><label class="l" for="r-back">SAVE THE LAST SECONDS BEFORE THE BUTTON PRESS</label><b id="o-back"></b></div><input type="range" id="r-back" min="1" max="10" step="1"></div></div>
 <div data-m="2,3"><div class="fld" id="f-max"><div class="lr"><label class="l" for="r-max">MAX CLIPS PER PERSON (FOR THE FILM)</label><b id="o-max"></b></div><input type="range" id="r-max" min="1" max="50" step="1"></div></div>
 </div>
-<div class="card" data-m="2,3"><h2>PLAYBACK</h2>
-<label class="l">SLOW-MOTION SPEED</label>
-<div class="seg wrap" id="s-speed"></div>
+<div class="card" data-m="2,3"><h2>PLAYBACK OPTIONS</h2>
 <label class="l">SMOOTHING (FRAME BLENDING)</label>
 <div class="seg" id="s-blend"><button data-v="1">ON</button><button data-v="0">OFF</button></div>
 <label class="l">MIRROR VIEW</label>
@@ -2706,7 +2713,7 @@ function record(t){if(stream){var vt=stream.getVideoTracks()[0];if(!vt||vt.ready
 
 /* ---------- remote link on the iPad ---------- */
 var relayOK=false,remoteTs=0;
-function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 20 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
+function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 21 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
   $("rstat2").textContent=remoteTs?"IPHONE CONNECTED - LAST SIGNAL "+Math.round((Date.now()-remoteTs)/1000)+" S AGO":"NO IPHONE CONNECTED YET."}
 function handleMain(m){
   if(m.t==="hello"){remoteSeen=true;remoteTs=Date.now();if(running||document.visibilityState==="visible")sendCfg();if(running)info();diag()}
@@ -3127,7 +3134,7 @@ var DP=[
 ["PEOPLE TO FOLLOW","POČET SLEDOVANÝCH OSOB (ČÍSLA 1-N)"],["SAVE CLIPS FOR THE FILM","UKLÁDAT KLIPY PRO FILM"],["DELAYED VIDEO ONLY","JEN ZPOŽDĚNÉ VIDEO"],["SAVE CLIPS","UKLÁDAT KLIPY"],["SAVE CLIPS OF","UKLÁDAT KLIPY PRO"],["ALL","VŠE"],
 ["MAX CLIPS IN THE CLIPS TAB (RECORDED WITH THE REC BUTTON)","MAX. KLIPŮ V ZÁLOŽCE KLIPY (NAHRÁVANÝCH TLAČÍTKEM REC)"],["DELAY OF THE PICTURE","ZPOŽDĚNÍ OBRAZU"],["START RECORDING AFTER BUTTON PRESS","ZAČÁTEK NAHRÁVÁNÍ PO STISKU TLAČÍTKA"],["CLIP LENGTH","DÉLKA KLIPU"],
 ["SAVE THE LAST SECONDS BEFORE THE BUTTON PRESS","ULOŽIT POSLEDNÍ SEKUNDY PŘED STISKEM TLAČÍTKA"],["MAX CLIPS PER PERSON (FOR THE FILM)","MAX. KLIPŮ NA OSOBU (PRO FILM)"],
-["PLAYBACK","PŘEHRÁVÁNÍ"],["SLOW-MOTION SPEED","RYCHLOST ZPOMALENÍ"],["SMOOTHING (FRAME BLENDING)","VYHLAZENÍ (PROLÍNÁNÍ SNÍMKŮ)"],["ON","ZAP"],["OFF","VYP"],["MIRROR VIEW","ZRCADLOVÝ OBRAZ"],["TAP A SCREEN TO TRIGGER IT","KLEPNUTÍM NA DLAŽDICI SPUSTIT"],
+["PLAYBACK","PŘEHRÁVÁNÍ"],["PLAYBACK OPTIONS","MOŽNOSTI PŘEHRÁVÁNÍ"],["SLOW-MOTION SPEED","RYCHLOST ZPOMALENÍ"],["SMOOTHING (FRAME BLENDING)","VYHLAZENÍ (PROLÍNÁNÍ SNÍMKŮ)"],["ON","ZAP"],["OFF","VYP"],["MIRROR VIEW","ZRCADLOVÝ OBRAZ"],["TAP A SCREEN TO TRIGGER IT","KLEPNUTÍM NA DLAŽDICI SPUSTIT"],
 ["DRAWING ON THE SCREEN","KRESLENÍ NA OBRAZOVKU"],["SHOW MY DRAWING (LINES, ARROWS) ON THE SCREEN AND RECORD IT INTO THE CLIPS","ZOBRAZIT MOJI KRESBU (ČÁRY, ŠIPKY) NA OBRAZOVCE A NAHRÁVAT JI DO KLIPŮ"],
 ["DRAW ONCE ON THE LIVE PICTURE (PRESS DRAW ON THE PROJECTION SCREEN). THE DRAWING STAYS ON THE SCREEN AND IS BURNED INTO THE CLIPS RECORDED WHILE IT IS ON. CLIPS RECORDED BEFORE KEEP THEIR OLD PICTURE.","NAKRESLI JEDNOU NA ŽIVÝ OBRAZ (KLEPNI NA KRESLIT NA PROMÍTACÍ OBRAZOVCE). KRESBA ZŮSTANE NA OBRAZOVCE A VYPÁLÍ SE DO KLIPŮ NAHRANÝCH, DOKUD JE ZAPNUTÁ. KLIPY NAHRANÉ DŘÍVE ZŮSTANOU S PŮVODNÍM OBRAZEM."],
 ["CAMERA","KAMERA"],["FRONT","PŘEDNÍ"],["BACK","ZADNÍ"],["ZOOM","ZOOM"],["RESOLUTION","ROZLIŠENÍ"],["REQUESTED FRAME RATE","POŽADOVANÁ SNÍMKOVÁ FREKVENCE"],
