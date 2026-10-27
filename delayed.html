@@ -28,7 +28,7 @@ h2{font-size:19px;margin:0 0 12px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
 .g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px;align-items:start}.g3 .card{margin:0}
 .seg{display:flex;gap:6px;margin:6px 0 16px}.seg.wrap{flex-wrap:wrap}
-.seg.wrap#s-n button{min-width:96px}#s-save button{white-space:normal;line-height:1.2;padding:12px 8px}.seg button{flex:1;min-width:64px;white-space:nowrap;padding:15px 6px;border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;font-weight:600;font-size:16px;font-family:inherit}
+.seg.wrap#s-n button{min-width:64px}#s-save button{white-space:normal;line-height:1.2;padding:12px 8px}.seg button{flex:1;min-width:64px;white-space:nowrap;padding:15px 6px;border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;font-weight:600;font-size:16px;font-family:inherit}
 .seg button[aria-pressed="true"]{border-color:var(--blue);background:var(--blue);color:var(--onblue)}
 label.l{display:block;color:var(--mute);font-size:14px;font-weight:700}
 .fld{margin:0 0 16px}.lr{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.lr b{font-size:22px;white-space:nowrap}
@@ -85,9 +85,33 @@ input[type=text]{width:100%;padding:14px;font-size:22px;border:2px solid var(--l
 .rb.act{background:var(--yellow);color:#1a1400}.rb.rc{background:var(--red);color:#fff}.rb:disabled{opacity:.4}
 #rmsg[hidden],#rgrid[hidden]{display:none!important}
 #rmsg{flex-direction:column;gap:18px;flex:1;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:800;font-size:24px;line-height:1.3;font-family:inherit;color:var(--mute);padding:20px}
-#s-mode button{white-space:normal;line-height:1.2;padding:12px 8px}@media(max-width:900px){#s-mode{flex-direction:column}}</style></head>
+#s-mode button{white-space:normal;line-height:1.2;padding:12px 8px}
+.lsw{display:flex;gap:4px;margin-top:8px;justify-content:flex-end}.lsw button{padding:5px 10px;border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;font-weight:800;font-size:13px;font-family:inherit}.lsw button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:var(--onblue)}
+.rtop .lsw{margin:0}
+#s-tm button{white-space:normal;line-height:1.2;padding:12px 6px}#s-who button{min-width:0;flex:1 1 90px;overflow:hidden;text-overflow:ellipsis;font-size:14px;padding:12px 4px}
+.big.wa{background:#25d366;color:#06260f}.big small,.big .wn{display:block;font-size:14px;font-weight:700;opacity:.85}
+.chips button{flex:1;min-width:110px;white-space:normal;line-height:1.2}.chips button small{font-weight:600;opacity:.8;font-size:12px}
+.names{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px;margin:6px 0 0}
+.nm{display:flex;align-items:center;gap:8px;padding:12px 10px;border:2px solid var(--line);border-radius:10px;background:transparent;color:var(--ink);font-weight:700;font-size:15px;font-family:inherit;text-align:left;text-transform:none}
+.nm i{width:22px;height:22px;border-radius:6px;border:2px solid #8a97ab;flex:none;display:grid;place-items:center;font-style:normal;font-size:14px;color:#fff}
+.nm span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nm small{color:var(--mute);font-weight:800}
+.nm[aria-pressed="true"]{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 14%,transparent)}.nm[aria-pressed="true"] i{background:var(--blue);border-color:var(--blue)}.nm[aria-pressed="true"] small{color:var(--blue)}
+#ted{position:fixed;inset:0;z-index:97;background:var(--bg);display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}#ted.on{display:flex}
+#ted .tedh{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line);font-size:20px;font-weight:800}
+#ted .tedb{flex:1;min-height:0;overflow:auto;padding:14px 16px calc(24px + env(safe-area-inset-bottom,0px));-webkit-overflow-scrolling:touch}
+.ti{width:100%;padding:12px;font-size:17px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);text-transform:none;letter-spacing:0;font-family:inherit}
+textarea.ti{resize:vertical}
+.edr{display:grid;grid-template-columns:34px 1fr 1fr 52px;gap:8px;align-items:center;margin:0 0 8px}.edr .en{font-weight:800;color:var(--mute);text-align:center}
+@media(max-width:640px){.edr{grid-template-columns:28px 1fr 44px}.edr input[data-f=ph]{grid-column:2/3;grid-row:2}.edr .btn{grid-row:1/3;grid-column:3}}
+details#ted-tr{margin-top:18px}details#ted-tr summary{cursor:pointer;font-weight:800;font-size:17px;padding:10px 0}
+#grid.many .lt{font-size:clamp(13px,3.2vh,28px);padding:3px 9px;max-width:calc(100% - 20px)}#grid.many .st{font-size:clamp(9px,1.6vh,14px);padding:3px 6px;top:auto;bottom:6px}#grid.many .cd{font-size:min(14vh,110px)}
+.lt{max-width:62%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rb b{max-width:100%;overflow:hidden;white-space:nowrap;padding:0 6px}
+#rgrid.n10,#rgrid.n11,#rgrid.n12,#rgrid.n13,#rgrid.n14{grid-template-columns:1fr 1fr 1fr}@media(orientation:portrait){#rgrid.n10,#rgrid.n11,#rgrid.n12,#rgrid.n13,#rgrid.n14{grid-template-columns:1fr 1fr}}
+#rgrid.n10 .rb b,#rgrid.n11 .rb b,#rgrid.n12 .rb b,#rgrid.n13 .rb b,#rgrid.n14 .rb b{font-size:min(10vw,7vh,60px)}#rgrid.n10 .rb small,#rgrid.n11 .rb small,#rgrid.n12 .rb small,#rgrid.n13 .rb small,#rgrid.n14 .rb small{font-size:12px;text-align:center;padding:0 4px}
+@media(max-width:900px){#s-mode{flex-direction:column}}</style></head>
 <body><main>
-<header class="hd"><svg class="lg" viewBox="0 0 160 160" role="img" aria-label="Volley Apps logo"><defs><clipPath id="hc"><circle cx="80" cy="80" r="50"/></clipPath></defs><rect width="160" height="160" rx="36" fill="#0F2A4A"/><circle cx="80" cy="80" r="50" fill="#fff"/><g clip-path="url(#hc)" fill="none" stroke="#E63946" stroke-width="17" stroke-linecap="round"><path d="M80 80 C 80 54, 100 34, 140 36"/><path d="M80 80 C 80 54, 100 34, 140 36" transform="rotate(120 80 80)"/><path d="M80 80 C 80 54, 100 34, 140 36" transform="rotate(240 80 80)"/></g><circle cx="80" cy="80" r="50" fill="none" stroke="#0F2A4A" stroke-width="3"/></svg><h1>DELAYED VIDEO</h1><div class="brand"><b>VOLLEY</b><span>APPS</span></div></header>
+<header class="hd"><svg class="lg" viewBox="0 0 160 160" role="img" aria-label="Volley Apps logo"><defs><clipPath id="hc"><circle cx="80" cy="80" r="50"/></clipPath></defs><rect width="160" height="160" rx="36" fill="#0F2A4A"/><circle cx="80" cy="80" r="50" fill="#fff"/><g clip-path="url(#hc)" fill="none" stroke="#E63946" stroke-width="17" stroke-linecap="round"><path d="M80 80 C 80 54, 100 34, 140 36"/><path d="M80 80 C 80 54, 100 34, 140 36" transform="rotate(120 80 80)"/><path d="M80 80 C 80 54, 100 34, 140 36" transform="rotate(240 80 80)"/></g><circle cx="80" cy="80" r="50" fill="none" stroke="#0F2A4A" stroke-width="3"/></svg><h1>DELAYED VIDEO</h1><div class="brand"><b>VOLLEY</b><span>APPS</span><div class="lsw"><button data-l="cs">CZ</button><button data-l="en">EN</button></div></div></header>
 <nav class="tabs" role="tablist">
 <button class="tab" role="tab" data-go="setup" aria-selected="true">SETUP</button>
 <button class="tab" role="tab" data-go="clips" aria-selected="false">CLIPS</button>
@@ -100,8 +124,16 @@ input[type=text]{width:100%;padding:14px;font-size:22px;border:2px solid var(--l
 <p class="muted" id="mode-d" style="margin:0"></p></div>
 <div class="g3">
 <div class="card"><h2>RECORDING</h2>
-<div data-m="2,3"><label class="l">PEOPLE TO FOLLOW</label>
-<div class="seg wrap" id="s-n"><button data-v="1">1 (A)</button><button data-v="2">2 (A-B)</button><button data-v="3">3 (A-C)</button><button data-v="4">4 (A-D)</button><button data-v="5">5 (A-E)</button><button data-v="6">6 (A-F)</button><button data-v="7">7 (A-G)</button><button data-v="8">8 (A-H)</button><button data-v="9">9 (A-I)</button></div>
+<div data-m="2,3"><label class="l">WHO IS IN THE PICTURE</label>
+<div class="seg" id="s-tm"><button data-v="1">SAVED TEAM</button><button data-v="0">NO TEAM (NUMBERS)</button></div>
+<div id="tm-box"><label class="l">TEAM</label><div class="seg wrap chips" id="tm-chips"></div>
+<div class="row" style="margin:0 0 14px"><button class="btn" id="tm-edit">✎ EDIT TEAMS</button></div>
+<div class="lr"><label class="l">SELECT THE NAMES (MAX. 14)</label><b id="tm-cnt"></b></div>
+<div class="names" id="tm-names"></div>
+<div class="row" style="margin:10px 0 6px"><button class="btn" id="tm-all">SELECT ALL</button><button class="btn" id="tm-none">CLEAR SELECTION</button><span class="muted" id="tm-msg" style="color:#c0392b"></span></div>
+<p class="muted" style="margin:0 0 16px">THE TILES FOLLOW THE ORDER IN WHICH YOU TAP THE NAMES.</p></div>
+<div id="n-box"><label class="l">PEOPLE TO FOLLOW</label>
+<div class="seg wrap" id="s-n"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button><button data-v="5">5</button><button data-v="6">6</button><button data-v="7">7</button><button data-v="8">8</button><button data-v="9">9</button><button data-v="10">10</button><button data-v="11">11</button><button data-v="12">12</button><button data-v="13">13</button><button data-v="14">14</button></div></div>
 <label class="l">SAVE CLIPS FOR THE FILM</label>
 <div class="seg" id="s-save"><button data-v="0">DELAYED VIDEO ONLY</button><button data-v="1">SAVE CLIPS</button></div></div>
 <div data-m="2,3"><div id="f-sv"><label class="l">SAVE CLIPS OF</label><div class="seg wrap" id="s-who"></div></div></div>
@@ -155,14 +187,14 @@ input[type=text]{width:100%;padding:14px;font-size:22px;border:2px solid var(--l
 <p class="muted" id="pairstat" style="margin:12px 0 0"></p>
 </div>
 <div class="card"><h2>BACKUP: INTERNET REMOTE</h2>
-<p class="muted" style="margin:0 0 10px">ON THE IPHONE, SCAN THIS QR CODE WITH THE CAMERA AND OPEN THE LINK. THE IPHONE THEN SHOWS THE BUTTONS A-I. THE QR CODE NEVER CHANGES.</p>
+<p class="muted" style="margin:0 0 10px">ON THE IPHONE, SCAN THIS QR CODE WITH THE CAMERA AND OPEN THE LINK. THE IPHONE THEN SHOWS ONE BUTTON PER PERSON. THE QR CODE NEVER CHANGES.</p>
 <div id="qr"></div>
 <p class="muted" id="rrelay" style="margin:14px 0 4px">CONNECTION: ...</p>
 <p class="muted" id="rstat2" style="margin:0">NO IPHONE CONNECTED YET.</p>
 </div>
 <div class="card"><h2>HOW IT WORKS</h2>
-<p class="muted" style="margin:0 0 10px">THE IPAD RECORDS. THE IPHONE ONLY SENDS SHORT COMMANDS (&ldquo;A PRESSED&rdquo;), NO VIDEO.</p>
-<p class="muted" style="margin:0 0 10px"><b>DIRECT PAIRING:</b><br>1. ON THE IPAD PRESS PAIR IPHONE.<br>2. SCAN THE IPAD QR CODE WITH THE IPHONE CAMERA AND OPEN THE LINK.<br>3. ON THE IPAD PRESS STEP 2 AND POINT THE IPAD CAMERA AT THE QR CODE ON THE IPHONE.<br>4. START THE RECORDING ON THE IPAD AND PRESS A-I ON THE IPHONE.</p>
+<p class="muted" style="margin:0 0 10px">THE IPAD RECORDS. THE IPHONE ONLY SENDS SHORT COMMANDS (&ldquo;BUTTON PRESSED&rdquo;), NO VIDEO.</p>
+<p class="muted" style="margin:0 0 10px"><b>DIRECT PAIRING:</b><br>1. ON THE IPAD PRESS PAIR IPHONE.<br>2. SCAN THE IPAD QR CODE WITH THE IPHONE CAMERA AND OPEN THE LINK.<br>3. ON THE IPAD PRESS STEP 2 AND POINT THE IPAD CAMERA AT THE QR CODE ON THE IPHONE.<br>4. START THE RECORDING ON THE IPAD AND PRESS A PERSON'S BUTTON ON THE IPHONE.</p>
 <p class="muted" style="margin:0">IF NOTHING WORKS, TAP THE SCREEN OF THE PERSON ON THE IPAD INSTEAD.</p>
 </div>
 </div>
@@ -176,9 +208,27 @@ input[type=text]{width:100%;padding:14px;font-size:22px;border:2px solid var(--l
 <button id="zm" aria-label="Zoom out">−</button><span id="zv" class="muted" style="min-width:52px;text-align:center">1.0×</span><button id="zp" aria-label="Zoom in">+</button><button id="pdraw">✎ DRAW</button><button id="pdrt" hidden>LINES ON</button><button id="prec" hidden>REC</button><label class="muted" for="psp" id="psl">SPEED</label><select id="psp"></select>
 <button id="pstop">STOP</button></div></div>
 
+<div id="ted"><div class="tedh"><span>TEAMS</span><button class="btn pri" id="ted-x">DONE</button></div><div class="tedb">
+<p class="muted" style="margin:0 0 12px">UP TO 3 TEAMS, EACH WITH MAX. 25 NAMES. THE NAME IS SHOWN ON THE TILE AND ON THE IPHONE BUTTON. NAMES AND PHONE NUMBERS ARE STORED ONLY IN THIS TABLET.</p>
+<div class="seg wrap chips" id="ted-tabs"></div>
+<label class="l">TEAM NAME</label><input class="ti" id="ted-name" maxlength="30" autocomplete="off">
+<div class="row" style="margin:12px 0"><button class="btn pri" id="ted-add">+ ADD NAME</button><button class="btn" id="ted-paste">PASTE A LIST</button><button class="btn danger" id="ted-del">CLEAR TEAM</button><b id="ted-cnt" style="margin-left:auto"></b></div>
+<div id="ted-pbox" hidden style="margin:0 0 14px"><textarea class="ti" id="ted-ta" rows="6" placeholder="ANNA NOVAK; +420777123456"></textarea><p class="muted" style="margin:6px 0 8px">ONE NAME PER LINE. OPTIONAL PHONE NUMBER AFTER A SEMICOLON, E.G. ANNA NOVAK; +420777123456</p><button class="btn pri" id="ted-padd">ADD THE LIST</button></div>
+<div class="edr" style="margin:0 0 6px"><span></span><label class="l" style="margin:0">NAME (SHOWN ON THE TILE)</label><label class="l" style="margin:0">PHONE FOR WHATSAPP (OPTIONAL)</label><span></span></div>
+<div id="ted-list"></div>
+<p class="muted" id="ted-imsg" style="margin:8px 0 0;color:var(--blue)"></p>
+<details id="ted-tr"><summary>MOVE TEAMS TO ANOTHER TABLET</summary>
+<p class="muted">1. ON THIS TABLET PRESS SHARE (AIRDROP, MESSAGES, WHATSAPP...) OR COPY LINK.</p>
+<p class="muted">2. ON THE OTHER TABLET PASTE THE LINK BELOW AND PRESS IMPORT. (A LINK OPENED IN SAFARI IMPORTS ONLY INTO SAFARI, NOT INTO THE APP ON THE HOME SCREEN.)</p>
+<div class="row" style="margin:8px 0"><button class="btn pri" id="ted-share">SHARE</button><button class="btn" id="ted-copy">COPY LINK</button></div>
+<textarea class="ti" id="ted-code" rows="3" readonly></textarea>
+<textarea class="ti" id="ted-in" rows="3" placeholder="PASTE THE LINK OR CODE HERE" style="margin-top:10px"></textarea>
+<div class="row" style="margin-top:8px"><button class="btn pri" id="ted-imp">IMPORT</button></div></details>
+</div></div>
+
 <div id="drw"><div class="dtb" id="dtb"></div><div class="dst" id="dst"><div class="mv"><video id="drv" muted playsinline autoplay></video><canvas id="drc"></canvas></div></div></div>
 
-<div id="rem"><div class="rtop"><button class="btn" id="rexit">EXIT</button><span class="muted" id="rstat">CONNECTING...</span></div>
+<div id="rem"><div class="rtop"><button class="btn" id="rexit">EXIT</button><span class="muted" id="rstat">CONNECTING...</span><div class="lsw"><button data-l="cs">CZ</button><button data-l="en">EN</button></div></div>
 <div id="rmsg"><div id="rmt">CONNECTING TO THE IPAD...</div><div id="rqrbox" hidden><div id="rqr"></div></div><button class="big" id="rretry" hidden style="width:100%;max-width:420px">TRY AGAIN</button></div><div id="rgrid" hidden></div></div>
 
 <div id="scan"><video id="scv" playsinline muted></video><div class="sb"><span>POINT THE CAMERA AT THE QR CODE ON THE IPHONE</span><button class="btn" id="scx">CANCEL</button></div></div>
@@ -2488,14 +2538,14 @@ var qrcode = function() {
 </script>
 <script>
 (function(){
-var $=function(i){return document.getElementById(i)},L=["A","B","C","D","E","F","G","H","I","DELAYED"];
+var $=function(i){return document.getElementById(i)},L=(function(){var a=[];for(var i=0;i<14;i++)a.push(String(i+1));a[99]="DELAYED";return a})();
 var BASE=new URLSearchParams(location.search).get("srv")||"https://ntfy.sh/";
 var ID=Math.random().toString(36).slice(2,10);
 function rnd(n){var a="abcdefghjkmnpqrstuvwxyz23456789",s="";for(var i=0;i<n;i++)s+=a[Math.floor(Math.random()*a.length)];return s}
 function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){}return null}
-var CFG={m1max:10,mode:2,ldelay:5,back:3,zoom:1,n:2,save:1,who:"ALL",delay:3,len:5,max:5,speed:50,blend:1,mirror:1,tap:1,draw:1,cam:"user",res:720,fps:30};
+var CFG={m1max:10,mode:2,ldelay:5,back:3,zoom:1,n:2,save:1,who:"ALL",delay:3,len:5,max:5,speed:50,blend:1,mirror:1,tap:1,draw:1,cam:"user",res:720,fps:30,tm:-1,tml:0};
 try{Object.assign(CFG,JSON.parse(ls("vadv-cfg")||"{}"))}catch(e){}
-if(!(CFG.speed>=10))CFG.speed=50;if(!(CFG.mode>=1&&CFG.mode<=3))CFG.mode=2;if(!(CFG.zoom>=1))CFG.zoom=1;
+if(!(CFG.speed>=10))CFG.speed=50;if(!(CFG.mode>=1&&CFG.mode<=3))CFG.mode=2;if(!(CFG.zoom>=1))CFG.zoom=1;if(!(CFG.n>=1&&CFG.n<=14))CFG.n=2;if(!(CFG.tm>=-1&&CFG.tm<3))CFG.tm=-1;
 function saveCfg(){ls("vadv-cfg",JSON.stringify(CFG))}
 var CODE="vadn726pjn2dh89";
 var RVFC="requestVideoFrameCallback" in HTMLVideoElement.prototype;
@@ -2510,7 +2560,7 @@ function idbOpen(){return new Promise(function(res){try{var r=indexedDB.open("va
   r.onupgradeneeded=function(){r.result.createObjectStore("clips",{keyPath:"id",autoIncrement:true})};
   r.onsuccess=function(){db=r.result;try{navigator.storage.persist()}catch(e){}res()};r.onerror=function(){useMem=true;res()}}catch(e){useMem=true;res()}})}
 function idbAll(){return new Promise(function(res){if(!db){res([]);return}var q=db.transaction("clips").objectStore("clips").getAll();q.onsuccess=function(){res(q.result)};q.onerror=function(){res([])}})}
-function idbPut(c){return new Promise(function(res){if(!db){c.id=c.id||Date.now()+Math.random();res();return}
+function idbPut(c){c.v=2;return new Promise(function(res){if(!db){c.id=c.id||Date.now()+Math.random();res();return}
   var q=db.transaction("clips","readwrite").objectStore("clips").put(c);q.onsuccess=function(){c.id=q.result;res()};q.onerror=function(){useMem=true;c.id=c.id||Date.now()+Math.random();res()}})}
 function idbDel(id){return new Promise(function(res){if(!db){res();return}var q=db.transaction("clips","readwrite").objectStore("clips").delete(id);q.onsuccess=function(){res()};q.onerror=function(){res()}})}
 function stat(){sys(useMem||!db?"WARNING: STORAGE IS NOT PERMANENT, CLIPS WILL BE LOST WHEN THE APP IS CLOSED":store.length+" CLIPS SAVED ON THIS DEVICE")}
@@ -2564,7 +2614,7 @@ var seen={};function fresh(id){if(!id)return true;if(seen[id])return false;seen[
 var running=false,stream=null,tiles=[],vw=1280,vh=720,wl=null,tickT=null,remoteSeen=false,mainChan=null,hb=null;
 async function wake(on){try{if(on&&navigator.wakeLock){wl=await navigator.wakeLock.request("screen")}else if(wl){await wl.release();wl=null}}catch(e){}}
 document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"&&(running||$("rem").classList.contains("on")))wake(true)});
-var cfgT=null,cfgLast=0;function sendCfg(now){if(!mainChan)return;if(cfgT){if(!now)return;clearTimeout(cfgT)}var w=now?200:Math.max(300,4000-(Date.now()-cfgLast));cfgT=setTimeout(function(){cfgT=null;cfgLast=Date.now();mainChan.send({t:"cfg",n:N(),run:running,d:CFG.mode===2?CFG.delay:0,l:CFG.mode===3?CFG.back:CFG.len})},w)}
+var cfgT=null,cfgLast=0;function sendCfg(now){if(!mainChan)return;if(cfgT){if(!now)return;clearTimeout(cfgT)}var w=now?200:Math.max(300,4000-(Date.now()-cfgLast));cfgT=setTimeout(function(){cfgT=null;cfgLast=Date.now();mainChan.send({t:"cfg",n:N(),nm:L.slice(0,N()),run:running,d:CFG.mode===2?CFG.delay:0,l:CFG.mode===3?CFG.back:CFG.len})},w)}
 function notify(i,s,extra){if(!mainChan)return;var o={t:"st",p:i,s:s};if(extra)for(var k in extra)o[k]=extra[k];mainChan.send(o)}
 function mkTile(i,liveOnly){
   var d=document.createElement("div");d.className="tile"+(CFG.mirror?" mir":"");
@@ -2594,8 +2644,10 @@ var LAY={1:{rows:1,t:[[1,12,1]]},2:{rows:2,t:[[1,12,1],[1,12,2]]},3:{rows:2,t:[[
  7:{rows:3,t:[[1,4,1],[5,4,1],[9,4,1],[3,4,2],[7,4,2],[3,4,3],[7,4,3]]},
  8:{rows:3,t:[[1,4,1],[5,4,1],[9,4,1],[1,4,2],[5,4,2],[9,4,2],[3,4,3],[7,4,3]]},
  9:{rows:3,t:[[1,4,1],[5,4,1],[9,4,1],[1,4,2],[5,4,2],[9,4,2],[1,4,3],[5,4,3],[9,4,3]]},6:{rows:2,t:[[1,4,1],[5,4,1],[9,4,1],[1,4,2],[5,4,2],[9,4,2]]}};
-function layout(){var g=$("grid"),Ls=LAY[N()];g.style.gridTemplateColumns="repeat(12,1fr)";g.style.gridTemplateRows="repeat("+Ls.rows+",1fr)";
-  tiles.forEach(function(t,i){var q=Ls.t[i];t.el.style.gridColumn=q[0]+" / span "+q[1];t.el.style.gridRow=String(q[2])})}
+function mkLay(rows){var t=[],mx=Math.max.apply(null,rows),w=120/mx;rows.forEach(function(r,ri){var st=1+(120-w*r)/2;for(var j=0;j<r;j++)t.push([st+j*w,w,ri+1])});return{rows:rows.length,t:t,x:1}}
+var LAYX={10:mkLay([5,5]),11:mkLay([4,4,3]),12:mkLay([4,4,4]),13:mkLay([5,4,4]),14:mkLay([5,5,4])};
+function layout(){var g=$("grid"),n=N(),Ls=LAYX[n]||LAY[n],k=LAYX[n]?1:10;g.style.gridTemplateColumns="repeat(120,1fr)";g.style.gridTemplateRows="repeat("+Ls.rows+",1fr)";
+  tiles.forEach(function(t,i){var q=Ls.t[i];t.el.style.gridColumn=(k===1?q[0]:(q[0]-1)*k+1)+" / span "+q[1]*k;t.el.style.gridRow=String(q[2])})}
 function info(){var z=CFG.zoom>1.001?" - ZOOM "+fz(CFG.zoom)+(HWZ?"":" (DIGITAL)"):"",rm=" - "+(remoteSeen?"REMOTE CONNECTED":"NO REMOTE");
   if(CFG.mode===1){$("pinfo").textContent=vw+"x"+vh+" - DELAYED VIDEO "+CFG.ldelay+" S"+z+rm;return}
   if(CFG.mode===3){$("pinfo").textContent=vw+"x"+vh+" - REPLAY LAST "+CFG.back+" S - SPEED "+CFG.speed+"%"+z+" - "+(CFG.save?"SAVING "+whoTxt():"NOT SAVING")+rm;return}
@@ -2604,6 +2656,7 @@ function info2(){$("pinfo").textContent=vw+"x"+vh+" - "+Math.round(fpsReal)+" FP
 var fpsReal=0;
 async function startProj(){
   $("setmsg").textContent="";try{scanStop()}catch(e){}
+  if(CFG.mode!==1&&CFG.tm>=0&&!pickList().length){$("setmsg").textContent="SELECT AT LEAST ONE NAME.";return}
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){$("setmsg").textContent="THE CAMERA IS NOT AVAILABLE IN THIS BROWSER VIEW (HTTPS NEEDED).";return}
   if(!window.MediaRecorder){$("setmsg").textContent="RECORDING IS NOT SUPPORTED ON THIS DEVICE.";return}
   try{stream=await navigator.mediaDevices.getUserMedia(camC())}
@@ -2611,7 +2664,7 @@ async function startProj(){
   var s=stream.getVideoTracks()[0].getSettings();vw=s.width||1280;vh=s.height||720;fpsReal=s.frameRate||CFG.fps;
   running=true;$("proj").classList.add("on");var g=$("grid");g.innerHTML="";tiles=[];
   if(CFG.mode===1){m1Build(g)}else{for(var i=0;i<N();i++){var t=mkTile(i,false);tiles.push(t);g.appendChild(t.el)}}
-  layout();
+  layout();$("grid").classList.toggle("many",N()>=10);
   tiles.forEach(function(t){updOverlay(t)});modeStart();info();wake(true);sendCfg(true);clearInterval(hb);hb=setInterval(sendCfg,30000);requestAnimationFrame(rafLoop);
   tickT=setInterval(function(){var now=performance.now();tiles.forEach(function(t){
     if(t.state==="wait"){var r=Math.ceil((t.d*1000-(now-t.t0))/1000);t.cd.textContent=Math.max(r,1);t.st.textContent=L[t.i]+" STARTS IN "+Math.max(r,1)+" S"}
@@ -2648,7 +2701,7 @@ function record(t){if(stream){var vt=stream.getVideoTracks()[0];if(!vt||vt.ready
 
 /* ---------- remote link on the iPad ---------- */
 var relayOK=false,remoteTs=0;
-function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 18 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
+function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 19 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
   $("rstat2").textContent=remoteTs?"IPHONE CONNECTED - LAST SIGNAL "+Math.round((Date.now()-remoteTs)/1000)+" S AGO":"NO IPHONE CONNECTED YET."}
 function handleMain(m){
   if(m.t==="hello"){remoteSeen=true;remoteTs=Date.now();if(running||document.visibilityState==="visible")sendCfg();if(running)info();diag()}
@@ -2657,9 +2710,9 @@ function handleMain(m){
 /* ---------- clips tab ---------- */
 var films={},building=false,buildingP=-1,cancelB=false,bmsg={};
 function fmtT(ts){var d=new Date(ts);return d.toTimeString().slice(0,5)}
-function PL(p){return p===9?"MODE 1 - DELAYED VIDEO":"PERSON "+L[p]}
+function PL(p){return p===99?"MODE 1 - DELAYED VIDEO":(CFG.tm>=0?L[p]:"PERSON "+L[p])}
 function renderClips(){var h="";
-  for(var pi=-1;pi<9;pi++){var p=pi<0?9:pi;var list=store.filter(function(c){return c.p===p}).sort(function(a,b){return a.ts-b.ts}),tot=list.reduce(function(a,c){return a+c.dur},0);
+  for(var pi=-1;pi<14;pi++){var p=pi<0?99:pi;var list=store.filter(function(c){return c.p===p}).sort(function(a,b){return a.ts-b.ts}),tot=list.reduce(function(a,c){return a+c.dur},0);if(p!==99&&p>=PN()&&!list.length)continue;
     h+='<div class="card"><h2>'+PL(p)+' - '+list.length+' CLIPS ('+Math.round(tot)+' S)</h2>';
     if(!list.length)h+='<p class="muted" style="margin:0">NO CLIPS YET.</p>';
     list.forEach(function(c,k){h+='<div class="clip"><span class="n">CLIP '+(k+1)+' - '+c.dur.toFixed(1)+' S - '+fmtT(c.ts)+' - '+Math.round(c.blob.size/1024)+' KB</span><button class="btn" data-pv="'+c.id+'">PLAY</button><button class="btn danger" data-del="'+c.id+'">DELETE</button></div>'});
@@ -2672,7 +2725,8 @@ $("clipcards").addEventListener("click",async function(e){var b=e.target.closest
   else if(b.dataset.clear){var p=+b.dataset.clear;var del=store.filter(function(x){return x.p===p});for(var i=0;i<del.length;i++){await idbDel(del[i].id)}store=store.filter(function(x){return x.p!==p});delete films[p];renderClips()}
   else if(b.dataset.cancelb){cancelB=true;if(window.__pf)window.__pf();b.disabled=true;b.textContent="CANCELLING..."}
   else if(b.dataset.film){buildFilm(+b.dataset.film)}
-  else if(b.dataset.save){shareFilm(+b.dataset.save)}});
+  else if(b.dataset.save){shareFilm(+b.dataset.save)}
+  else if(b.dataset.wa){waFilm(+b.dataset.wa,false)}else if(b.dataset.wachat){waFilm(+b.dataset.wachat,true)}});
 $("pvx").onclick=function(){var v=$("pvv");v.pause();v.removeAttribute("src");v.load();$("pv").classList.remove("on")};
 function playOne(v,rec){return new Promise(function(res){var u=URL.createObjectURL(rec.blob),done=false,wd;function fin(){if(done)return;done=true;clearTimeout(wd);try{URL.revokeObjectURL(u)}catch(e){}res()}
   window.__pf=fin;v.onended=fin;v.onerror=fin;wd=setTimeout(fin,Math.max(4,(rec.dur||5)+4)*1000);v.muted=true;v.playbackRate=1;v.src=u;var pr=v.play();if(pr&&pr.catch)pr.catch(fin)})}
@@ -2695,8 +2749,10 @@ async function buildFilm0(p){
   if(cancelB){bmsg[p]="CANCELLED.";return}
   var ft0=(rec.mimeType||mime||"video/mp4");if(!chunks.length)throw new Error("EMPTY FILE");films[p]=new Blob(chunks,{type:/mp4/.test(ft0)?"video/mp4":"video/webm"})}
 function filmName(p,b){var ext=/mp4/.test(b.type)?"mp4":"webm",d=new Date();return "VOLLEYAPPS_"+L[p]+"_"+d.toISOString().slice(0,10)+"."+ext}
-function renderFilm(p){var box=$("fb-"+p);if(!box||!films[p])return;var b=films[p],u=URL.createObjectURL(b);
-  box.innerHTML='<video controls playsinline src="'+u+'"></video><div class="row" style="margin-top:10px"><button class="big" data-save="'+p+'">SAVE TO PHOTOS</button></div><div class="row" style="margin-top:10px"><a class="btn" style="text-decoration:none;text-align:center" href="'+u+'" download="'+filmName(p,b)+'">ALTERNATIVE: DOWNLOAD FILE</a></div><p class="muted" id="fm-'+p+'" style="margin:8px 0 0">TAP SAVE TO PHOTOS, THEN CHOOSE &ldquo;SAVE VIDEO&rdquo; IN THE MENU. ('+(b.size/1048576).toFixed(1)+' MB). IF IT DOES NOT WORK, USE THE DOWNLOAD FILE BUTTON AND SAVE IT TO FILES.</p>'}
+function renderFilm(p){var box=$("fb-"+p);if(!box||!films[p])return;var b=films[p],u=URL.createObjectURL(b),ph=PH(p),team=CFG.tm>=0&&p<14&&p!==99;
+  box.innerHTML='<video controls playsinline src="'+u+'"></video><div class="row" style="margin-top:10px"><button class="big wa" data-wa="'+p+'">SEND TO WHATSAPP'+(team?'<span class="wn">'+L[p]+(ph?' · '+esc(ph):'')+'</span>':'')+'</button></div>'
+   +(team&&ph?'<div class="row" style="margin-top:10px"><button class="btn" data-wachat="'+p+'">OPEN WHATSAPP CHAT</button></div>':'')
+   +'<div class="row" style="margin-top:10px"><button class="big" data-save="'+p+'">SAVE TO PHOTOS</button></div><div class="row" style="margin-top:10px"><a class="btn" style="text-decoration:none;text-align:center" href="'+u+'" download="'+filmName(p,b)+'">ALTERNATIVE: DOWNLOAD FILE</a></div><p class="muted" id="fm-'+p+'" style="margin:8px 0 0">TAP SAVE TO PHOTOS, THEN CHOOSE &ldquo;SAVE VIDEO&rdquo; IN THE MENU. ('+(b.size/1048576).toFixed(1)+' MB). IF IT DOES NOT WORK, USE THE DOWNLOAD FILE BUTTON AND SAVE IT TO FILES.</p>'}
 function shareFilm(p){var b=films[p];if(!b)return;var nm=filmName(p,b),f=new File([b],nm,{type:b.type}),m=$("fm-"+p);
   function say(t){if(m)m.textContent=t}
   if(!navigator.share){say("SHARING IS NOT AVAILABLE IN THIS BROWSER. USE THE DOWNLOAD FILE BUTTON.");return}
@@ -2712,7 +2768,7 @@ var rN=+(new URLSearchParams(location.search).get("n"))||0;
 function rSig(){if(!rch)return;
   if(pMode&&!relay){rStatus(pAns?"SHOW THE QR CODE TO THE IPAD":"PREPARING...");$("rmsg").hidden=false;$("rgrid").hidden=true;$("rretry").hidden=true;$("rqrbox").hidden=!pAns;
     $("rmt").textContent=rcfg?"CONNECTION LOST. ON THE IPAD PRESS PAIR IPHONE AND SCAN THE NEW QR CODE AGAIN.":(pAns?"STEP 2: ON THE IPAD PRESS 'SCAN THE IPHONE QR CODE' AND POINT THE IPAD CAMERA AT THIS QR CODE.":"PREPARING THE DIRECT CONNECTION...");return}
-  $("rqrbox").hidden=true;if(!rcfg&&relay&&rN>0&&Date.now()-rstart>4000){applyCfg({n:Math.min(rN,9),run:true,d:0,l:0});$("rretry").hidden=true;rStatus("CONNECTED - SENDING COMMANDS (THE IPAD DOES NOT REPLY)");return}
+  $("rqrbox").hidden=true;if(!rcfg&&relay&&rN>0&&Date.now()-rstart>4000){applyCfg({n:Math.min(rN,14),run:true,d:0,l:0});$("rretry").hidden=true;rStatus("CONNECTED - SENDING COMMANDS (THE IPAD DOES NOT REPLY)");return}
   var age=rAge(),ok=!!rcfg&&age<100000,t;
   if(ok)t="IPAD CONNECTED";else if(!relay)t="NO CONNECTION TO THE RELAY"+(rch.err?" ("+rch.err+")":"");else t="LOOKING FOR THE IPAD...";
   rStatus(t);
@@ -2731,8 +2787,9 @@ function openRemote(code,payload){pMode=!!payload;pAns="";code=(code||"").toLowe
 function closeRemote(){if(ppc){try{ppc.close()}catch(e){}ppc=null}pMode=false;if(rch)rch.close();rch=null;clearInterval(rhello);clearInterval(rtimer);$("rem").classList.remove("on");wake(false);
   if(location.search){try{history.replaceState(null,"",location.pathname)}catch(e){}}}
 function applyCfg(m){
-  if(rbuilt!==m.n){rbuilt=m.n;var h="";rb=[];for(var i=0;i<m.n;i++){rb.push({s:"idle",t0:0,d:m.d,l:m.l,n:0});h+='<button class="rb" data-i="'+i+'"><b>'+L[i]+'</b><small>READY</small></button>'}
-    var g=$("rgrid");g.className="n"+m.n;g.innerHTML=h}
+  var sg=m.n+"|"+(m.nm||[]).join("\u0001");if(m.nm)for(var q=0;q<m.nm.length;q++)L[q]=cleanName(m.nm[q]);
+  if(rbuilt!==sg){rbuilt=sg;var h="";rb=[];for(var i=0;i<m.n;i++){rb.push({s:"idle",t0:0,d:m.d,l:m.l,n:0});h+='<button class="rb" data-i="'+i+'"><b>'+L[i]+'</b><small>READY</small></button>'}
+    var g=$("rgrid");g.className="n"+m.n;g.innerHTML=h;fitRb()}
   $("rgrid").hidden=!m.run;$("rmsg").hidden=!!m.run;if(!m.run)$("rmt").textContent="THE IPAD IS CONNECTED BUT NOT RECORDING YET. PRESS START ON THE IPAD.";
   rb.forEach(function(x){x.d=m.d;x.l=m.l})}
 function onRemote(m){
@@ -2758,9 +2815,10 @@ document.addEventListener("visibilitychange",function(){if(document.visibilitySt
 
 
 /* ---------- v13: modes, zoom, frame buffer ---------- */
-function N(){return CFG.mode===1?1:CFG.n}
+function PN(){return CFG.tm>=0?Math.max(1,pickList().length):CFG.n}
+function N(){return CFG.mode===1?1:PN()}
 var MODED={1:"ONE FULL SCREEN WITH THE CAMERA PICTURE DELAYED. SET THE DELAY AND PRESS START. YOU CAN RECORD A CLIP OF WHAT YOU SEE AND SAVE IT LATER.",
- 2:"THE PEOPLE ARE CHOSEN IN ADVANCE (A-I). PRESS A PERSON'S BUTTON AND THE RECORDING STARTS AFTER THE DELAY; THE CLIP THEN LOOPS IN SLOW MOTION.",
+ 2:"THE PEOPLE ARE CHOSEN IN ADVANCE (NAMES OR NUMBERS). PRESS A PERSON'S BUTTON AND THE RECORDING STARTS AFTER THE DELAY; THE CLIP THEN LOOPS IN SLOW MOTION.",
  3:"THE CAMERA RUNS IN THE BACKGROUND. AFTER THE ACTION PRESS A PERSON'S BUTTON: THE LAST SECONDS (UP TO 10) GO TO THE LOOP AND, IF SET, TO THE CLIPS."};
 function applyMode(){var m=String(CFG.mode);[].forEach.call(document.querySelectorAll("[data-m]"),function(e){e.hidden=e.dataset.m.split(",").indexOf(m)<0});$("mode-d").textContent=MODED[CFG.mode]||""}
 function fz(v){return (+v).toFixed(1)+"×"}
@@ -2849,7 +2907,7 @@ function bufStop(){BUF.on=false;BUF.fr=[];if(BUF.v){try{BUF.v.srcObject=null;BUF
 function cl(b){try{if(b&&b.close)b.close()}catch(e){}}
 /* mode 1: one delayed screen */
 var M1=null,M1R=null;
-function m1Build(g){var d=document.createElement("div");d.className="tile"+(CFG.cam==="user"?" mir":"");d.style.gridColumn="1 / span 12";d.style.gridRow="1";
+function m1Build(g){var d=document.createElement("div");d.className="tile"+(CFG.cam==="user"?" mir":"");d.style.gridColumn="1 / span 120";d.style.gridRow="1";
   d.innerHTML='<div class="mv"><canvas class="dcv" width="1280" height="720"></canvas></div><div class="st"></div><div class="cd"></div>';g.appendChild(d);
   M1={el:d,cv:d.querySelector("canvas"),st:d.querySelector(".st"),cd:d.querySelector(".cd"),shown:null,dec:false};M1.cx=M1.cv.getContext("2d")}
 function m1Draw(now){var T=now-CFG.ldelay*1000,a=BUF.fr,f=frameIdx(a,T);
@@ -2866,7 +2924,7 @@ function m1Rec(){if(M1R){clearTimeout(M1R.tm);try{M1R.rec.stop()}catch(e){}retur
   rec.onstop=async function(){var dur=(performance.now()-t0)/1000;M1R=null;if(M1)M1.el.classList.remove("rec");$("prec").textContent="REC";
     var rmt=rec.mimeType||mime||"video/mp4",blob=new Blob(chunks,{type:/mp4/.test(rmt)?"video/mp4":"video/webm"});
     if(blob.size<3000){if(M1)M1.st.textContent="RECORDING FAILED (EMPTY FILE)";notify(0,"done",{n:-1});return}
-    var n=await saveClipObj({p:9,blob:blob,mime:blob.type,dur:dur,ts:Date.now()},9,CFG.m1max);notify(0,"done",{n:n});if(M1)M1.st.textContent="CLIP SAVED ("+n+")"};
+    var n=await saveClipObj({p:99,blob:blob,mime:blob.type,dur:dur,ts:Date.now()},99,CFG.m1max);notify(0,"done",{n:n});if(M1)M1.st.textContent="CLIP SAVED ("+n+")"};
   rec.start()}
 $("prec").onclick=m1Rec;
 /* mode 3: replay after the action */
@@ -2950,12 +3008,224 @@ window.pairAnswer=pairAnswer;$("pairbtn").onclick=pairStart;$("pairscan").onclic
 
 /* ---------- init ---------- */
 function drawQR(){var u=location.origin+location.pathname+"?r="+CODE+"&n="+N();try{var q=qrcode(0,"M");q.addData(u);q.make();$("qr").innerHTML='<img alt="QR" src="'+q.createDataURL(8,2)+'">'}catch(e){$("qr").textContent=u}}
+/* ---------- v19: teams, names, WhatsApp, CZ/EN ---------- */
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function cleanName(s){return String(s==null?"":s).replace(/[<>&"\u0000-\u001f]/g,"").slice(0,30)}
+function cleanPh(s){return String(s==null?"":s).replace(/[^\d+ ()\-]/g,"").slice(0,24)}
+var TM={t:[]};
+(function(){var j=null;try{j=JSON.parse(ls("vadv-teams")||"null")}catch(e){}if(j&&j.t&&j.t.length)TM=j;
+  while(TM.t.length<3)TM.t.push({n:"",p:[],sel:[]});TM.t.length=3;
+  TM.t.forEach(function(t){t.n=cleanName(t.n);t.p=(t.p||[]).slice(0,25).map(function(p){return{n:cleanName(p&&p.n),ph:cleanPh(p&&p.ph)}});t.sel=(t.sel||[]).filter(function(i,k,a){return i>=0&&i<t.p.length&&a.indexOf(i)===k}).slice(0,14)})})();
+function saveTM(){ls("vadv-teams",JSON.stringify(TM))}
+function tName(k){return TM.t[k].n||("TEAM "+(k+1))}
+function pickList(){var t=TM.t[CFG.tm];return t?t.sel.filter(function(i){return t.p[i]&&t.p[i].n}):[]}
+function applyLabels(){var pl=CFG.tm>=0?pickList():null,t=CFG.tm>=0?TM.t[CFG.tm]:null;
+  for(var i=0;i<14;i++)L[i]=pl&&pl[i]!==undefined?t.p[pl[i]].n:String(i+1);L[99]="DELAYED"}
+function PH(p){if(CFG.tm<0||p>=14)return"";var pl=pickList(),t=TM.t[CFG.tm];return pl[p]!==undefined&&t.p[pl[p]]?t.p[pl[p]].ph:""}
+function phDigits(ph){var d=String(ph).replace(/[^\d+]/g,"");if(d.charAt(0)==="+")return d.slice(1);if(d.indexOf("00")===0)return d.slice(2);if(d.length===9)return"420"+d;return d.replace(/^0+/,"")}
+var tmMsgT=null;function tmMsg(t){$("tm-msg").textContent=t;clearTimeout(tmMsgT);tmMsgT=setTimeout(function(){$("tm-msg").textContent=""},2800)}
+function tmRefresh(){applyLabels();renderTm();uiSave();drawQR();if(running)info();sendCfg()}
+function renderTm(){var on=CFG.tm>=0;
+  [].forEach.call($("s-tm").children,function(b){b.setAttribute("aria-pressed",String((b.dataset.v==="1")===on))});
+  $("tm-box").hidden=!on;$("n-box").hidden=on;if(!on)return;
+  $("tm-chips").innerHTML=TM.t.map(function(t,k){return'<button data-k="'+k+'" aria-pressed="'+(CFG.tm===k)+'">'+esc(tName(k))+'<br><small>'+t.p.filter(function(p){return p.n}).length+' / 25</small></button>'}).join("");
+  var t=TM.t[CFG.tm],h="";t.p.forEach(function(p,i){if(!p.n)return;var k=t.sel.indexOf(i);
+    h+='<button class="nm" data-i="'+i+'" aria-pressed="'+(k>=0)+'"><i>'+(k>=0?"✓":"")+'</i><span>'+esc(p.n)+'</span><small>'+(k>=0?"#"+(k+1):"")+'</small></button>'});
+  $("tm-names").innerHTML=h||'<p class="muted" style="margin:0">THIS TEAM IS EMPTY. PRESS EDIT TEAMS AND ADD NAMES.</p>';
+  $("tm-cnt").textContent=pickList().length+" / 14"}
+$("s-tm").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
+  if(b.dataset.v==="1"){CFG.tm=CFG.tml>=0&&CFG.tml<3?CFG.tml:0}else{if(CFG.tm>=0)CFG.tml=CFG.tm;CFG.tm=-1}
+  saveCfg();tmRefresh();if(CFG.tm>=0&&!TM.t[CFG.tm].p.length)edOpen()});
+$("tm-chips").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;CFG.tm=+b.dataset.k;CFG.tml=CFG.tm;saveCfg();tmRefresh()});
+$("tm-names").addEventListener("click",function(e){var b=e.target.closest(".nm");if(!b)return;var t=TM.t[CFG.tm],i=+b.dataset.i,k=t.sel.indexOf(i);
+  if(k>=0)t.sel.splice(k,1);else{if(pickList().length>=14){tmMsg("MAXIMUM IS 14 NAMES.");return}t.sel.push(i)}
+  saveTM();tmRefresh()});
+$("tm-all").onclick=function(){var t=TM.t[CFG.tm];t.sel=[];t.p.forEach(function(p,i){if(p.n&&t.sel.length<14)t.sel.push(i)});saveTM();tmRefresh();if(t.p.filter(function(p){return p.n}).length>14)tmMsg("MAXIMUM IS 14 NAMES.")};
+$("tm-none").onclick=function(){TM.t[CFG.tm].sel=[];saveTM();tmRefresh()};
+$("tm-edit").onclick=function(){edOpen()};
+/* editor */
+var edK=0;
+function edOpen(){edK=CFG.tm>=0?CFG.tm:0;$("ted").classList.add("on");$("ted-pbox").hidden=true;$("ted-imsg").textContent="";edRender()}
+function edRender(){var t=TM.t[edK];
+  $("ted-tabs").innerHTML=TM.t.map(function(x,k){return'<button data-k="'+k+'" aria-pressed="'+(k===edK)+'">'+esc(tName(k))+'</button>'}).join("");
+  $("ted-name").value=t.n;$("ted-name").placeholder="TEAM "+(edK+1);
+  $("ted-list").innerHTML=t.p.map(function(p,i){return'<div class="edr"><span class="en">'+(i+1)+'</span><input class="ti" data-f="n" data-i="'+i+'" placeholder="NAME" maxlength="30" autocomplete="off" value="'+esc(p.n)+'"><input class="ti" data-f="ph" data-i="'+i+'" type="tel" placeholder="+420 777 123 456" maxlength="24" value="'+esc(p.ph)+'"><button class="btn danger" data-rm="'+i+'">✕</button></div>'}).join("");
+  edCnt()}
+function edCnt(){$("ted-cnt").textContent=TM.t[edK].p.length+" / 25";$("ted-add").disabled=TM.t[edK].p.length>=25}
+function edShare(){var c=encTM();$("ted-code").value=location.origin+location.pathname+"#tm="+c}
+$("ted-tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;edK=+b.dataset.k;edRender()});
+$("ted-name").addEventListener("input",function(){var c=cleanName(this.value);if(c!==this.value)this.value=c;TM.t[edK].n=c;saveTM();$("ted-tabs").children[edK].textContent=tName(edK);renderTm()});
+$("ted-list").addEventListener("input",function(e){var el=e.target;if(!el.dataset.f)return;var p=TM.t[edK].p[+el.dataset.i];if(!p)return;
+  var c=el.dataset.f==="n"?cleanName(el.value):cleanPh(el.value);if(c!==el.value)el.value=c;p[el.dataset.f]=c;saveTM();applyLabels();renderTm();uiSave()});
+$("ted-list").addEventListener("click",function(e){var b=e.target.closest("[data-rm]");if(!b)return;var i=+b.dataset.rm,t=TM.t[edK];t.p.splice(i,1);
+  t.sel=t.sel.filter(function(x){return x!==i}).map(function(x){return x>i?x-1:x});saveTM();edRender();applyLabels();renderTm();uiSave()});
+$("ted-add").onclick=function(){var t=TM.t[edK];if(t.p.length>=25)return;t.p.push({n:"",ph:""});saveTM();edRender();var a=$("ted-list").querySelectorAll('input[data-f="n"]');if(a.length)a[a.length-1].focus()};
+$("ted-paste").onclick=function(){$("ted-pbox").hidden=!$("ted-pbox").hidden};
+$("ted-padd").onclick=function(){var t=TM.t[edK],lines=$("ted-ta").value.split(/\r?\n/),add=0,left=0;
+  lines.forEach(function(l){l=l.trim();if(!l)return;var n=l,ph="";
+    if(/[;\t]/.test(l)){var a=l.split(/[;\t]/);n=a[0];ph=a.slice(1).join(" ")}else{var m=l.match(/^(.*?)[\s,]+(\+?[\d][\d ()\-]{7,})$/);if(m){n=m[1];ph=m[2]}}
+    n=cleanName(n).trim();if(!n)return;if(t.p.length>=25){left++;return}t.p.push({n:n,ph:cleanPh(ph).trim()});add++});
+  $("ted-ta").value="";$("ted-pbox").hidden=true;saveTM();edRender();applyLabels();renderTm();uiSave();
+  $("ted-imsg").textContent=add+" NAMES ADDED"+(left?" ("+left+" LEFT OUT, TEAM FULL)":"")+"."};
+$("ted-del").onclick=function(){if(!window.confirm(TT("CLEAR ALL NAMES IN THIS TEAM?")))return;var t=TM.t[edK];t.p=[];t.sel=[];saveTM();edRender();applyLabels();renderTm();uiSave()};
+function edClose(){TM.t.forEach(function(t){var keep=[],map={};t.p.forEach(function(p,i){p.n=p.n.trim();p.ph=p.ph.trim();if(p.n||p.ph){map[i]=keep.length;keep.push(p)}});
+    t.sel=t.sel.filter(function(i){return map[i]!==undefined}).map(function(i){return map[i]});t.p=keep});
+  saveTM();$("ted").classList.remove("on");tmRefresh()}
+$("ted-x").onclick=edClose;
+/* transfer between tablets */
+function b64e(s){return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
+function b64d(s){s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";return decodeURIComponent(escape(atob(s)))}
+function encTM(){return"VT1."+b64e(JSON.stringify(TM.t.map(function(t){return[t.n,t.p.filter(function(p){return p.n}).map(function(p){return p.ph?[p.n,p.ph]:p.n})]})))}
+function decTM(code){var m=String(code).match(/VT1\.([A-Za-z0-9_\-]+)/);if(!m)return null;try{var a=JSON.parse(b64d(m[1]));if(!Array.isArray(a)||!a.length||a.length>3)return null;
+  var out=a.map(function(x){var ps=(x[1]||[]).slice(0,25).map(function(p){return typeof p==="string"?{n:cleanName(p),ph:""}:{n:cleanName(p[0]),ph:cleanPh(p[1])}}).filter(function(p){return p.n});
+    var sel=[];ps.forEach(function(p,i){if(sel.length<14)sel.push(i)});return{n:cleanName(x[0]),p:ps,sel:sel}});
+  while(out.length<3)out.push({n:"",p:[],sel:[]});return out}catch(e){return null}}
+function importTM(code,silent){var o=decTM(code);if(!o)return false;if(!silent&&!window.confirm(TT("REPLACE ALL SAVED TEAMS ON THIS TABLET?")))return null;
+  TM.t=o;if(CFG.tm>=0&&!TM.t[CFG.tm].p.length)CFG.tm=0;saveTM();saveCfg();tmRefresh();if($("ted").classList.contains("on"))edRender();return true}
+$("ted-tr").addEventListener("toggle",function(){if(this.open)edShare()});
+$("ted-copy").onclick=function(){edShare();var v=$("ted-code").value,done=function(){$("ted-imsg").textContent="LINK COPIED."};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done).catch(function(){$("ted-code").select();try{document.execCommand("copy");done()}catch(e){}});
+  else{$("ted-code").select();try{document.execCommand("copy");done()}catch(e){}}};
+$("ted-share").onclick=function(){edShare();var v=$("ted-code").value;
+  if(navigator.share)navigator.share({title:"DELAYED VIDEO",text:"DELAYED VIDEO - TEAMS",url:v}).catch(function(){});else $("ted-copy").click()};
+$("ted-imp").onclick=function(){var r=importTM($("ted-in").value);$("ted-imsg").textContent=r===true?"TEAMS IMPORTED.":r===false?"INVALID LINK OR CODE.":"";if(r===true)$("ted-in").value=""};
+function teamHash(){var h=location.hash||"";if(h.indexOf("#tm=")!==0)return;var c=h.slice(4);try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+  setTimeout(function(){var r=importTM(c);if(r===false)window.alert(TT("INVALID LINK OR CODE."));else if(r===true){show("setup");if(CFG.mode===1){CFG.mode=2;saveCfg()}}},400)}
+/* ---------- WhatsApp ---------- */
+function waFilm(p,chat){var b=films[p];if(!b)return;var nm=filmName(p,b),f=new File([b],nm,{type:b.type}),m=$("fm-"+p),ph=PH(p),who=p<14&&CFG.tm>=0?L[p]:"";
+  function say(t){if(m)m.textContent=t}
+  if(chat&&ph){window.open("https://wa.me/"+phDigits(ph),"_blank");say("WHATSAPP CHAT OPENED. ATTACH THE SAVED VIDEO IN THE CHAT.");return}
+  if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[f]}))){
+    say(who?"CHOOSE WHATSAPP, THEN THE CHAT WITH "+who+(ph?" ("+ph+")":""):"CHOOSE WHATSAPP AND THE CHAT.");
+    navigator.share({files:[f]}).then(function(){say("DONE.")}).catch(function(e){say(e&&e.name==="AbortError"?"CANCELLED.":"SAVING FAILED ("+(e&&e.name||"ERROR")+"). USE THE DOWNLOAD FILE BUTTON.")});return}
+  if(ph){var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=nm;document.body.appendChild(a);a.click();a.remove();window.open("https://wa.me/"+phDigits(ph),"_blank");say("WHATSAPP CHAT OPENED. ATTACH THE DOWNLOADED VIDEO IN THE CHAT.");return}
+  say("SHARING IS NOT AVAILABLE IN THIS BROWSER. USE THE DOWNLOAD FILE BUTTON.")}
+/* ---------- CZ / EN ---------- */
+var LANG="en";try{LANG=localStorage.getItem("vadv-lang")||((navigator.language||"").toLowerCase().indexOf("cs")===0||(navigator.language||"").toLowerCase().indexOf("sk")===0?"cs":"en")}catch(e){}
+var Q=function(n,a,b,c){return n===1?a:(n>=2&&n<=4?b:c)};
+var DP=[
+["DELAYED VIDEO","ZPOŽDĚNÉ VIDEO"],["SETUP","NASTAVENÍ"],["CLIPS","KLIPY"],["REMOTE (IPHONE)","OVLADAČ (IPHONE)"],["MODE","REŽIM"],["MODE 1","REŽIM 1"],
+["1 · DELAYED VIDEO","1 · ZPOŽDĚNÉ VIDEO"],["2 · SELECT INDIVIDUALS IN ADVANCE","2 · VÝBĚR OSOB PŘEDEM"],["3 · REPLAY AFTER THE ACTION","3 · OPAKOVÁNÍ PO AKCI"],
+["RECORDING","NAHRÁVÁNÍ"],["WHO IS IN THE PICTURE","KDO JE V OBRAZE"],["SAVED TEAM","ULOŽENÉ DRUŽSTVO"],["NO TEAM (NUMBERS)","BEZ DRUŽSTVA (ČÍSLA)"],["TEAM","DRUŽSTVO"],["✎ EDIT TEAMS","✎ UPRAVIT DRUŽSTVA"],
+["SELECT THE NAMES (MAX. 14)","VYBER JMÉNA (MAX. 14)"],["THE TILES FOLLOW THE ORDER IN WHICH YOU TAP THE NAMES.","POŘADÍ DLAŽDIC ODPOVÍDÁ POŘADÍ, V JAKÉM KLEPNEŠ NA JMÉNA."],["SELECT ALL","VYBRAT VŠE"],["CLEAR SELECTION","ZRUŠIT VÝBĚR"],
+["MAXIMUM IS 14 NAMES.","MAXIMUM JE 14 JMEN."],["THIS TEAM IS EMPTY. PRESS EDIT TEAMS AND ADD NAMES.","DRUŽSTVO JE PRÁZDNÉ. KLEPNI NA UPRAVIT DRUŽSTVA A PŘIDEJ JMÉNA."],["SELECT AT LEAST ONE NAME.","VYBER ALESPOŇ JEDNO JMÉNO."],
+["TEAMS","DRUŽSTVA"],["TEAM NAME","NÁZEV DRUŽSTVA"],["+ ADD NAME","+ PŘIDAT JMÉNO"],["PASTE A LIST","VLOŽIT SEZNAM"],["CLEAR TEAM","VYMAZAT DRUŽSTVO"],["ADD THE LIST","PŘIDAT SEZNAM"],
+["ONE NAME PER LINE. OPTIONAL PHONE NUMBER AFTER A SEMICOLON, E.G. ANNA NOVAK; +420777123456","JEDNO JMÉNO NA ŘÁDEK. TELEFON (NEPOVINNÝ) ZA STŘEDNÍK, NAPŘ. ANNA NOVAK; +420777123456"],
+["UP TO 3 TEAMS, EACH WITH MAX. 25 NAMES. THE NAME IS SHOWN ON THE TILE AND ON THE IPHONE BUTTON. NAMES AND PHONE NUMBERS ARE STORED ONLY IN THIS TABLET.","AŽ 3 DRUŽSTVA, V KAŽDÉM MAX. 25 JMEN. JMÉNO SE ZOBRAZÍ NA DLAŽDICI I NA TLAČÍTKU V IPHONU. JMÉNA A TELEFONY JSOU ULOŽENA JEN V TOMTO TABLETU."],
+["NAME","JMÉNO"],["NAME (SHOWN ON THE TILE)","JMÉNO (ZOBRAZÍ SE NA DLAŽDICI)"],["PHONE FOR WHATSAPP (OPTIONAL)","TELEFON PRO WHATSAPP (NEPOVINNÉ)"],["DONE","HOTOVO"],
+["MOVE TEAMS TO ANOTHER TABLET","PŘENOS DRUŽSTEV NA JINÝ TABLET"],
+["1. ON THIS TABLET PRESS SHARE (AIRDROP, MESSAGES, WHATSAPP...) OR COPY LINK.","1. V TOMTO TABLETU KLEPNI NA SDÍLET (AIRDROP, ZPRÁVY, WHATSAPP...) NEBO KOPÍROVAT ODKAZ."],
+["2. ON THE OTHER TABLET PASTE THE LINK BELOW AND PRESS IMPORT. (A LINK OPENED IN SAFARI IMPORTS ONLY INTO SAFARI, NOT INTO THE APP ON THE HOME SCREEN.)","2. V DRUHÉM TABLETU VLOŽ ODKAZ NÍŽE A KLEPNI NA NAČÍST. (ODKAZ OTEVŘENÝ V SAFARI SE NAČTE JEN DO SAFARI, NE DO APLIKACE Z PLOCHY.)"],
+["COPY LINK","KOPÍROVAT ODKAZ"],["SHARE","SDÍLET"],["IMPORT","NAČÍST"],["LINK COPIED.","ODKAZ ZKOPÍROVÁN."],["TEAMS IMPORTED.","DRUŽSTVA NAČTENA."],["INVALID LINK OR CODE.","NEPLATNÝ ODKAZ NEBO KÓD."],
+["REPLACE ALL SAVED TEAMS ON THIS TABLET?","NAHRADIT VŠECHNA ULOŽENÁ DRUŽSTVA V TOMTO TABLETU?"],["CLEAR ALL NAMES IN THIS TEAM?","VYMAZAT VŠECHNA JMÉNA V TOMTO DRUŽSTVU?"],["PASTE THE LINK OR CODE HERE","VLOŽ SEM ODKAZ NEBO KÓD"],
+["PEOPLE TO FOLLOW","POČET SLEDOVANÝCH OSOB (ČÍSLA 1-N)"],["SAVE CLIPS FOR THE FILM","UKLÁDAT KLIPY PRO FILM"],["DELAYED VIDEO ONLY","JEN ZPOŽDĚNÉ VIDEO"],["SAVE CLIPS","UKLÁDAT KLIPY"],["SAVE CLIPS OF","UKLÁDAT KLIPY PRO"],["ALL","VŠE"],
+["MAX CLIPS IN THE CLIPS TAB (RECORDED WITH THE REC BUTTON)","MAX. KLIPŮ V ZÁLOŽCE KLIPY (NAHRÁVANÝCH TLAČÍTKEM REC)"],["DELAY OF THE PICTURE","ZPOŽDĚNÍ OBRAZU"],["START RECORDING AFTER BUTTON PRESS","ZAČÁTEK NAHRÁVÁNÍ PO STISKU TLAČÍTKA"],["CLIP LENGTH","DÉLKA KLIPU"],
+["SAVE THE LAST SECONDS BEFORE THE BUTTON PRESS","ULOŽIT POSLEDNÍ SEKUNDY PŘED STISKEM TLAČÍTKA"],["MAX CLIPS PER PERSON (FOR THE FILM)","MAX. KLIPŮ NA OSOBU (PRO FILM)"],
+["PLAYBACK","PŘEHRÁVÁNÍ"],["SLOW-MOTION SPEED","RYCHLOST ZPOMALENÍ"],["SMOOTHING (FRAME BLENDING)","VYHLAZENÍ (PROLÍNÁNÍ SNÍMKŮ)"],["ON","ZAP"],["OFF","VYP"],["MIRROR VIEW","ZRCADLOVÝ OBRAZ"],["TAP A SCREEN TO TRIGGER IT","KLEPNUTÍM NA DLAŽDICI SPUSTIT"],
+["DRAWING ON THE SCREEN","KRESLENÍ NA OBRAZOVKU"],["SHOW MY DRAWING (LINES, ARROWS) ON THE SCREEN AND RECORD IT INTO THE CLIPS","ZOBRAZIT MOJI KRESBU (ČÁRY, ŠIPKY) NA OBRAZOVCE A NAHRÁVAT JI DO KLIPŮ"],
+["DRAW ONCE ON THE LIVE PICTURE (PRESS DRAW ON THE PROJECTION SCREEN). THE DRAWING STAYS ON THE SCREEN AND IS BURNED INTO THE CLIPS RECORDED WHILE IT IS ON. CLIPS RECORDED BEFORE KEEP THEIR OLD PICTURE.","NAKRESLI JEDNOU NA ŽIVÝ OBRAZ (KLEPNI NA KRESLIT NA PROMÍTACÍ OBRAZOVCE). KRESBA ZŮSTANE NA OBRAZOVCE A VYPÁLÍ SE DO KLIPŮ NAHRANÝCH, DOKUD JE ZAPNUTÁ. KLIPY NAHRANÉ DŘÍVE ZŮSTANOU S PŮVODNÍM OBRAZEM."],
+["CAMERA","KAMERA"],["FRONT","PŘEDNÍ"],["BACK","ZADNÍ"],["ZOOM","ZOOM"],["RESOLUTION","ROZLIŠENÍ"],["REQUESTED FRAME RATE","POŽADOVANÁ SNÍMKOVÁ FREKVENCE"],
+["THE REAL FRAME RATE IS SHOWN ON THE PROJECTION SCREEN. A HIGHER FRAME RATE GIVES SMOOTHER SLOW MOTION. (MODE 3 ALWAYS USES 720P / 30 FPS.)","SKUTEČNÁ SNÍMKOVÁ FREKVENCE SE ZOBRAZÍ NA PROMÍTACÍ OBRAZOVCE. VYŠŠÍ FREKVENCE DÁ PLYNULEJŠÍ ZPOMALENÍ. (REŽIM 3 VŽDY POUŽÍVÁ 720P / 30 FPS.)"],["START","START"],
+["DIRECT PAIRING (RECOMMENDED)","PŘÍMÉ PÁROVÁNÍ (DOPORUČENO)"],["NO INTERNET NEEDED. BOTH DEVICES MUST BE ON THE SAME WI-FI (OR THE IPHONE'S HOTSPOT). PAIR ONCE BEFORE EACH TRAINING.","INTERNET NENÍ POTŘEBA. OBĚ ZAŘÍZENÍ MUSÍ BÝT NA STEJNÉ WI-FI (NEBO V HOTSPOTU IPHONU). PÁRUJ JEDNOU PŘED KAŽDÝM TRÉNINKEM."],
+["PAIR IPHONE","PÁROVAT IPHONE"],["STEP 2: SCAN THE IPHONE QR CODE","KROK 2: NAČÍST QR KÓD Z IPHONU"],["BACKUP: INTERNET REMOTE","ZÁLOHA: OVLADAČ PŘES INTERNET"],
+["ON THE IPHONE, SCAN THIS QR CODE WITH THE CAMERA AND OPEN THE LINK. THE IPHONE THEN SHOWS ONE BUTTON PER PERSON. THE QR CODE NEVER CHANGES.","V IPHONU NAČTI TENTO QR KÓD FOTOAPARÁTEM A OTEVŘI ODKAZ. IPHONE PAK ZOBRAZÍ JEDNO TLAČÍTKO PRO KAŽDOU OSOBU. QR KÓD SE NEMĚNÍ."],
+["CONNECTION: ...","SPOJENÍ: ..."],["NO IPHONE CONNECTED YET.","IPHONE ZATÍM NENÍ PŘIPOJEN."],["HOW IT WORKS","JAK TO FUNGUJE"],
+["THE IPAD RECORDS. THE IPHONE ONLY SENDS SHORT COMMANDS (“BUTTON PRESSED”), NO VIDEO.","IPAD NAHRÁVÁ. IPHONE POSÍLÁ JEN KRÁTKÉ POVELY („TLAČÍTKO STISKNUTO“), ŽÁDNÉ VIDEO."],
+["DIRECT PAIRING:","PŘÍMÉ PÁROVÁNÍ:"],["1. ON THE IPAD PRESS PAIR IPHONE.","1. V IPADU KLEPNI NA PÁROVAT IPHONE."],["2. SCAN THE IPAD QR CODE WITH THE IPHONE CAMERA AND OPEN THE LINK.","2. NAČTI QR KÓD Z IPADU FOTOAPARÁTEM IPHONU A OTEVŘI ODKAZ."],
+["3. ON THE IPAD PRESS STEP 2 AND POINT THE IPAD CAMERA AT THE QR CODE ON THE IPHONE.","3. V IPADU KLEPNI NA KROK 2 A NAMIŘ KAMERU IPADU NA QR KÓD V IPHONU."],
+["4. START THE RECORDING ON THE IPAD AND PRESS A PERSON'S BUTTON ON THE IPHONE.","4. SPUSŤ NAHRÁVÁNÍ V IPADU A V IPHONU KLEPNI NA TLAČÍTKO OSOBY."],
+["IF NOTHING WORKS, TAP THE SCREEN OF THE PERSON ON THE IPAD INSTEAD.","KDYŽ NIC NEFUNGUJE, KLEPNI NA DLAŽDICI OSOBY PŘÍMO V IPADU."],
+["© 2026 Pavel Starý. All rights reserved. Copying and distribution without permission is prohibited.","© 2026 Pavel Starý. Všechna práva vyhrazena. Kopírování a šíření bez povolení je zakázáno."],
+["✎ DRAW","✎ KRESLIT"],["LINES ON","ČÁRY ZAP"],["LINES OFF","ČÁRY VYP"],["REC","REC"],["SPEED","RYCHLOST"],["STOP","STOP"],["EXIT","KONEC"],["CONNECTING...","PŘIPOJUJI..."],["CONNECTING TO THE IPAD...","PŘIPOJUJI SE K IPADU..."],["TRY AGAIN","ZKUSIT ZNOVU"],
+["POINT THE CAMERA AT THE QR CODE ON THE IPHONE","NAMIŘ KAMERU NA QR KÓD NA IPHONU"],["CANCEL","ZRUŠIT"],["CLOSE","ZAVŘÍT"],
+["↶ UNDO","↶ ZPĚT"],["UNDO","ZPĚT"],["CLEAR ALL","SMAZAT VŠE"],["CURVATURE","ZAKŘIVENÍ"],["✎ PEN","✎ TUŽKA"],["╱ LINE","╱ ČÁRA"],["➜ ARROW","➜ ŠIPKA"],["⌒ CURVE","⌒ OBLOUK"],["⌒➜ CURVED ARROW","⌒➜ OBLOUKOVÁ ŠIPKA"],["◯ CIRCLE","◯ KRUH"],["▭ RECTANGLE","▭ OBDÉLNÍK"],["THIN","TENKÁ"],["MEDIUM","STŘEDNÍ"],["THICK","SILNÁ"],
+["WARNING: STORAGE IS NOT PERMANENT, CLIPS WILL BE LOST WHEN THE APP IS CLOSED","POZOR: ÚLOŽIŠTĚ NENÍ TRVALÉ, KLIPY SE PO ZAVŘENÍ APLIKACE ZTRATÍ"],
+["TOO MANY REQUESTS, WAIT A MINUTE","PŘÍLIŠ MNOHO POŽADAVKŮ, POČKEJ MINUTU"],["NO INTERNET","BEZ INTERNETU"],["LIVE VIEW","ŽIVÝ OBRAZ"],["NO REMOTE","BEZ OVLADAČE"],["REMOTE CONNECTED","OVLADAČ PŘIPOJEN"],["NOT SAVING","NEUKLÁDÁM"],["SMOOTHED","VYHLAZENO"],
+["THE CAMERA IS NOT AVAILABLE IN THIS BROWSER VIEW (HTTPS NEEDED).","KAMERA NENÍ V TOMTO ZOBRAZENÍ PROHLÍŽEČE DOSTUPNÁ (POTŘEBA HTTPS)."],["RECORDING IS NOT SUPPORTED ON THIS DEVICE.","NAHRÁVÁNÍ TOTO ZAŘÍZENÍ NEPODPORUJE."],
+["LOOP","SMYČKA"],["LIVE","ŽIVĚ"],["LIVE - TAP TO RECORD","ŽIVĚ - KLEPNI PRO NAHRÁNÍ"],["CAMERA BUSY","KAMERA JE OBSAZENÁ"],["SAVING CLIP...","UKLÁDÁM KLIP..."],
+["RECORDING FAILED (EMPTY FILE) - RESTARTING THE CAMERA, TRY AGAIN","NAHRÁVÁNÍ SELHALO (PRÁZDNÝ SOUBOR) - RESTARTUJI KAMERU, ZKUS ZNOVU"],["RECORDING FAILED (EMPTY FILE)","NAHRÁVÁNÍ SELHALO (PRÁZDNÝ SOUBOR)"],
+["ONLINE","ONLINE"],["OFFLINE","OFFLINE"],["MODE 1 - DELAYED VIDEO","REŽIM 1 - ZPOŽDĚNÉ VIDEO"],["NO CLIPS YET.","ZATÍM ŽÁDNÉ KLIPY."],["PLAY","PŘEHRÁT"],["DELETE","SMAZAT"],
+["BUILD FILM (100% SPEED)","SESTAVIT FILM (100% RYCHLOST)"],["NO CLIPS TO BUILD","ŽÁDNÉ KLIPY K SESTAVENÍ"],["BUILDING...","SESTAVUJI..."],["CANCELLING...","RUŠÍM..."],["CANCELLED.","ZRUŠENO."],["EMPTY FILE","PRÁZDNÝ SOUBOR"],["ERROR","CHYBA"],
+["SAVE TO PHOTOS","ULOŽIT DO FOTEK"],["SEND TO WHATSAPP","POSLAT NA WHATSAPP"],["OPEN WHATSAPP CHAT","OTEVŘÍT CHAT NA WHATSAPP"],["ALTERNATIVE: DOWNLOAD FILE","ALTERNATIVA: STÁHNOUT SOUBOR"],
+["TAP SAVE TO PHOTOS, THEN CHOOSE “SAVE VIDEO” IN THE MENU. IF IT DOES NOT WORK, USE THE DOWNLOAD FILE BUTTON AND SAVE IT TO FILES.","KLEPNI NA ULOŽIT DO FOTEK A V NABÍDCE VYBER „ULOŽIT VIDEO“. KDYŽ TO NEFUNGUJE, POUŽIJ TLAČÍTKO STÁHNOUT SOUBOR A ULOŽ HO DO SOUBORŮ."],
+["SHARING IS NOT AVAILABLE IN THIS BROWSER. USE THE DOWNLOAD FILE BUTTON.","SDÍLENÍ NENÍ V TOMTO PROHLÍŽEČI DOSTUPNÉ. POUŽIJ TLAČÍTKO STÁHNOUT SOUBOR."],["OPENING THE SHARE MENU...","OTEVÍRÁM NABÍDKU SDÍLENÍ..."],
+["DONE. IF THE VIDEO IS NOT IN PHOTOS, CHOOSE SAVE VIDEO IN THE MENU.","HOTOVO. KDYŽ VIDEO NENÍ VE FOTKÁCH, V NABÍDCE VYBER ULOŽIT VIDEO."],["DONE.","HOTOVO."],
+["CHOOSE WHATSAPP AND THE CHAT.","VYBER WHATSAPP A CHAT."],["WHATSAPP CHAT OPENED. ATTACH THE SAVED VIDEO IN THE CHAT.","CHAT NA WHATSAPP OTEVŘEN. VIDEO PŘILOŽ V CHATU."],["WHATSAPP CHAT OPENED. ATTACH THE DOWNLOADED VIDEO IN THE CHAT.","CHAT NA WHATSAPP OTEVŘEN. STAŽENÉ VIDEO PŘILOŽ V CHATU."],
+["SHOW THE QR CODE TO THE IPAD","UKAŽ QR KÓD IPADU"],["PREPARING...","PŘIPRAVUJI..."],
+["CONNECTION LOST. ON THE IPAD PRESS PAIR IPHONE AND SCAN THE NEW QR CODE AGAIN.","SPOJENÍ SE PŘERUŠILO. V IPADU KLEPNI NA PÁROVAT IPHONE A NAČTI NOVÝ QR KÓD."],
+["STEP 2: ON THE IPAD PRESS 'SCAN THE IPHONE QR CODE' AND POINT THE IPAD CAMERA AT THIS QR CODE.","KROK 2: V IPADU KLEPNI NA 'NAČÍST QR KÓD Z IPHONU' A NAMIŘ KAMERU IPADU NA TENTO QR KÓD."],
+["PREPARING THE DIRECT CONNECTION...","PŘIPRAVUJI PŘÍMÉ SPOJENÍ..."],["CONNECTED - SENDING COMMANDS (THE IPAD DOES NOT REPLY)","PŘIPOJENO - POSÍLÁM POVELY (IPAD NEODPOVÍDÁ)"],["IPAD CONNECTED","IPAD PŘIPOJEN"],["NO CONNECTION TO THE RELAY","NENÍ SPOJENÍ S PŘENOSOVÝM SERVEREM"],
+["NO IPAD FOUND. ON THE IPAD, OPEN THE APP AND THE REMOTE TAB, THEN SCAN ITS QR CODE AGAIN.","IPAD NENALEZEN. V IPADU OTEVŘI APLIKACI A ZÁLOŽKU OVLADAČ, PAK ZNOVU NAČTI JEHO QR KÓD."],
+["LOOKING FOR THE IPAD...","HLEDÁM IPAD..."],["NO SIGNAL FROM THE IPAD. CHECK THAT THE IPAD IS ONLINE AND THE APP IS OPEN.","ŽÁDNÝ SIGNÁL Z IPADU. ZKONTROLUJ, ŽE JE IPAD ONLINE A APLIKACE OTEVŘENÁ."],
+["THE IPAD IS CONNECTED BUT NOT RECORDING YET. PRESS START ON THE IPAD.","IPAD JE PŘIPOJEN, ALE ZATÍM NENAHRÁVÁ. V IPADU KLEPNI NA START."],
+["READY","PŘIPRAVENO"],["SENT...","ODESLÁNO..."],["DONE","HOTOVO"],["BUSY - RECORDING","OBSAZENO - NAHRÁVÁ"],
+["ONE FULL SCREEN WITH THE CAMERA PICTURE DELAYED. SET THE DELAY AND PRESS START. YOU CAN RECORD A CLIP OF WHAT YOU SEE AND SAVE IT LATER.","JEDNA CELÁ OBRAZOVKA SE ZPOŽDĚNÝM OBRAZEM Z KAMERY. NASTAV ZPOŽDĚNÍ A KLEPNI NA START. MŮŽEŠ NAHRÁT KLIP TOHO, CO VIDÍŠ, A ULOŽIT HO PRO PÓZDĚJŠÍ FILM."],
+["THE PEOPLE ARE CHOSEN IN ADVANCE (NAMES OR NUMBERS). PRESS A PERSON'S BUTTON AND THE RECORDING STARTS AFTER THE DELAY; THE CLIP THEN LOOPS IN SLOW MOTION.","OSOBY SE VYBÍRAJÍ PŘEDEM (JMÉNA NEBO ČÍSLA). KLEPNI NA TLAČÍTKO OSOBY A NAHRÁVÁNÍ ZAČNE PO ZPOŽDĚNÍ; KLIP SE PAK OPAKUJE ZPOMALENĚ."],
+["THE CAMERA RUNS IN THE BACKGROUND. AFTER THE ACTION PRESS A PERSON'S BUTTON: THE LAST SECONDS (UP TO 10) GO TO THE LOOP AND, IF SET, TO THE CLIPS.","KAMERA BĚŽÍ NA POZADÍ. PO AKCI KLEPNI NA TLAČÍTKO OSOBY: POSLEDNÍ SEKUNDY (AŽ 10) SE PUSTÍ VE SMYČCE A POKUD JE TO NASTAVENO, ULOŽÍ SE DO KLIPŮ."],
+["FILLING THE DELAY BUFFER...","NAPLŇUJI PAMĚŤ ZPOŽDĚNÍ..."],["RECORDING NOT POSSIBLE","NAHRÁVÁNÍ NENÍ MOŽNÉ"],["STOP AND SAVE CLIP","ZASTAVIT A ULOŽIT KLIP"],["BUFFER NOT READY - TRY AGAIN","PAMĚŤ ZATÍM NENÍ PŘIPRAVENA - ZKUS ZNOVU"],
+["THIS BROWSER DOES NOT SUPPORT DIRECT PAIRING.","TENTO PROHLÍŽEČ PŘÍMÉ PÁROVÁNÍ NEPODPORUJE."],["DIRECT CONNECTION: IPHONE CONNECTED. NO INTERNET NEEDED.","PŘÍMÉ SPOJENÍ: IPHONE PŘIPOJEN. INTERNET NENÍ POTŘEBA."],
+["DIRECT CONNECTION LOST. PRESS PAIR IPHONE AGAIN.","PŘÍMÉ SPOJENÍ SE PŘERUŠILO. KLEPNI ZNOVU NA PÁROVAT IPHONE."],["PAIRING FAILED. BOTH DEVICES MUST BE ON THE SAME WI-FI. PRESS PAIR IPHONE TO TRY AGAIN.","PÁROVÁNÍ SELHALO. OBĚ ZAŘÍZENÍ MUSÍ BÝT NA STEJNÉ WI-FI. ZKUS ZNOVU KLEPNUTÍM NA PÁROVAT IPHONE."],
+["STEP 1: SCAN THIS QR CODE WITH THE IPHONE CAMERA AND OPEN THE LINK. THE IPHONE THEN SHOWS ITS OWN QR CODE.","KROK 1: NAČTI TENTO QR KÓD FOTOAPARÁTEM IPHONU A OTEVŘI ODKAZ. IPHONE PAK ZOBRAZÍ SVŮJ VLASTNÍ QR KÓD."],
+["INVALID LINK. PRESS PAIR IPHONE ON THE IPAD AGAIN.","NEPLATNÝ ODKAZ. V IPADU ZNOVU KLEPNI NA PÁROVAT IPHONE."],["PRESS PAIR IPHONE FIRST.","NEJDŘÍV KLEPNI NA PÁROVAT IPHONE."],
+["ZOOM OUT","ODDÁLIT"],["ZOOM IN","PŘIBLÍŽIT"]
+];
+var D={};DP.forEach(function(p){D[p[0].toLowerCase()]=p[1]});
+function cpl(n){return n+" "+Q(+n,"KLIP","KLIPY","KLIPŮ")}
+var R=[
+[/^(\d+) CLIPS SAVED ON THIS DEVICE$/,function(m){return m[1]+" "+Q(+m[1],"KLIP ULOŽEN","KLIPY ULOŽENY","KLIPŮ ULOŽENO")+" V TOMTO ZAŘÍZENÍ"}],
+[/^TEAM (\d)$/,function(m){return"DRUŽSTVO "+m[1]}],[/^(\d+) NAMES ADDED( \((\d+) LEFT OUT, TEAM FULL\))?\.$/,function(m){return"PŘIDÁNO JMEN: "+m[1]+(m[3]?" ("+m[3]+" VYNECHÁNO, DRUŽSTVO JE PLNÉ)":"")+"."}],
+[/^SEND TO WHATSAPP$/,function(){return"POSLAT NA WHATSAPP"}],
+[/^CHOOSE WHATSAPP, THEN THE CHAT WITH (.+)$/,function(m){return"VYBER WHATSAPP A POTOM CHAT S: "+m[1]}],
+[/^SAVING FAILED \((.*)\)\. USE THE DOWNLOAD FILE BUTTON\.$/,function(m){return"ULOŽENÍ SELHALO ("+m[1]+"). POUŽIJ TLAČÍTKO STÁHNOUT SOUBOR."}],
+[/^THIS FILE CAN NOT BE SHARED \((.*)\)\. USE THE DOWNLOAD FILE BUTTON\.$/,function(m){return"TENTO SOUBOR NELZE SDÍLET ("+m[1]+"). POUŽIJ TLAČÍTKO STÁHNOUT SOUBOR."}],
+[/^ZOOM (.+?)( \(DIGITAL\))?$/,function(m){return"ZOOM "+m[1]+(m[2]?" (DIGITÁLNÍ)":"")}],
+[/^DELAYED VIDEO (\d+) S$/,function(m){return"ZPOŽDĚNÉ VIDEO "+m[1]+" S"}],[/^REPLAY LAST (\d+) S$/,function(m){return"OPAKOVÁNÍ POSLEDNÍCH "+m[1]+" S"}],
+[/^SPEED (\d+)%$/,function(m){return"RYCHLOST "+m[1]+"%"}],[/^DELAY (\d+) S$/,function(m){return"ZPOŽDĚNÍ "+m[1]+" S"}],[/^CLIP (\d+) S$/,function(m){return"KLIP "+m[1]+" S"}],
+[/^DELAYED BY (\d+) S$/,function(m){return"ZPOŽDĚNO O "+m[1]+" S"}],[/^SAVING (.+)$/,function(m){return"UKLÁDÁM: "+(T1(m[1])||m[1])}],
+[/^REC ([\d.]+) \/ (\d+) S$/,function(m){return"REC "+m[1]+" / "+m[2]+" S"}],[/^REC (\d+) S$/,function(m){return"REC "+m[1]+" S"}],
+[/^(.+) STARTS IN (\d+) S$/,function(m){return m[1]+" ZAČNE ZA "+m[2]+" S"}],[/^STARTS IN (\d+) S$/,function(m){return"ZAČNE ZA "+m[1]+" S"}],
+[/^LOOP LAST (\d+) S$/,function(m){return"SMYČKA POSLEDNÍCH "+m[1]+" S"}],[/^LIVE - TAP TO SAVE THE LAST (\d+) S$/,function(m){return"ŽIVĚ - KLEPNI A ULOŽÍ SE POSLEDNÍCH "+m[1]+" S"}],
+[/^CLIP (\d+)$/,function(m){return"KLIP "+m[1]}],[/^CLIP SAVED \((\d+)\)$/,function(m){return"KLIP ULOŽEN ("+m[1]+")"}],
+[/^PERSON (.+)$/,function(m){return"OSOBA "+m[1]}],[/^(\d+) CLIPS \((\d+) S\)$/,function(m){return cpl(m[1])+" ("+m[2]+" S)"}],
+[/^WAIT$/,function(){return"POČKEJ"}],[/^BUILDING (.+)$/,function(m){return"SESTAVUJI: "+(T1(m[1])||m[1])}],
+[/^BUILDING THE FILM FAILED \((.*)\)\. TRY AGAIN, OR USE PLAY ON THE SINGLE CLIPS\.$/,function(m){return"SESTAVENÍ FILMU SELHALO ("+m[1]+"). ZKUS ZNOVU NEBO POUŽIJ PŘEHRÁT U JEDNOTLIVÝCH KLIPŮ."}],
+[/^BUILDING FILM\.\.\. CLIP (\d+) OF (\d+)\. KEEP THIS SCREEN OPEN\.$/,function(m){return"SESTAVUJI FILM... KLIP "+m[1]+" Z "+m[2]+". NECHEJ TUTO OBRAZOVKU OTEVŘENOU."}],
+[/^TAP SAVE TO PHOTOS, THEN CHOOSE “SAVE VIDEO” IN THE MENU\. \(([\d.]+) MB\)\. IF IT DOES NOT WORK, USE THE DOWNLOAD FILE BUTTON AND SAVE IT TO FILES\.$/,function(m){return"KLEPNI NA ULOŽIT DO FOTEK A V NABÍDCE VYBER „ULOŽIT VIDEO“. ("+m[1]+" MB). KDYŽ TO NEFUNGUJE, POUŽIJ TLAČÍTKO STÁHNOUT SOUBOR A ULOŽ HO DO SOUBORŮ."}],
+[/^VERSION (\d+) · CONNECTION TO THE RELAY: (ONLINE|OFFLINE)( \((.*)\))?$/,function(m){return"VERZE "+m[1]+" · SPOJENÍ S PŘENOSOVÝM SERVEREM: "+m[2]+(m[4]?" ("+(T1(m[4])||m[4])+")":"")}],
+[/^IPHONE CONNECTED - LAST SIGNAL (\d+) S AGO$/,function(m){return"IPHONE PŘIPOJEN - POSLEDNÍ SIGNÁL PŘED "+m[1]+" S"}],
+[/^SERVER ERROR (\d+)$/,function(m){return"CHYBA SERVERU "+m[1]}],[/^NO CONNECTION TO THE RELAY \((.*)\)$/,function(m){return"NENÍ SPOJENÍ S PŘENOSOVÝM SERVEREM ("+(T1(m[1])||m[1])+")"}],
+[/^THE IPHONE HAS NO INTERNET CONNECTION TO THE RELAY( \((.*)\))?\. CHECK WI-FI OR MOBILE DATA\.$/,function(m){return"IPHONE NEMÁ INTERNETOVÉ SPOJENÍ S PŘENOSOVÝM SERVEREM"+(m[2]?" ("+(T1(m[2])||m[2])+")":"")+". ZKONTROLUJ WI-FI NEBO MOBILNÍ DATA."}],
+[/^CAMERA ERROR: (.*)\. ALLOW CAMERA ACCESS FOR THIS APP\.$/,function(m){return"CHYBA KAMERY: "+m[1]+". POVOL PŘÍSTUP KE KAMEŘE."}],[/^CAMERA NOT AVAILABLE:(.*)$/,function(m){return"KAMERA NENÍ DOSTUPNÁ:"+m[1]}],[/^ERROR: (.*)$/,function(m){return"CHYBA: "+m[1]}],
+[/^RECORDING - (\d+) S$/,function(m){return"NAHRÁVÁ - "+m[1]+" S"}],[/^DONE - (\d+) CLIPS$/,function(m){return"HOTOVO - "+cpl(m[1])}],[/^SENT\.\.\. \((\d)\)$/,function(m){return"ODESLÁNO... ("+m[1]+")"}]
+];
+function T1(s){var k=s.toLowerCase();if(D.hasOwnProperty(k))return D[k];for(var i=0;i<R.length;i++){var m=s.match(R[i][0]);if(m)return R[i][1](m)}return null}
+function T(s){var m=s.match(/^(\s*)([\s\S]*?)(\s*)$/),c=m[2];if(!c)return s;var r=T1(c);
+  if(r===null&&c.indexOf(" - ")>0){var ch=false,o=c.split(" - ").map(function(x){var y=T1(x);if(y===null)return x;ch=true;return y});if(ch)r=o.join(" - ")}
+  return r===null?s:m[1]+r+m[3]}
+function TT(s){return LANG==="cs"?T(s):s}
+var AT=["placeholder","title","aria-label"];
+function trNode(n){if(n.nodeType!==3)return;var p=n.parentNode;if(!p||p.nodeName==="SCRIPT"||p.nodeName==="STYLE"||p.nodeName==="TEXTAREA")return;
+  var cur=n.nodeValue;if(n.__t!==undefined&&cur===n.__t)return;n.__o=cur;var t=LANG==="cs"?T(cur):cur;n.__t=t;if(t!==cur)n.nodeValue=t}
+function trAttrs(el){if(el.nodeType!==1)return;AT.forEach(function(a){if(!el.hasAttribute(a))return;var o=el.__oa&&el.__oa[a],cur=el.getAttribute(a);
+    if(o&&o.t===cur)return;el.__oa=el.__oa||{};var t=LANG==="cs"?T(cur):cur;el.__oa[a]={o:cur,t:t};if(t!==cur)el.setAttribute(a,t)})}
+function trTree(root){if(!root)return;if(root.nodeType===3){trNode(root);return}if(root.nodeType!==1)return;trAttrs(root);
+  var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT,null),n;while((n=w.nextNode())){if(n.nodeType===3)trNode(n);else trAttrs(n)}}
+function reLang(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT,null),n;
+  while((n=w.nextNode())){if(n.nodeType===3){if(n.__o!==undefined){var t=LANG==="cs"?T(n.__o):n.__o;n.__t=t;if(n.nodeValue!==t)n.nodeValue=t}else trNode(n)}
+    else{AT.forEach(function(a){if(n.__oa&&n.__oa[a]){var o=n.__oa[a].o,t=LANG==="cs"?T(o):o;n.__oa[a].t=t;n.setAttribute(a,t)}});trAttrs(n)}}}
+function setLang(l){LANG=l==="cs"?"cs":"en";ls("vadv-lang",LANG);document.documentElement.lang=LANG;reLang();
+  document.title=LANG==="cs"?"ZPOŽDĚNÉ VIDEO":"DELAYED VIDEO";
+  [].forEach.call(document.querySelectorAll(".lsw button"),function(b){b.setAttribute("aria-pressed",String(b.dataset.l===LANG))})}
+document.addEventListener("click",function(e){var b=e.target.closest(".lsw button");if(b)setLang(b.dataset.l)});
+function i18nInit(){setLang(LANG);new MutationObserver(function(ms){ms.forEach(function(m){if(m.type==="characterData")trNode(m.target);else if(m.type==="childList")m.addedNodes.forEach(function(a){trTree(a)});else if(m.type==="attributes")trAttrs(m.target)})}).observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:AT})}
+function fitRb(){[].forEach.call(document.querySelectorAll("#rgrid .rb b"),function(b){b.style.fontSize="";var fs=parseFloat(getComputedStyle(b).fontSize),g=0;while(b.scrollWidth>b.clientWidth+1&&fs>11&&g++<40){fs*=.9;b.style.fontSize=fs+"px"}})}
+window.addEventListener("resize",function(){if(rb.length)fitRb()});
 function init(){
   try{localStorage.removeItem("vadv-code");localStorage.removeItem("vadv-rcode")}catch(e){}
-  drawQR();uiSave();applyMode();
+  applyLabels();drawQR();uiSave();applyMode();renderTm();i18nInit();teamHash();
   mainChan=new Chan(CODE,handleMain,function(ok){relayOK=ok;diag()});mainChan.open();setInterval(diag,2000);diag();
   var qs=new URLSearchParams(location.search),pp=qs.get("p"),r=qs.get("r");if(pp)openRemote(null,pp);else if(r)openRemote(r);
-  idbOpen().then(idbAll).then(function(a){store=a;stat();renderClips()})}
+  idbOpen().then(idbAll).then(function(a){a.forEach(function(c){if(c.p===9&&!c.v){c.p=99;idbPut(c)}});store=a;stat();renderClips()})}
 init();
 })();
 </script>
