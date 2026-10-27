@@ -2622,7 +2622,7 @@ function mkTile(i,liveOnly){
   var t={i:i,el:d,liveOnly:liveOnly,dro:d.querySelector(".dro"),tl:d.querySelector(".tl"),state:"idle",url:null,clip:null,timer:null,d:CFG.delay,l:CFG.len,t0:0,A:null,B:null,tf:0,dW:33,lastMT:-1,nb:true,h:0,blendOn:false};
   t.tl.srcObject=stream;t.tl.setAttribute("playsinline","");t.tl.play().catch(function(){});
   if(!liveOnly){t.tv=d.querySelector(".tv");t.tc=d.querySelector(".tc");t.cx=t.tc.getContext("2d");t.st=d.querySelector(".st");t.cd=d.querySelector(".cd");
-    t.tv.addEventListener("ended",function(){t.tv.currentTime=0;t.tv.play().catch(function(){})});
+    t.tv.loop=true;t.tv.addEventListener("ended",function(){t.tv.currentTime=0;t.tv.play().catch(function(){})});t.tv.addEventListener("pause",function(){if(t.clip&&running&&!t.tv.ended)setTimeout(function(){if(t.clip&&running&&t.tv.paused)t.tv.play().catch(function(){})},50)});
     t.tv.addEventListener("loadedmetadata",function(){applyRate(t);sizeBlend(t)});t.tv.addEventListener("playing",function(){applyRate(t)});
     t.fcb=function(now,meta){if(!t.blendOn)return;var dm=meta.mediaTime-t.lastMT,r=t.tv.playbackRate||1;t.lastMT=meta.mediaTime;
       var T=t.A;t.A=t.B;t.B=T;try{t.B.getContext("2d").drawImage(t.tv,0,0,t.B.width,t.B.height)}catch(e){}
@@ -2666,9 +2666,14 @@ async function startProj(){
   if(CFG.mode===1){m1Build(g)}else{for(var i=0;i<N();i++){var t=mkTile(i,false);tiles.push(t);g.appendChild(t.el)}}
   layout();$("grid").classList.toggle("many",N()>=10);
   tiles.forEach(function(t){updOverlay(t)});modeStart();info();wake(true);sendCfg(true);clearInterval(hb);hb=setInterval(sendCfg,30000);requestAnimationFrame(rafLoop);
-  tickT=setInterval(function(){var now=performance.now();tiles.forEach(function(t){
+  tickT=setInterval(function(){var now=performance.now();tiles.forEach(wdog);tiles.forEach(function(t){
     if(t.state==="wait"){var r=Math.ceil((t.d*1000-(now-t.t0))/1000);t.cd.textContent=Math.max(r,1);t.st.textContent=L[t.i]+" STARTS IN "+Math.max(r,1)+" S"}
     else if(t.state==="rec"){var e=Math.min(t.l,(now-t.t0)/1000);t.cd.textContent="";t.st.textContent="REC "+e.toFixed(1)+" / "+t.l+" S"}})},150)}
+function wdog(t){var v=t.tv,n=performance.now();if(!v||!t.clip||CFG.mode!==2||t.state==="rec"||t.state==="wait")return;
+  var ct=v.currentTime;if(t.wt===undefined||Math.abs(ct-t.wt)>0.001){t.wt=ct;t.wn=n;return}
+  if(n-t.wn<1500)return;t.wn=n;
+  if(v.paused||v.ended){v.play().catch(function(){})}
+  else{var u=t.url;t.tv.pause();t.tv.src=u;t.tv.load();applyRate(t);t.tv.play().catch(function(){})}}
 function updOverlay(t){if(CFG.mode===3){var n3=store.filter(function(c){return c.p===t.i}).length;t.cd.textContent="";t.st.textContent=t.lp?("LOOP LAST "+CFG.back+" S"+(t.saving?" - SAVING CLIP...":(shouldSave(t.i)?" - CLIP "+n3:""))):"LIVE - TAP TO SAVE THE LAST "+CFG.back+" S";return}if(t.state!=="idle")return;t.cd.textContent="";var n=store.filter(function(c){return c.p===t.i}).length;
   t.st.textContent=t.clip?("LOOP"+(t.saved?" - CLIP "+n:"")):(CFG.tap?"LIVE - TAP TO RECORD":"LIVE")}
 function stopProj(){if(window.drwClose)window.drwClose();modeStop();running=false;clearInterval(tickT);clearInterval(hb);tiles.forEach(function(t){clearTimeout(t.timer);if(t.rec&&t.rec.state!=="inactive"){t.rec.onstop=null;try{t.rec.stop()}catch(e){}}if(t.url)URL.revokeObjectURL(t.url)});
@@ -2701,7 +2706,7 @@ function record(t){if(stream){var vt=stream.getVideoTracks()[0];if(!vt||vt.ready
 
 /* ---------- remote link on the iPad ---------- */
 var relayOK=false,remoteTs=0;
-function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 19 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
+function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 20 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
   $("rstat2").textContent=remoteTs?"IPHONE CONNECTED - LAST SIGNAL "+Math.round((Date.now()-remoteTs)/1000)+" S AGO":"NO IPHONE CONNECTED YET."}
 function handleMain(m){
   if(m.t==="hello"){remoteSeen=true;remoteTs=Date.now();if(running||document.visibilityState==="visible")sendCfg();if(running)info();diag()}
@@ -2938,11 +2943,12 @@ async function frames2clip(fr){var mime=pickMime(),f0=fr[0],bm0=await createImag
 function enqueueClip(i,seg){var t=tiles[i];if(t)t.saving=(t.saving||0)+1;
   CQ=CQ.then(function(){return frames2clip(seg)}).then(async function(c){var n=-1;if(c){c.p=i;n=await saveClipObj(c,i,CFG.max)}var t2=tiles[i];if(t2){t2.saving=Math.max(0,(t2.saving||1)-1);updOverlay(t2)}notify(i,"done",{n:n})}).catch(function(){var t2=tiles[i];if(t2){t2.saving=0;updOverlay(t2)}})}
 function lpStart(t,fr){var L=t.lp;if(L){cl(L.cur);cl(L.nxt)}t.lp={fr:fr,t0:performance.now(),dur:Math.max(1,fr[fr.length-1].t-fr[0].t),cur:null,nxt:null,ci:-1,dec:false};t.tc.width=1280;t.tc.height=720;t.tc.style.display="block"}
-async function lpSet(t,k){var L=t.lp;L.dec=true;try{
+async function lpSet(t,k){var L=t.lp;L.dec=true;L.dts=performance.now();try{
     if(k===L.ci+1&&L.nxt){var old=L.cur;L.cur=L.nxt;L.nxt=null;cl(old)}
     else{var cur=await createImageBitmap(L.fr[k].b);if(t.lp!==L){cl(cur);return}var o1=L.cur,o2=L.nxt;L.cur=cur;L.nxt=null;cl(o1);cl(o2)}
     L.ci=k;if(k+1<L.fr.length){var nb=await createImageBitmap(L.fr[k+1].b);if(t.lp===L&&L.ci===k&&!L.nxt)L.nxt=nb;else cl(nb)}}catch(e){}if(t.lp===L)L.dec=false}
 function lpDraw(t,now){var L=t.lp;if(!L)return;var sp=CFG.speed/100,tt=L.fr[0].t+((now-L.t0)*sp)%L.dur,k=Math.max(0,frameIdx(L.fr,tt));
+  if(L.dec&&now-(L.dts||now)>1500)L.dec=false;
   if(k!==L.ci&&!L.dec)lpSet(t,k);
   if(!L.cur)return;var x=t.cx,c=t.tc;if(c.width!==L.cur.width||c.height!==L.cur.height){c.width=L.cur.width;c.height=L.cur.height}
   x.globalAlpha=1;x.drawImage(L.cur,0,0);
