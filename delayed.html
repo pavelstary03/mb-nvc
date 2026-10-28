@@ -103,6 +103,7 @@ input[type=range]::-moz-range-thumb{width:42px;height:42px;border-radius:50%;bac
 .rw{display:flex;gap:12px;align-items:center}.rs{flex:none;width:56px;height:56px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-size:32px;font-weight:700;font-family:inherit;line-height:1;padding:0}
 .fld{margin:0 0 22px}
 .gh{grid-column:1/-1;margin:14px 0 0;font-size:22px}.gh:first-child{margin-top:0}
+.pvi video.pvq{opacity:0;transition:opacity .15s}.pvi video.pvq.on{opacity:1}
 .pvi video{display:block;width:100%;max-width:340px;max-height:210px;background:#000;border-radius:10px;margin:0 0 8px}
 .trow{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.trow b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;text-transform:none}
 .tabs{flex-wrap:wrap}.tab{min-width:150px}
@@ -2736,7 +2737,7 @@ function record(t){if(stream){var vt=stream.getVideoTracks()[0];if(!vt||vt.ready
 
 /* ---------- remote link on the iPad ---------- */
 var relayOK=false,remoteTs=0;
-function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 23 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
+function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 24 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
   $("rstat2").textContent=remoteTs?"IPHONE CONNECTED - LAST SIGNAL "+Math.round((Date.now()-remoteTs)/1000)+" S AGO":"NO IPHONE CONNECTED YET."}
 function handleMain(m){
   if(m.t==="hello"){remoteSeen=true;remoteTs=Date.now();if(running||document.visibilityState==="visible")sendCfg();if(running)info();diag()}
@@ -2765,10 +2766,12 @@ function renderClips(){var by={};store.forEach(function(c){var k=c.k||"N|"+((c.p
   Object.keys(PVC).forEach(function(k){if(store.some(function(c){return String(c.id)===String(PVC[k])}))showPv(k,PVC[k]);else delete PVC[k]});stat()}
 function showPv(k,cid){var c=store.filter(function(x){return String(x.id)===String(cid)})[0],box=$("pvi-"+kid(k));if(!c||!box)return;
   if(PVU[k])try{URL.revokeObjectURL(PVU[k])}catch(e){}PVU[k]=URL.createObjectURL(c.blob);PVC[k]=cid;
-  box.innerHTML='<video controls playsinline loop muted autoplay src="'+PVU[k]+'"></video><div class="row" style="margin:8px 0 10px"><button class="btn" data-full="'+c.id+'">FULL SCREEN</button><button class="btn" data-pclose="'+esc(k)+'">CLOSE PREVIEW</button></div>';
-  var v=box.querySelector("video");v.muted=true;v.play().catch(function(){})}
+  box.innerHTML='<video class="pvq" playsinline webkit-playsinline loop muted preload="auto" src="'+PVU[k]+'"></video><div class="row" style="margin:8px 0 10px"><button class="btn" data-ptog="1">PAUSE</button><button class="btn" data-full="'+c.id+'">FULL SCREEN</button><button class="btn" data-pclose="'+esc(k)+'">CLOSE PREVIEW</button></div>';
+  var v=box.querySelector("video");v.muted=true;v.controls=false;v.addEventListener("playing",function(){v.classList.add("on")},{once:true});v.addEventListener("click",function(){if(v.paused)v.play().catch(function(){});else v.pause()});
+  var tg=box.querySelector("[data-ptog]");v.addEventListener("play",function(){tg.textContent="PAUSE"});v.addEventListener("pause",function(){tg.textContent="PLAY"});v.play().catch(function(){v.classList.add("on")})}
 $("clipcards").addEventListener("click",async function(e){var b=e.target.closest("button");if(!b)return;
   if(b.dataset.pv){showPv(b.dataset.k,b.dataset.pv)}
+  else if(b.dataset.ptog){var pv=b.parentNode.parentNode.querySelector("video");if(pv){if(pv.paused)pv.play().catch(function(){});else pv.pause()}}
   else if(b.dataset.full){var c=store.filter(function(x){return String(x.id)===b.dataset.full})[0];if(c){$("pvv").src=URL.createObjectURL(c.blob);$("pv").classList.add("on");$("pvv").play().catch(function(){})}}
   else if(b.dataset.pclose){var pk=b.dataset.pclose;delete PVC[pk];if(PVU[pk]){try{URL.revokeObjectURL(PVU[pk])}catch(x){}delete PVU[pk]}var pb=$("pvi-"+kid(pk));if(pb)pb.innerHTML=""}
   else if(b.dataset.del){var c2=store.filter(function(x){return String(x.id)===b.dataset.del})[0];if(c2){await idbDel(c2.id);store.splice(store.indexOf(c2),1);delete films[c2.k];renderClips()}}
@@ -3174,7 +3177,7 @@ var DP=[
 ["PEOPLE TO FOLLOW","POČET SLEDOVANÝCH OSOB (ČÍSLA 1-N)"],["SAVE CLIPS FOR THE FILM","UKLÁDAT KLIPY PRO FILM"],["DELAYED VIDEO ONLY","JEN ZPOŽDĚNÉ VIDEO"],["SAVE CLIPS","UKLÁDAT KLIPY"],["SAVE CLIPS OF","UKLÁDAT KLIPY PRO"],["ALL","VŠE"],
 ["MAX CLIPS IN THE CLIPS TAB (RECORDED WITH THE REC BUTTON)","MAX. KLIPŮ V ZÁLOŽCE KLIPY (NAHRÁVANÝCH TLAČÍTKEM REC)"],["DELAY OF THE PICTURE","ZPOŽDĚNÍ OBRAZU"],["START RECORDING AFTER BUTTON PRESS","ZAČÁTEK NAHRÁVÁNÍ PO STISKU TLAČÍTKA"],["CLIP LENGTH","DÉLKA KLIPU"],
 ["SAVE THE LAST SECONDS BEFORE THE BUTTON PRESS","ULOŽIT POSLEDNÍ SEKUNDY PŘED STISKEM TLAČÍTKA"],["MAX CLIPS PER PERSON (FOR THE FILM)","MAX. KLIPŮ NA OSOBU (PRO FILM)"],
-["PLAYBACK","PŘEHRÁVÁNÍ"],["PLAYBACK OPTIONS","MOŽNOSTI PŘEHRÁVÁNÍ"],["APP SETTINGS","NASTAVENÍ APLIKACE"],["DELAYED VIDEO → START","ZPOŽDĚNÉ VIDEO → START"],["SAVED CLIPS","NAHRANÉ KLIPY"],["TIMING","ČASOVÁNÍ"],["TEAM STORAGE","ULOŽENÁ DRUŽSTVA"],["EDIT","UPRAVIT"],["NO TEAM","BEZ DRUŽSTVA"],["FULL SCREEN","CELÁ OBRAZOVKA"],["CLOSE PREVIEW","ZAVŘÍT NÁHLED"],
+["PLAYBACK","PŘEHRÁVÁNÍ"],["PLAYBACK OPTIONS","MOŽNOSTI PŘEHRÁVÁNÍ"],["APP SETTINGS","NASTAVENÍ APLIKACE"],["DELAYED VIDEO → START","ZPOŽDĚNÉ VIDEO → START"],["SAVED CLIPS","NAHRANÉ KLIPY"],["TIMING","ČASOVÁNÍ"],["TEAM STORAGE","ULOŽENÁ DRUŽSTVA"],["EDIT","UPRAVIT"],["NO TEAM","BEZ DRUŽSTVA"],["FULL SCREEN","CELÁ OBRAZOVKA"],["PAUSE","POZASTAVIT"],["CLOSE PREVIEW","ZAVŘÍT NÁHLED"],
 ["THE SPEED CAN ALSO BE CHANGED DURING PLAYBACK ON THE PROJECTION SCREEN.","RYCHLOST LZE MĚNIT I BĚHEM PŘEHRÁVÁNÍ NA PROMÍTACÍ OBRAZOVCE."],
 ["UP TO 3 TEAMS, EACH WITH MAX. 25 NAMES. THE TEAM AND THE NAMES ARE CHOSEN IN DELAYED VIDEO → START.","AŽ 3 DRUŽSTVA, V KAŽDÉM MAX. 25 JMEN. DRUŽSTVO A JMÉNA SE VYBÍRAJÍ V ZÁLOŽCE ZPOŽDĚNÉ VIDEO → START."],
 ["CLIPS ARE SAVED UNDER THE PERSON'S NAME AND STAY HERE UNTIL YOU DELETE THEM.","KLIPY SE UKLÁDAJÍ POD JMÉNO OSOBY A ZŮSTÁVAJÍ ZDE, DOKUD JE NESMAŽEŠ."],["SLOW-MOTION SPEED","RYCHLOST ZPOMALENÍ"],["SMOOTHING (FRAME BLENDING)","VYHLAZENÍ (PROLÍNÁNÍ SNÍMKŮ)"],["ON","ZAP"],["OFF","VYP"],["MIRROR VIEW","ZRCADLOVÝ OBRAZ"],["TAP A SCREEN TO TRIGGER IT","KLEPNUTÍM NA DLAŽDICI SPUSTIT"],
