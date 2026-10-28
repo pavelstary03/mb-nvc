@@ -91,7 +91,8 @@ input[type=text]{width:100%;padding:14px;font-size:22px;border:2px solid var(--l
 #s-tm button{white-space:normal;line-height:1.2;padding:12px 6px}#s-who button{min-width:0;flex:1 1 90px;overflow:hidden;text-overflow:ellipsis;font-size:14px;padding:12px 4px}
 .big.wa{background:#25d366;color:#06260f}.big small,.big .wn{display:block;font-size:14px;font-weight:700;opacity:.85}
 .chips button{flex:1;min-width:110px;white-space:normal;line-height:1.2}.chips button small{font-weight:600;opacity:.8;font-size:12px}
-.g3.g2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr));align-items:stretch}@media(max-width:900px){.g3.g2{grid-template-columns:1fr}}
+.g3.g2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr));align-items:stretch}@media(max-width:900px){.g3.g2{grid-template-columns:1fr}.tmcard{grid-column:auto!important}}
+.tmcard{grid-column:span 2}
 #v-setup>.card{margin-bottom:14px}
 
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:56px;background:transparent;margin:0;touch-action:pan-y}
@@ -195,7 +196,7 @@ details#ted-tr{margin-top:18px}details#ted-tr summary{cursor:pointer;font-weight
 <div class="seg" id="s-draw"><button data-v="1">ON</button><button data-v="0">OFF</button></div>
 <p class="muted" style="margin:0">DRAW ONCE ON THE LIVE PICTURE (PRESS DRAW ON THE PROJECTION SCREEN). THE DRAWING STAYS ON THE SCREEN AND IS BURNED INTO THE CLIPS RECORDED WHILE IT IS ON. CLIPS RECORDED BEFORE KEEP THEIR OLD PICTURE.</p>
 </div>
-<div class="card" style="grid-column:1/-1"><h2>TEAM STORAGE</h2>
+<div class="card tmcard"><h2>TEAM STORAGE</h2>
 <p class="muted" style="margin:0 0 8px">UP TO 3 TEAMS, EACH WITH MAX. 25 NAMES. THE TEAM AND THE NAMES ARE CHOSEN IN DELAYED VIDEO → START.</p>
 <div id="st-teams"></div>
 <div class="row" style="margin-top:12px"><button class="btn" id="st-tr">MOVE TEAMS TO ANOTHER TABLET</button></div>
@@ -2735,7 +2736,7 @@ function record(t){if(stream){var vt=stream.getVideoTracks()[0];if(!vt||vt.ready
 
 /* ---------- remote link on the iPad ---------- */
 var relayOK=false,remoteTs=0;
-function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 22 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
+function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 23 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
   $("rstat2").textContent=remoteTs?"IPHONE CONNECTED - LAST SIGNAL "+Math.round((Date.now()-remoteTs)/1000)+" S AGO":"NO IPHONE CONNECTED YET."}
 function handleMain(m){
   if(m.t==="hello"){remoteSeen=true;remoteTs=Date.now();if(running||document.visibilityState==="visible")sendCfg();if(running)info();diag()}
