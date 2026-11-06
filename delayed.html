@@ -239,7 +239,7 @@ details#ted-tr{margin-top:18px}details#ted-tr summary{cursor:pointer;font-weight
 </div>
 </section>
 <div id="sys" class="muted" style="margin-top:16px;text-align:center"></div>
-<footer class="cp">© 2026 Pavel Starý. All rights reserved. Copying and distribution without permission is prohibited.</footer>
+<footer class="cp">© 2026 Pavel Starý. All rights reserved. Copying and distribution without permission is prohibited. <b style="white-space:nowrap">· v28</b></footer>
 </main>
 
 <div id="proj"><div id="grid"></div>
@@ -2747,7 +2747,7 @@ var relayOK=false,remoteTs=0,offRdy="CHECKING";
 (function(){if(!("serviceWorker" in navigator)||!/^https?:$/.test(location.protocol)){offRdy="NOT READY";return}
   var pg=location.pathname.split("/").pop()||"delayed.html";
   navigator.serviceWorker.register("delayed-sw.js?page="+encodeURIComponent(pg)).then(function(){return navigator.serviceWorker.ready}).then(function(){return caches.keys()}).then(function(k){offRdy=k.some(function(n){return n.indexOf("echocoach-")===0})?"READY":"NOT READY"}).catch(function(){offRdy="NOT READY"})})();
-function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 27 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e+" · OFFLINE MODE: "+offRdy;
+function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 28 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e+" · OFFLINE MODE: "+offRdy;
   $("rstat2").textContent=remoteTs?"IPHONE CONNECTED - LAST SIGNAL "+Math.round((Date.now()-remoteTs)/1000)+" S AGO":"NO IPHONE CONNECTED YET."}
 function handleMain(m){
   if(m.t==="hello"){remoteSeen=true;remoteTs=Date.now();if(running||document.visibilityState==="visible")sendCfg();if(running)info();diag()}
