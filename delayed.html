@@ -2743,8 +2743,11 @@ function record(t){if(stream){var vt=stream.getVideoTracks()[0];if(!vt||vt.ready
   rec.start();setTimeout(function(){if(rec.state!=="inactive")rec.stop()},t.l*1000)}
 
 /* ---------- remote link on the iPad ---------- */
-var relayOK=false,remoteTs=0;
-function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 26 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e;
+var relayOK=false,remoteTs=0,offRdy="CHECKING";
+(function(){if(!("serviceWorker" in navigator)||!/^https?:$/.test(location.protocol)){offRdy="NOT READY";return}
+  var pg=location.pathname.split("/").pop()||"delayed.html";
+  navigator.serviceWorker.register("delayed-sw.js?page="+encodeURIComponent(pg)).then(function(){return navigator.serviceWorker.ready}).then(function(){return caches.keys()}).then(function(k){offRdy=k.some(function(n){return n.indexOf("echocoach-")===0})?"READY":"NOT READY"}).catch(function(){offRdy="NOT READY"})})();
+function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 27 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e+" · OFFLINE MODE: "+offRdy;
   $("rstat2").textContent=remoteTs?"IPHONE CONNECTED - LAST SIGNAL "+Math.round((Date.now()-remoteTs)/1000)+" S AGO":"NO IPHONE CONNECTED YET."}
 function handleMain(m){
   if(m.t==="hello"){remoteSeen=true;remoteTs=Date.now();if(running||document.visibilityState==="visible")sendCfg();if(running)info();diag()}
@@ -3025,7 +3028,7 @@ function modeStart(){var tr=stream.getVideoTracks()[0];HWZ=null;try{var cp=tr.ge
   if(CFG.mode!==2){bufStart(CFG.mode===1?CFG.ldelay+4:Math.max(CFG.back,10)+2);requestAnimationFrame(bufLoop)}}
 function modeStop(){bufStop();if(M1R){clearTimeout(M1R.tm);try{M1R.rec.onstop=null;M1R.rec.stop()}catch(e){}M1R=null}M1=null;zpStop()}
 /* ---------- direct pairing (WebRTC data channel, signalling by QR codes) ---------- */
-var ICE={iceServers:[{urls:"stun:stun.l.google.com:19302"}]};
+function iceCfg(){return{iceServers:relayOK?[{urls:"stun:stun.l.google.com:19302"}]:[]}}
 function gatherCands(pc){return new Promise(function(res){var c=[],h=0,sr=0,done=false;
   function fin(){if(done)return;done=true;res(c)}
   pc.onicecandidate=function(e){if(!e.candidate){fin();return}var p=e.candidate.candidate.split(" ");if(p[2]&&p[2].toLowerCase()!=="udp")return;var ip=p[4],port=p[5],t=p[7];
@@ -3045,7 +3048,7 @@ function pairStart(){
   if(!window.RTCPeerConnection){pairStat("THIS BROWSER DOES NOT SUPPORT DIRECT PAIRING.");return}
   if(ppcI){try{ppcI.close()}catch(e){}ppcI=null}
   $("pairbox").hidden=false;$("pairstep").textContent="PREPARING...";$("pqr").innerHTML="";pairStat("");
-  var pc=new RTCPeerConnection(ICE);ppcI=pc;var dc=pc.createDataChannel("vapps");
+  var pc=new RTCPeerConnection(iceCfg());ppcI=pc;var dc=pc.createDataChannel("vapps");
   mainChan.ondc=function(ok){if(ok){pairStat("DIRECT CONNECTION: IPHONE CONNECTED. NO INTERNET NEEDED.");$("pairbox").hidden=true;sendCfg(true)}else pairStat("DIRECT CONNECTION LOST. PRESS PAIR IPHONE AGAIN.")};
   mainChan.attach(dc);
   pc.onconnectionstatechange=function(){if(pc.connectionState==="failed")pairStat("PAIRING FAILED. BOTH DEVICES MUST BE ON THE SAME WI-FI. PRESS PAIR IPHONE TO TRY AGAIN.")};
@@ -3057,7 +3060,7 @@ function pairAnswer(text){var o=unpack(text,"A");if(!o||!ppcI)return false;
   ppcI.setRemoteDescription({type:"answer",sdp:mkSdp(o,"active")}).then(function(){pairStat("CONNECTING...")}).catch(function(e){pairStat("ERROR: "+(e&&e.message||e))});return true}
 function startAnswer(payload){
   var o=unpack(payload,"O");if(!o||!window.RTCPeerConnection){$("rmt").textContent="INVALID LINK. PRESS PAIR IPHONE ON THE IPAD AGAIN.";return}
-  var pc=new RTCPeerConnection(ICE);ppc=pc;pc.ondatachannel=function(e){rch.attach(e.channel)};
+  var pc=new RTCPeerConnection(iceCfg());ppc=pc;pc.ondatachannel=function(e){rch.attach(e.channel)};
   pc.setRemoteDescription({type:"offer",sdp:mkSdp(o,"actpass")}).then(function(){return pc.createAnswer()}).then(function(a){return pc.setLocalDescription(a)}).then(function(){return gatherCands(pc)}).then(function(c){
     var pay=packSdp("A",pc,c);pAns=qrImg(pay);$("rqr").innerHTML='<img alt="QR" src="'+pAns+'">';$("rqr").dataset.a=pay;rSig()}).catch(function(e){$("rmt").textContent="ERROR: "+(e&&e.message||e)})}
 var scanT=null,scanS=null;
@@ -3263,7 +3266,7 @@ var R=[
 [/^BUILDING THE FILM FAILED \((.*)\)\. TRY AGAIN, OR USE PLAY ON THE SINGLE CLIPS\.$/,function(m){return"SESTAVENÍ FILMU SELHALO ("+m[1]+"). ZKUS ZNOVU NEBO POUŽIJ PŘEHRÁT U JEDNOTLIVÝCH KLIPŮ."}],
 [/^BUILDING FILM\.\.\. CLIP (\d+) OF (\d+)\. KEEP THIS SCREEN OPEN\.$/,function(m){return"SESTAVUJI FILM... KLIP "+m[1]+" Z "+m[2]+". NECHEJ TUTO OBRAZOVKU OTEVŘENOU."}],
 [/^TAP SAVE TO PHOTOS, THEN CHOOSE “SAVE VIDEO” IN THE MENU\. \(([\d.]+) MB\)\. IF IT DOES NOT WORK, USE THE DOWNLOAD FILE BUTTON AND SAVE IT TO FILES\.$/,function(m){return"KLEPNI NA ULOŽIT DO FOTEK A V NABÍDCE VYBER „ULOŽIT VIDEO“. ("+m[1]+" MB). KDYŽ TO NEFUNGUJE, POUŽIJ TLAČÍTKO STÁHNOUT SOUBOR A ULOŽ HO DO SOUBORŮ."}],
-[/^VERSION (\d+) · CONNECTION TO THE RELAY: (ONLINE|OFFLINE)( \((.*)\))?$/,function(m){return"VERZE "+m[1]+" · SPOJENÍ S PŘENOSOVÝM SERVEREM: "+m[2]+(m[4]?" ("+(T1(m[4])||m[4])+")":"")}],
+[/^VERSION (\d+) · CONNECTION TO THE RELAY: (ONLINE|OFFLINE)( \(([^)]*)\))? · OFFLINE MODE: (READY|NOT READY|CHECKING)$/,function(m){return"VERZE "+m[1]+" · SPOJENÍ S PŘENOSOVÝM SERVEREM: "+m[2]+(m[4]?" ("+(T1(m[4])||m[4])+")":"")+" · OFFLINE REŽIM: "+(m[5]==="READY"?"PŘIPRAVEN":m[5]==="CHECKING"?"ZJIŠŤUJI":"NENÍ PŘIPRAVEN (OTEVŘI JEDNOU S INTERNETEM)")}],
 [/^IPHONE CONNECTED - LAST SIGNAL (\d+) S AGO$/,function(m){return"IPHONE PŘIPOJEN - POSLEDNÍ SIGNÁL PŘED "+m[1]+" S"}],
 [/^SERVER ERROR (\d+)$/,function(m){return"CHYBA SERVERU "+m[1]}],[/^NO CONNECTION TO THE RELAY \((.*)\)$/,function(m){return"NENÍ SPOJENÍ S PŘENOSOVÝM SERVEREM ("+(T1(m[1])||m[1])+")"}],
 [/^THE IPHONE HAS NO INTERNET CONNECTION TO THE RELAY( \((.*)\))?\. CHECK WI-FI OR MOBILE DATA\.$/,function(m){return"IPHONE NEMÁ INTERNETOVÉ SPOJENÍ S PŘENOSOVÝM SERVEREM"+(m[2]?" ("+(T1(m[2])||m[2])+")":"")+". ZKONTROLUJ WI-FI NEBO MOBILNÍ DATA."}],
