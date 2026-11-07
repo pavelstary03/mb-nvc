@@ -203,6 +203,16 @@ details#ted-tr{margin-top:18px}details#ted-tr summary{cursor:pointer;font-weight
 <div class="seg" id="s-draw"><button data-v="1">ON</button><button data-v="0">OFF</button></div>
 <p class="muted" style="margin:0">DRAW ONCE ON THE LIVE PICTURE (PRESS DRAW ON THE PROJECTION SCREEN). THE DRAWING STAYS ON THE SCREEN AND IS BURNED INTO THE CLIPS RECORDED WHILE IT IS ON. CLIPS RECORDED BEFORE KEEP THEIR OLD PICTURE.</p>
 </div>
+<div class="card"><h2>SECOND CAMERA (IPHONE) - TEST</h2>
+<label class="l">RECORD A SECOND ANGLE WITH THE PAIRED IPHONE (MODE 2, DIRECT PAIRING)</label>
+<div class="seg" id="s-c2"><button data-v="1">ON</button><button data-v="0">OFF</button></div>
+<label class="l">AUTOMATIC SYNCHRONISATION</label>
+<div class="seg" id="s-c2a"><button data-v="1">ON</button><button data-v="0">OFF</button></div>
+<label class="l">FINE TUNING (MS) - MINUS = THE IPHONE PICTURE IS DELAYED MORE</label>
+<div class="row"><input type="range" id="r-c2o" min="-300" max="300" step="10" data-ns="1"><b id="o-c2o" style="min-width:90px;text-align:right">0 MS</b></div>
+<p class="muted" id="c2stat" style="margin:10px 0 0">OFF</p>
+<p class="muted" style="margin:6px 0 0">BOTH ANGLES ARE RECORDED INTO ONE VIDEO, SIDE BY SIDE (LEFT TABLET, RIGHT IPHONE). PAIR THE IPHONE FIRST ON THE REMOTE TAB. THE IPHONE MUST KEEP ITS SCREEN ON.</p>
+</div>
 <div class="card tmcard"><h2>TEAM STORAGE</h2>
 <p class="muted" style="margin:0 0 8px">UP TO 3 TEAMS, EACH WITH MAX. 25 NAMES. THE TEAM AND THE NAMES ARE CHOSEN IN DELAYED VIDEO → START.</p>
 <div id="st-teams"></div>
@@ -239,7 +249,7 @@ details#ted-tr{margin-top:18px}details#ted-tr summary{cursor:pointer;font-weight
 </div>
 </section>
 <div id="sys" class="muted" style="margin-top:16px;text-align:center"></div>
-<footer class="cp">© 2026 Pavel Starý. All rights reserved. Copying and distribution without permission is prohibited. <b style="white-space:nowrap">· v28</b></footer>
+<footer class="cp">© 2026 Pavel Starý. All rights reserved. Copying and distribution without permission is prohibited. <b style="white-space:nowrap">· v30</b></footer>
 </main>
 
 <div id="proj"><div id="grid"></div>
@@ -268,7 +278,7 @@ details#ted-tr{margin-top:18px}details#ted-tr summary{cursor:pointer;font-weight
 <div id="drw"><div class="dtb" id="dtb"></div><div class="dst" id="dst"><div class="mv"><video id="drv" muted playsinline autoplay></video><canvas id="drc"></canvas></div></div></div>
 
 <div id="rem"><div class="rtop"><button class="btn" id="rexit">EXIT</button><span class="muted" id="rstat">CONNECTING...</span><div class="lsw"><button data-l="cs">CZ</button><button data-l="en">EN</button></div></div>
-<div id="rmsg"><div id="rmt">CONNECTING TO THE IPAD...</div><div id="rqrbox" hidden><div id="rqr"></div></div><button class="big" id="rretry" hidden style="width:100%;max-width:420px">TRY AGAIN</button></div><div id="rgrid" hidden></div></div>
+<div id="rmsg"><div id="rmt">CONNECTING TO THE IPAD...</div><div id="rqrbox" hidden><div id="rqr"></div></div><button class="big" id="rretry" hidden style="width:100%;max-width:420px">TRY AGAIN</button></div><div id="rgrid" hidden></div><div id="c2p" class="muted" hidden style="text-align:center;padding:10px"></div></div>
 
 <div id="scan"><video id="scv" playsinline muted></video><div class="sb"><span>POINT THE CAMERA AT THE QR CODE ON THE IPHONE</span><button class="btn" id="scx">CANCEL</button></div></div>
 
@@ -2610,13 +2620,13 @@ function seg(id,key,conv){var g=$(id);function paint(){[].forEach.call(g.childre
 function rng(id,key,out,fmt){var r=$(id);r.value=CFG[key];function u(){$(out).textContent=fmt(r.value)}u();r.addEventListener("input",function(){CFG[key]=+r.value;u();saveCfg();afterCfg(key)})}
 var num=function(v){return +v};
 seg("s-n","n",num);seg("s-mode","mode",num);seg("s-save","save",num);seg("s-blend","blend",num);var segMirror=seg("s-mirror","mirror",num);seg("s-tap","tap",num);
-seg("s-cam","cam");var segDraw=seg("s-draw","draw",num);seg("s-res","res",num);seg("s-fps","fps",num);
+seg("s-cam","cam");seg("s-c2","c2",num);seg("s-c2a","c2a",num);rng("r-c2o","c2o","o-c2o",function(v){return(+v>0?"+":"")+v+" MS"});var segDraw=seg("s-draw","draw",num);seg("s-res","res",num);seg("s-fps","fps",num);
 var segSpeed=seg("s-speed","speed",num);
 rng("r-delay","delay","o-delay",function(v){return v+" S"});rng("r-len","len","o-len",function(v){return v+" S"});rng("r-ldelay","ldelay","o-ldelay",function(v){return v+" S"});rng("r-back","back","o-back",function(v){return v+" S"});rng("r-zoom","zoom","o-zoom",fz);
 (function(){var h="",o="";for(var s=10;s<=100;s+=10){h+='<button data-v="'+s+'">'+s+'%</button>';o+=''}$("s-speed").innerHTML=h;segSpeed.repaint();$("psp").value=CFG.speed;$("psv").textContent=CFG.speed+"%"})();
 function setSpeed(v){v=Math.max(10,Math.min(100,Math.round(v/10)*10));CFG.speed=v;saveCfg();segSpeed.repaint();afterCfg("speed")}
 $("psp").addEventListener("input",function(){setSpeed(+this.value)});$("psm").onclick=function(){setSpeed(CFG.speed-10)};$("psq").onclick=function(){setSpeed(CFG.speed+10)};
-function afterCfg(k){if(k==="draw")drwChanged();if(k==="n"||k==="save")uiSave();if(k==="n"||k==="mode")drawQR();if(k==="mode")applyMode();if(k==="zoom")applyZoom();
+function afterCfg(k){if(k==="c2"){c2Toggle()}if(k==="c2a"||k==="c2o")c2Msg();if(k==="draw")drwChanged();if(k==="n"||k==="save")uiSave();if(k==="n"||k==="mode")drawQR();if(k==="mode")applyMode();if(k==="zoom")applyZoom();
   if(k==="cam"){CFG.mirror=CFG.cam==="user"?1:0;saveCfg();segMirror.repaint()}
   if(k==="speed"){$("psp").value=CFG.speed;$("psv").textContent=CFG.speed+"%"}
   if(running){tiles.forEach(function(t){applyRate(t);setBlend(t);t.el.classList.toggle("mir",!!CFG.mirror)});info()}
@@ -2660,7 +2670,7 @@ function mkTile(i,liveOnly){
   var d=document.createElement("div");d.className="tile"+(CFG.mirror?" mir":"");
   d.innerHTML='<div class="mv"><video class="tl" muted playsinline autoplay></video>'+(liveOnly?'':'<video class="tv" muted playsinline></video><canvas class="tc"></canvas>')+'<canvas class="dro"></canvas></div>'+(liveOnly?'<div class="st">LIVE VIEW</div>':'<div class="lt">'+L[i]+'</div><div class="st"></div><div class="cd"></div>');
   var t={i:i,el:d,liveOnly:liveOnly,dro:d.querySelector(".dro"),tl:d.querySelector(".tl"),state:"idle",url:null,clip:null,timer:null,d:CFG.delay,l:CFG.len,t0:0,A:null,B:null,tf:0,dW:33,lastMT:-1,nb:true,h:0,blendOn:false};
-  t.tl.srcObject=stream;t.tl.setAttribute("playsinline","");t.tl.play().catch(function(){});
+  t.tl.srcObject=(C2.use&&C2.s)?C2.s:stream;t.tl.setAttribute("playsinline","");t.tl.play().catch(function(){});
   if(!liveOnly){t.tv=d.querySelector(".tv");t.tc=d.querySelector(".tc");t.cx=t.tc.getContext("2d");t.st=d.querySelector(".st");t.cd=d.querySelector(".cd");
     t.tv.loop=true;t.tv.addEventListener("ended",function(){t.tv.currentTime=0;t.tv.play().catch(function(){})});t.tv.addEventListener("pause",function(){if(t.clip&&running&&!t.tv.ended)setTimeout(function(){if(t.clip&&running&&t.tv.paused)t.tv.play().catch(function(){})},50)});
     t.tv.addEventListener("loadedmetadata",function(){applyRate(t);sizeBlend(t)});t.tv.addEventListener("playing",function(){applyRate(t)});
@@ -2705,7 +2715,7 @@ async function startProj(){
   running=true;$("proj").classList.add("on");var g=$("grid");g.innerHTML="";tiles=[];
   if(CFG.mode===1){m1Build(g)}else{for(var i=0;i<N();i++){var t=mkTile(i,false);tiles.push(t);g.appendChild(t.el)}}
   layout();$("grid").classList.toggle("many",N()>=10);
-  tiles.forEach(function(t){updOverlay(t)});modeStart();info();wake(true);sendCfg(true);clearInterval(hb);hb=setInterval(sendCfg,30000);requestAnimationFrame(rafLoop);
+  tiles.forEach(function(t){updOverlay(t)});modeStart();c2Req();c2Apply();info();wake(true);sendCfg(true);clearInterval(hb);hb=setInterval(sendCfg,30000);requestAnimationFrame(rafLoop);
   tickT=setInterval(function(){var now=performance.now();tiles.forEach(wdog);tiles.forEach(function(t){
     if(t.state==="wait"){var r=Math.ceil((t.d*1000-(now-t.t0))/1000);t.cd.textContent=Math.max(r,1);t.st.textContent=L[t.i]+" STARTS IN "+Math.max(r,1)+" S"}
     else if(t.state==="rec"){var e=Math.min(t.l,(now-t.t0)/1000);t.cd.textContent="";t.st.textContent="REC "+e.toFixed(1)+" / "+t.l+" S"}})},150)}
@@ -2716,7 +2726,7 @@ function wdog(t){var v=t.tv,n=performance.now();if(!v||!t.clip||CFG.mode!==2||t.
   else{var u=t.url;t.tv.pause();t.tv.src=u;t.tv.load();applyRate(t);t.tv.play().catch(function(){})}}
 function updOverlay(t){if(CFG.mode===3){var n3=store.filter(function(c){return c.k===keyOf(t.i)}).length;t.cd.textContent="";t.st.textContent=t.lp?("LOOP LAST "+CFG.back+" S"+(t.saving?" - SAVING CLIP...":(shouldSave(t.i)?" - CLIP "+n3:""))):"LIVE - TAP TO SAVE THE LAST "+CFG.back+" S";return}if(t.state!=="idle")return;t.cd.textContent="";var n=store.filter(function(c){return c.k===keyOf(t.i)}).length;
   t.st.textContent=t.clip?("LOOP"+(t.saved?" - CLIP "+n:"")):(CFG.tap?"LIVE - TAP TO RECORD":"LIVE")}
-function stopProj(){if(window.drwClose)window.drwClose();modeStop();running=false;clearInterval(tickT);clearInterval(hb);tiles.forEach(function(t){clearTimeout(t.timer);if(t.rec&&t.rec.state!=="inactive"){t.rec.onstop=null;try{t.rec.stop()}catch(e){}}if(t.url)URL.revokeObjectURL(t.url)});
+function stopProj(){if(window.drwClose)window.drwClose();c2Stop2();modeStop();running=false;clearInterval(tickT);clearInterval(hb);tiles.forEach(function(t){clearTimeout(t.timer);if(t.rec&&t.rec.state!=="inactive"){t.rec.onstop=null;try{t.rec.stop()}catch(e){}}if(t.url)URL.revokeObjectURL(t.url)});
   tiles=[];$("grid").innerHTML="";if(stream){stream.getTracks().forEach(function(x){x.stop()});stream=null}$("proj").classList.remove("on");wake(false);sendCfg(true);renderClips()}
 $("start").onclick=startProj;$("pstop").onclick=stopProj;window.addEventListener("resize",function(){if(running)layout()});
 
@@ -2747,10 +2757,11 @@ var relayOK=false,remoteTs=0,offRdy="CHECKING";
 (function(){if(!("serviceWorker" in navigator)||!/^https?:$/.test(location.protocol)){offRdy="NOT READY";return}
   var pg=location.pathname.split("/").pop()||"delayed.html";
   navigator.serviceWorker.register("delayed-sw.js?page="+encodeURIComponent(pg)).then(function(){return navigator.serviceWorker.ready}).then(function(){return caches.keys()}).then(function(k){offRdy=k.some(function(n){return n.indexOf("echocoach-")===0})?"READY":"NOT READY"}).catch(function(){offRdy="NOT READY"})})();
-function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 28 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e+" · OFFLINE MODE: "+offRdy;
+function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 30 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e+" · OFFLINE MODE: "+offRdy;
   $("rstat2").textContent=remoteTs?"IPHONE CONNECTED - LAST SIGNAL "+Math.round((Date.now()-remoteTs)/1000)+" S AGO":"NO IPHONE CONNECTED YET."}
 function handleMain(m){
-  if(m.t==="hello"){remoteSeen=true;remoteTs=Date.now();if(running||document.visibilityState==="visible")sendCfg();if(running)info();diag()}
+  if(m.t==="hello"){remoteSeen=true;remoteTs=Date.now();if(running||document.visibilityState==="visible")sendCfg();if(running)info();diag();c2Req()}
+  else if(m.t==="c2o")c2Offer(m)
   else if(m.t==="press"&&fresh(m.id)){remoteSeen=true;remoteTs=Date.now();press(m.p,"remote");diag()}}
 
 /* ---------- clips tab ---------- */
@@ -2868,6 +2879,7 @@ function onRemote(m){
   if(m.t==="cfg"){if(m.run)act={from:m.from,ts:now};else if(act&&act.from===m.from)act=null;rcfg=m;applyCfg(m);rSig()}
   else if(m.t==="st"&&rb[m.p]){if(act&&act.from===m.from)act.ts=now;var x=rb[m.p];x.t0=performance.now();if(m.n!==undefined)x.n=m.n;
     if(m.s==="wait"){x.s="wait";x.d=m.d;x.l=m.l}else if(m.s==="rec"){x.s="rec";x.l=m.l}else if(m.s==="done"){x.s="done"}else if(m.s==="busy"){x.s="busy"}}
+  else if(m.t==="c2req")c2Start();else if(m.t==="c2off")c2Stop();else if(m.t==="c2a"&&ppc)ppc.setRemoteDescription({type:"answer",sdp:m.sdp}).then(c2Bitrate).catch(function(e){c2PInfo("ERROR: "+(e&&e.message||e))});
   rUpdate()}
 function rUpdate(){var now=performance.now();[].forEach.call($("rgrid").children,function(el,i){var x=rb[i];if(!x)return;var sm=el.querySelector("small"),txt="READY",cls="rb";
   if(x.s==="sent"){if(x.tries<5&&now-x.tl>1500&&rch){x.tries++;x.tl=now;rch.send({t:"press",p:i,id:x.pid})}txt="SENT..."+(x.tries>1?" ("+x.tries+")":"");cls="rb act";if(now-x.t0>5000)x.s="idle"}
@@ -2893,7 +2905,7 @@ function applyMode(){var m=String(CFG.mode);[].forEach.call(document.querySelect
 function fz(v){return (+v).toFixed(1)+"×"}
 var HWZ=null,ZD=1,ZP=null;
 function zpStop(){if(ZP){ZP.on=false;try{ZP.s.getTracks().forEach(function(t){t.stop()})}catch(e){}ZP=null}}
-function recSource(){if(ZD<=1.001&&!drwActive()){zpStop();return stream}
+function recSource(){if(C2.use&&C2.s){zpStop();return C2.s}if(ZD<=1.001&&!drwActive()){zpStop();return stream}
   if(!ZP){var v=document.createElement("video");v.muted=true;v.setAttribute("playsinline","");v.srcObject=stream;v.play().catch(function(){});var c=document.createElement("canvas");c.width=vw;c.height=vh;var x=c.getContext("2d");
     ZP={v:v,c:c,x:x,on:true,s:c.captureStream(CFG.fps||30)};
     (function lp(){if(!ZP||ZP.v!==v||!ZP.on)return;if(v.videoWidth){var z=ZD,sw=v.videoWidth/z,sh=v.videoHeight/z;if(c.width!==v.videoWidth){c.width=v.videoWidth;c.height=v.videoHeight}x.drawImage(v,(v.videoWidth-sw)/2,(v.videoHeight-sh)/2,sw,sh,0,0,c.width,c.height);drwBurn(x,c.width,c.height)}requestAnimationFrame(lp)})()}
@@ -2908,8 +2920,13 @@ $("zm").onclick=function(){zoomSet(CFG.zoom-0.25)};$("zp").onclick=function(){zo
 function camC(){var hi=CFG.mode===2&&CFG.res==1080,fps=CFG.mode===2?CFG.fps:30;return{audio:false,video:{facingMode:{ideal:CFG.cam},width:{ideal:hi?1920:1280},height:{ideal:hi?1080:720},frameRate:{ideal:fps}}}}
 
 /* ---------- v16: simple drawing on the screen ---------- */
-var DRW={s:[],curv:40,tool:"l",col:"#ff3b30",wd:4,v:0,cur:null,open:false};
-function drwActive(){return !!CFG.draw&&DRW.s.length>0}
+var DRW={s:[],r:[],ed:"t",curv:40,tool:"l",col:"#ff3b30",wd:4,v:0,cur:null,open:false};
+function drwActive(){return !!CFG.draw&&(DRW.s.length>0||(C2.use&&DRW.r.length>0))}
+function DL(){return DRW.ed==="i"&&C2.use?DRW.r:DRW.s}
+function MI(){return !!CFG.mirror&&!C2.use}
+function drwSrc(){return DRW.ed==="i"&&C2.use&&C2.rv&&C2.rv.srcObject?C2.rv.srcObject:stream}
+function drwBoth(x,r){var hw=r.w/2;[[C2.lv,DRW.s],[C2.rv,DRW.r]].forEach(function(q,i){var v=q[0],a=v&&v.videoWidth?v.videoWidth/v.videoHeight:16/9,w=hw,h=r.h;if(w/h>a)w=h*a;else h=w/a;
+    drwPaint(x,r.x+i*hw+(hw-w)/2,r.y+(r.h-h)/2,w,h,q[1])})}
 function drwAr(v){return v&&v.videoWidth>0&&v.videoHeight>0?v.videoWidth/v.videoHeight:(vw&&vh?vw/vh:16/9)}
 function drwRect(W,H,v){var ar=drwAr(v),w=W,h=W/ar;if(h>H){h=H;w=H*ar}return{x:(W-w)/2,y:(H-h)/2,w:w,h:h}}
 function drwPaint(x,rx,ry,rw,rh,list){list=list||DRW.s;x.save();x.lineCap="round";x.lineJoin="round";
@@ -2927,32 +2944,33 @@ function drwPaint(x,rx,ry,rw,rh,list){list=list||DRW.s;x.save();x.lineCap="round
 function drwBurn(x,w,h){if(drwActive())drwPaint(x,0,0,w,h)}
 function drwChanged(){DRW.v++;if(M1)M1.shown=null;
   if(running&&stream&&CFG.mode===2){if(ZD>1.001||drwActive())recSource();else zpStop()}
-  if($("pdrt")){$("pdrt").hidden=!DRW.s.length;$("pdrt").textContent=CFG.draw?"LINES ON":"LINES OFF"}
+  if($("pdrt")){$("pdrt").hidden=!(DRW.s.length||DRW.r.length);$("pdrt").textContent=CFG.draw?"LINES ON":"LINES OFF"}
   if(typeof segDraw!=="undefined")segDraw.repaint()}
-function drwTick(){if(CFG.mode===1)return;var sg=DRW.v+"|"+CFG.draw+"|"+vw+"x"+vh;
+function drwTick(){if(CFG.mode===1)return;var sg=DRW.v+"|"+CFG.draw+"|"+vw+"x"+vh+"|"+C2.use;
   tiles.forEach(function(t){var c=t.dro;if(!c)return;var W=c.clientWidth,H=c.clientHeight,show=drwActive()&&!(t.clip||t.lp),k=sg+"|"+W+"x"+H+"|"+show+"|"+drwAr(t.tl).toFixed(3);if(t.drk===k)return;t.drk=k;
     var d=window.devicePixelRatio||1,pw=Math.round(W*d),ph=Math.round(H*d);if(c.width!==pw||c.height!==ph){c.width=pw;c.height=ph}var x=c.getContext("2d");x.clearRect(0,0,c.width,c.height);
-    if(show){var r=drwRect(c.width,c.height,t.tl);drwPaint(x,r.x,r.y,r.w,r.h)}})}
+    if(show){var r=drwRect(c.width,c.height,t.tl);if(C2.use)drwBoth(x,r);else drwPaint(x,r.x,r.y,r.w,r.h)}})}
 /* drawing editor on the live picture */
 (function(){var tb=$("dtb"),dc=$("drc"),dx=dc.getContext("2d"),TL=[["pen","✎ PEN"],["l","╱ LINE"],["a","➜ ARROW"],["q","⌒ CURVE"],["qa","⌒➜ CURVED ARROW"],["c","◯ CIRCLE"],["r","▭ RECTANGLE"]],CL=["#ff3b30","#ffd60a","#30d158","#0a84ff","#ffffff","#000000"],WL=[[2,"THIN"],[4,"MEDIUM"],[8,"THICK"]];
-  tb.innerHTML=TL.map(function(t){return '<button type="button" data-t="'+t[0]+'">'+t[1]+'</button>'}).join("")+'<span class="dsp"></span>'+CL.map(function(c){return '<button type="button" class="dcol" data-c="'+c+'" style="background:'+c+'" aria-label="'+c+'"></button>'}).join("")+'<span class="dsp"></span>'+WL.map(function(w){return '<button type="button" data-w="'+w[0]+'">'+w[1]+'</button>'}).join("")+'<span class="dsp"></span><label class="dcv">CURVATURE <input type="range" id="dcv" min="-100" max="100" step="5" value="40"></label><span class="dsp"></span><button type="button" data-a="undo">↶ UNDO</button><button type="button" data-a="clr">CLEAR ALL</button><button type="button" class="dgo" data-a="done">DONE</button>';
-  function ui(){[].forEach.call(tb.querySelectorAll("[data-t]"),function(b){b.setAttribute("aria-pressed",b.dataset.t===DRW.tool)});[].forEach.call(tb.querySelectorAll("[data-c]"),function(b){b.classList.toggle("on",b.dataset.c===DRW.col)});[].forEach.call(tb.querySelectorAll("[data-w]"),function(b){b.setAttribute("aria-pressed",+b.dataset.w===DRW.wd)})}
+  tb.innerHTML='<span id="dcam" hidden><button type="button" data-cam="t">TABLET</button><button type="button" data-cam="i">IPHONE</button><span class="dsp"></span></span>'+TL.map(function(t){return '<button type="button" data-t="'+t[0]+'">'+t[1]+'</button>'}).join("")+'<span class="dsp"></span>'+CL.map(function(c){return '<button type="button" class="dcol" data-c="'+c+'" style="background:'+c+'" aria-label="'+c+'"></button>'}).join("")+'<span class="dsp"></span>'+WL.map(function(w){return '<button type="button" data-w="'+w[0]+'">'+w[1]+'</button>'}).join("")+'<span class="dsp"></span><label class="dcv">CURVATURE <input type="range" id="dcv" min="-100" max="100" step="5" value="40"></label><span class="dsp"></span><button type="button" data-a="undo">↶ UNDO</button><button type="button" data-a="clr">CLEAR ALL</button><button type="button" class="dgo" data-a="done">DONE</button>';
+  function ui(){$("dcam").hidden=!C2.use;[].forEach.call(tb.querySelectorAll("[data-cam]"),function(b){b.setAttribute("aria-pressed",b.dataset.cam===DRW.ed)});[].forEach.call(tb.querySelectorAll("[data-t]"),function(b){b.setAttribute("aria-pressed",b.dataset.t===DRW.tool)});[].forEach.call(tb.querySelectorAll("[data-c]"),function(b){b.classList.toggle("on",b.dataset.c===DRW.col)});[].forEach.call(tb.querySelectorAll("[data-w]"),function(b){b.setAttribute("aria-pressed",+b.dataset.w===DRW.wd)})}
   function size(){var d=window.devicePixelRatio||1,W=dc.clientWidth,H=dc.clientHeight;if(dc.width!==Math.round(W*d)||dc.height!==Math.round(H*d)){dc.width=Math.round(W*d);dc.height=Math.round(H*d)}}
-  function paint(){size();dx.clearRect(0,0,dc.width,dc.height);var r=drwRect(dc.width,dc.height,$("drv"));dx.strokeStyle="rgba(255,255,255,.25)";dx.lineWidth=1;dx.strokeRect(r.x,r.y,r.w,r.h);drwPaint(dx,r.x,r.y,r.w,r.h,DRW.s.concat(DRW.cur?[DRW.cur]:[]))}
-  function pt(e){var b=dc.getBoundingClientRect(),sx=dc.width/b.width,sy=dc.height/b.height,px=(e.clientX-b.left)*sx,py=(e.clientY-b.top)*sy;if(CFG.mirror)px=dc.width-px;var r=drwRect(dc.width,dc.height,$("drv"));
+  function paint(){size();dx.clearRect(0,0,dc.width,dc.height);var r=drwRect(dc.width,dc.height,$("drv"));dx.strokeStyle="rgba(255,255,255,.25)";dx.lineWidth=1;dx.strokeRect(r.x,r.y,r.w,r.h);drwPaint(dx,r.x,r.y,r.w,r.h,DL().concat(DRW.cur?[DRW.cur]:[]))}
+  function pt(e){var b=dc.getBoundingClientRect(),sx=dc.width/b.width,sy=dc.height/b.height,px=(e.clientX-b.left)*sx,py=(e.clientY-b.top)*sy;if(MI())px=dc.width-px;var r=drwRect(dc.width,dc.height,$("drv"));
     return[Math.max(0,Math.min(1,(px-r.x)/r.w)),Math.max(0,Math.min(1,(py-r.y)/r.h))]}
   dc.addEventListener("pointerdown",function(e){e.preventDefault();try{dc.setPointerCapture(e.pointerId)}catch(x){}var q=pt(e);DRW.cur={k:DRW.tool,c:DRW.col,w:DRW.wd,q:DRW.curv/100,p:DRW.tool==="pen"?[q]:[q,q],id:e.pointerId};paint()});
   dc.addEventListener("pointermove",function(e){var c=DRW.cur;if(!c||e.pointerId!==c.id)return;var q=pt(e);if(c.k==="pen")c.p.push(q);else c.p[1]=q;paint()});
   function end(e){var c=DRW.cur;if(!c||e.pointerId!==c.id)return;DRW.cur=null;delete c.id;
-    var ok=c.k==="pen"?c.p.length>1:Math.hypot((c.p[1][0]-c.p[0][0]),(c.p[1][1]-c.p[0][1]))>.012;if(ok){DRW.s.push(c);drwChanged()}paint()}
+    var ok=c.k==="pen"?c.p.length>1:Math.hypot((c.p[1][0]-c.p[0][0]),(c.p[1][1]-c.p[0][1]))>.012;if(ok){DL().push(c);drwChanged()}paint()}
   dc.addEventListener("pointerup",end);dc.addEventListener("pointercancel",end);
   tb.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
+    if(b.dataset.cam){DRW.ed=b.dataset.cam;var v2=$("drv");v2.srcObject=drwSrc();v2.play().catch(function(){});ui();paint();return}
     if(b.dataset.t)DRW.tool=b.dataset.t;else if(b.dataset.c)DRW.col=b.dataset.c;else if(b.dataset.w)DRW.wd=+b.dataset.w;
-    else if(b.dataset.a==="undo"){DRW.s.pop();drwChanged()}else if(b.dataset.a==="clr"){DRW.s=[];drwChanged()}else if(b.dataset.a==="done"){close();return}
+    else if(b.dataset.a==="undo"){DL().pop();drwChanged()}else if(b.dataset.a==="clr"){if(DRW.ed==="i"&&C2.use)DRW.r=[];else DRW.s=[];drwChanged()}else if(b.dataset.a==="done"){close();return}
     ui();paint()});
-  $("dcv").addEventListener("input",function(){DRW.curv=+this.value;var l=DRW.s[DRW.s.length-1];if(l&&(l.k==="q"||l.k==="qa")){l.q=DRW.curv/100;drwChanged()}paint()});
-  function open(){if(!stream)return;if(!CFG.draw){CFG.draw=1;saveCfg();drwChanged()}DRW.open=true;$("drw").classList.add("on");$("dst").classList.toggle("mir",!!CFG.mirror);
-    var v=$("drv");v.srcObject=stream;v.style.transform=ZD>1.001?"scale("+ZD+")":"";v.play().catch(function(){});v.onloadedmetadata=function(){if(v.videoWidth){vw=v.videoWidth;vh=v.videoHeight;if(running)info()}drwChanged();paint()};v.onresize=paint;ui();setTimeout(paint,50)}
+  $("dcv").addEventListener("input",function(){DRW.curv=+this.value;var L2=DL(),l=L2[L2.length-1];if(l&&(l.k==="q"||l.k==="qa")){l.q=DRW.curv/100;drwChanged()}paint()});
+  function open(){if(!stream)return;if(!CFG.draw){CFG.draw=1;saveCfg();drwChanged()}DRW.open=true;DRW.ed="t";$("drw").classList.add("on");$("dst").classList.toggle("mir",MI());
+    var v=$("drv");v.srcObject=drwSrc();v.style.transform=ZD>1.001?"scale("+ZD+")":"";v.play().catch(function(){});v.onloadedmetadata=function(){if(v.videoWidth&&!C2.use){vw=v.videoWidth;vh=v.videoHeight;if(running)info()}drwChanged();paint()};v.onresize=paint;ui();setTimeout(paint,50)}
   function close(){DRW.open=false;DRW.cur=null;$("drw").classList.remove("on");var v=$("drv");try{v.srcObject=null}catch(e){}}
   window.addEventListener("resize",function(){if(DRW.open)paint()});
   $("pdraw").onclick=open;
@@ -3048,7 +3066,7 @@ function pairStart(){
   if(!window.RTCPeerConnection){pairStat("THIS BROWSER DOES NOT SUPPORT DIRECT PAIRING.");return}
   if(ppcI){try{ppcI.close()}catch(e){}ppcI=null}
   $("pairbox").hidden=false;$("pairstep").textContent="PREPARING...";$("pqr").innerHTML="";pairStat("");
-  var pc=new RTCPeerConnection(iceCfg());ppcI=pc;var dc=pc.createDataChannel("vapps");
+  var pc=new RTCPeerConnection(iceCfg());ppcI=pc;C2.live=false;pc.ontrack=c2Track;var dc=pc.createDataChannel("vapps");
   mainChan.ondc=function(ok){if(ok){pairStat("DIRECT CONNECTION: IPHONE CONNECTED. NO INTERNET NEEDED.");$("pairbox").hidden=true;sendCfg(true)}else pairStat("DIRECT CONNECTION LOST. PRESS PAIR IPHONE AGAIN.")};
   mainChan.attach(dc);
   pc.onconnectionstatechange=function(){if(pc.connectionState==="failed")pairStat("PAIRING FAILED. BOTH DEVICES MUST BE ON THE SAME WI-FI. PRESS PAIR IPHONE TO TRY AGAIN.")};
@@ -3074,6 +3092,59 @@ function scanStart(){
       var d=cx.getImageData(0,0,w,h),c=jsQR(d.data,w,h,{inversionAttempts:"attemptBoth"});
       if(c&&c.data&&c.data.indexOf("A1|")===0){if(pairAnswer(c.data))scanStop()}},250)}).catch(function(e){pairStat("CAMERA NOT AVAILABLE: "+(e&&e.message||e))})}
 window.pairAnswer=pairAnswer;$("pairbtn").onclick=pairStart;$("pairscan").onclick=scanStart;$("scx").onclick=scanStop;
+
+/* ---------- v29: second camera (iPhone) ---------- */
+var C2={rv:null,lv:null,last:0,lastT:-1,live:false,use:false,cv:null,cx:null,s:null,run:false,ring:[[],[]],auto:0,rtt:0,jb:0,tm:null,st:0,lt:0};
+var C2W=1024,C2H=576;
+function c2On(){return !!CFG.c2&&!!mainChan&&!!mainChan.dc&&mainChan.dc.readyState==="open"}
+function c2Want(){return running&&CFG.mode===2&&c2On()}
+function c2Off(){return Math.max(-500,Math.min(500,(CFG.c2a!==0?C2.auto:0)+(+CFG.c2o||0)))}
+function c2Req(){if(c2On()&&(running||document.visibilityState==="visible"))mainChan.send({t:"c2req"})}
+function c2Toggle(){if(CFG.c2){c2Req()}else if(mainChan&&mainChan.dc&&mainChan.dc.readyState==="open")mainChan.send({t:"c2off"});c2Apply()}
+function c2Stop2(){C2.run=false;C2.use=false;if(mainChan&&mainChan.dc&&mainChan.dc.readyState==="open")mainChan.send({t:"c2off"});C2.live=false}
+function c2Track(e){var rv=C2.rv;if(!rv){rv=document.createElement("video");rv.muted=true;rv.setAttribute("playsinline","");rv.autoplay=true;rv.style.cssText="position:fixed;left:0;top:0;width:2px;height:2px;opacity:.01;pointer-events:none";document.body.appendChild(rv);C2.rv=rv}
+  rv.srcObject=(e.streams&&e.streams[0])||new MediaStream([e.track]);rv.play().catch(function(){});e.track.onmute=function(){C2.last=0};
+  if(!C2.tm)C2.tm=setInterval(c2Tick,500);c2Tick()}
+function c2Tick(){var rv=C2.rv,now=performance.now();if(rv&&rv.videoWidth&&rv.currentTime!==C2.lastT){C2.lastT=rv.currentTime;C2.last=now}
+  var live=!!rv&&rv.videoWidth>0&&now-C2.last<1500;if(live!==C2.live){C2.live=live;c2Apply()}
+  if(live&&ppcI&&now-C2.st>2000){C2.st=now;ppcI.getStats().then(function(r){var rtt=0,jb=0;r.forEach(function(x){if(x.type==="candidate-pair"&&x.state==="succeeded"&&x.currentRoundTripTime)rtt=x.currentRoundTripTime;if(x.type==="inbound-rtp"&&x.kind==="video"&&x.jitterBufferEmittedCount)jb=x.jitterBufferDelay/x.jitterBufferEmittedCount});
+    C2.rtt=rtt;C2.jb=jb;var a=Math.max(0,Math.min(400,Math.round(rtt*500+jb*1000+40)));C2.auto=C2.auto?Math.round(C2.auto*.7+a*.3):a;c2Msg()}).catch(function(){})}
+  c2Msg()}
+function c2Msg(){var e=$("c2stat");if(!e)return;var o=$("o-c2o");if(o)o.textContent=(CFG.c2o>0?"+":"")+(+CFG.c2o||0)+" MS";
+  var t;if(!CFG.c2)t="OFF";else if(!mainChan||!mainChan.dc||mainChan.dc.readyState!=="open")t="NOT READY: PAIR THE IPHONE FIRST (REMOTE TAB, DIRECT PAIRING).";
+  else if(CFG.mode!==2)t="WORKS ONLY IN MODE 2.";else if(!C2.live)t="WAITING FOR THE IPHONE CAMERA... KEEP THE IPHONE APP OPEN WITH ITS SCREEN ON.";
+  else t="IPHONE CAMERA CONNECTED"+(C2.rv?" ("+C2.rv.videoWidth+"X"+C2.rv.videoHeight+")":"")+". MEASURED DELAY ABOUT "+C2.auto+" MS"+(CFG.c2a!==0?" (AUTO)":"")+". APPLIED: "+(c2Off()>0?"TABLET PICTURE DELAYED BY "+c2Off()+" MS":(c2Off()<0?"IPHONE PICTURE DELAYED BY "+(-c2Off())+" MS":"NO CORRECTION"))+(running?"":". THE SECOND ANGLE IS RECORDED AFTER YOU PRESS START.");
+  e.textContent=t}
+function c2Apply(){var use=c2Want()&&C2.live;
+  if(use){if(!C2.cv){C2.cv=document.createElement("canvas");C2.cv.width=C2W*2;C2.cv.height=C2H;C2.cx=C2.cv.getContext("2d");C2.s=C2.cv.captureStream(30)}
+    if(!C2.lv){var l=document.createElement("video");l.muted=true;l.setAttribute("playsinline","");l.autoplay=true;l.style.cssText="position:fixed;left:0;top:0;width:2px;height:2px;opacity:.01;pointer-events:none";document.body.appendChild(l);C2.lv=l}
+    vw=C2W*2;vh=C2H;if(!C2.run){C2.run=true;c2Loop()}}
+  else{C2.run=false;if(stream&&stream.getVideoTracks()[0]){var st=stream.getVideoTracks()[0].getSettings();vw=st.width||1280;vh=st.height||720}}
+  C2.use=use;
+  tiles.forEach(function(t){var src=use?C2.s:stream;if(t.tl.srcObject!==src){t.tl.srcObject=src;t.tl.play().catch(function(){})}t.el.classList.toggle("mir",!use&&!!CFG.mirror)});
+  if(running){layout();info()}c2Msg()}
+function c2Fit(x,v,dx){var w=v.videoWidth||v.width,h=v.videoHeight||v.height;if(!w)return;var k=Math.min(C2W/w,C2H/h),dw=w*k,dh=h*k;x.drawImage(v,dx+(C2W-dw)/2,(C2H-dh)/2,dw,dh)}
+function c2Side(i,v,delay,now){var R=C2.ring[i];if(!v||!v.videoWidth)return null;if(delay<=0){R.length=0;return v}
+  var e=R.length>=24?R.shift():{c:document.createElement("canvas"),t:0};if(e.c.width!==C2W){e.c.width=C2W;e.c.height=C2H}
+  var x=e.c.getContext("2d");x.clearRect(0,0,C2W,C2H);c2Fit(x,v,0);e.t=now;R.push(e);var p=R[0];for(var k=0;k<R.length;k++)if(R[k].t<=now-delay)p=R[k];return p.c}
+function c2Loop(){if(!C2.run)return;requestAnimationFrame(c2Loop);var now=performance.now();if(now-C2.lt<28)return;C2.lt=now;
+  var lv=C2.lv;if(stream&&lv.srcObject!==stream){lv.srcObject=stream;lv.play().catch(function(){})}
+  var off=c2Off(),cx=C2.cx;cx.fillStyle="#000";cx.fillRect(0,0,C2W*2,C2H);
+  var a=c2Side(0,lv,off>0?off:0,now),b=c2Side(1,C2.rv,off<0?-off:0,now);
+  if(a)a.videoWidth!==undefined?c2Fit(cx,a,0):cx.drawImage(a,0,0);if(b)b.videoWidth!==undefined?c2Fit(cx,b,C2W):cx.drawImage(b,C2W,0);if(CFG.draw&&(DRW.s.length||DRW.r.length))drwBoth(cx,{x:0,y:0,w:C2W*2,h:C2H})}
+function c2Offer(m){var pc=ppcI;if(!pc)return;pc.setRemoteDescription({type:"offer",sdp:m.sdp}).then(function(){return pc.createAnswer()}).then(function(a){return pc.setLocalDescription(a)}).then(function(){mainChan.send({t:"c2a",sdp:pc.localDescription.sdp})}).catch(function(e){$("c2stat").textContent="ERROR: "+(e&&e.message||e)})}
+/* iPhone side */
+var C2P={s:null,snd:null};
+function c2PInfo(t){var e=$("c2p");if(!e)return;e.hidden=!t;e.textContent=t||""}
+function c2Start(){if(!ppc||!rch)return;var tr0=C2P.s&&C2P.s.getVideoTracks()[0];if(tr0&&tr0.readyState==="live")return;
+  c2PInfo("STARTING THE SECOND CAMERA...");
+  navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"},width:{ideal:1280},height:{ideal:720},frameRate:{ideal:30}},audio:false}).then(function(s){
+    C2P.s=s;var tr=s.getVideoTracks()[0];
+    if(C2P.snd){C2P.snd.replaceTrack(tr)}else{ppc.onnegotiationneeded=function(){ppc.createOffer().then(function(o){return ppc.setLocalDescription(o)}).then(function(){rch.send({t:"c2o",sdp:ppc.localDescription.sdp})}).catch(function(e){c2PInfo("ERROR: "+(e&&e.message||e))})};C2P.snd=ppc.addTrack(tr,s)}
+    c2PInfo("SECOND CAMERA IS ON - THE IPAD SEES THIS PICTURE. KEEP THIS SCREEN ON AND THE APP OPEN.")}).catch(function(e){c2PInfo("CAMERA ERROR: "+(e.name||e.message)+". ALLOW CAMERA ACCESS.")})}
+function c2Stop(){if(C2P.s){C2P.s.getTracks().forEach(function(t){t.stop()});C2P.s=null}c2PInfo("")}
+function c2Bitrate(){try{if(!C2P.snd)return;var p=C2P.snd.getParameters();if(!p.encodings||!p.encodings.length)p.encodings=[{}];p.encodings[0].maxBitrate=4e6;C2P.snd.setParameters(p).catch(function(){})}catch(e){}}
+window.addEventListener("load",function(){c2Msg()});
 
 /* ---------- init ---------- */
 function drawQR(){var u=location.origin+location.pathname+"?r="+CODE+"&n="+N();try{var q=qrcode(0,"M");q.addData(u);q.make();$("qr").innerHTML='<img alt="QR" src="'+q.createDataURL(8,2)+'">'}catch(e){$("qr").textContent=u}}
@@ -3176,6 +3247,10 @@ function waFilm(k,chat){var b=films[k];if(!b)return;var nm=filmName(k,b),f=new F
 var LANG="en";try{LANG=localStorage.getItem("vadv-lang")||((navigator.language||"").toLowerCase().indexOf("cs")===0||(navigator.language||"").toLowerCase().indexOf("sk")===0?"cs":"en")}catch(e){}
 var Q=function(n,a,b,c){return n===1?a:(n>=2&&n<=4?b:c)};
 var DP=[
+["NOT READY: PAIR THE IPHONE FIRST (REMOTE TAB, DIRECT PAIRING).","NEPŘIPRAVENO: NEJDŘÍV SPÁRUJ IPHONE (ZÁLOŽKA OVLADAČ, PŘÍMÉ PÁROVÁNÍ)."],["WORKS ONLY IN MODE 2.","FUNGUJE JEN V REŽIMU 2."],["WAITING FOR THE IPHONE CAMERA... KEEP THE IPHONE APP OPEN WITH ITS SCREEN ON.","ČEKÁM NA KAMERU IPHONU... NECH NA IPHONU OTEVŘENOU APLIKACI SE ZAPNUTOU OBRAZOVKOU."],
+["STARTING THE SECOND CAMERA...","SPOUŠTÍM DRUHOU KAMERU..."],["SECOND CAMERA IS ON - THE IPAD SEES THIS PICTURE. KEEP THIS SCREEN ON AND THE APP OPEN.","DRUHÁ KAMERA JE ZAPNUTÁ - IPAD VIDÍ TENTO OBRAZ. NECH OBRAZOVKU ZAPNUTOU A APLIKACI OTEVŘENOU."],
+["SECOND CAMERA (IPHONE) - TEST","DRUHÁ KAMERA (IPHONE) - TEST"],["RECORD A SECOND ANGLE WITH THE PAIRED IPHONE (MODE 2, DIRECT PAIRING)","NATÁČET DRUHÝ ÚHEL SPÁROVANÝM IPHONEM (REŽIM 2, PŘÍMÉ PÁROVÁNÍ)"],["AUTOMATIC SYNCHRONISATION","AUTOMATICKÁ SYNCHRONIZACE"],["FINE TUNING (MS) - MINUS = THE IPHONE PICTURE IS DELAYED MORE","JEMNÉ DOLADĚNÍ (MS) - MÍNUS = OBRAZ Z IPHONU SE ZPOZDÍ VÍC"],
+["BOTH ANGLES ARE RECORDED INTO ONE VIDEO, SIDE BY SIDE (LEFT TABLET, RIGHT IPHONE). PAIR THE IPHONE FIRST ON THE REMOTE TAB. THE IPHONE MUST KEEP ITS SCREEN ON.","OBA ÚHLY SE NAHRÁVAJÍ DO JEDNOHO VIDEA VEDLE SEBE (VLEVO TABLET, VPRAVO IPHONE). NEJDŘÍV SPÁRUJ IPHONE NA ZÁLOŽCE OVLADAČ. IPHONE MUSÍ MÍT ZAPNUTOU OBRAZOVKU."],
 ["DELAYED VIDEO","ZPOŽDĚNÉ VIDEO"],["SETUP","NASTAVENÍ"],["CLIPS","KLIPY"],["REMOTE (IPHONE)","OVLADAČ (IPHONE)"],["MODE","REŽIM"],["MODE 1","REŽIM 1"],
 ["1 · DELAYED VIDEO","1 · ZPOŽDĚNÉ VIDEO"],["2 · SELECT INDIVIDUALS IN ADVANCE","2 · VÝBĚR OSOB PŘEDEM"],["3 · REPLAY AFTER THE ACTION","3 · OPAKOVÁNÍ PO AKCI"],
 ["RECORDING","NAHRÁVÁNÍ"],["WHO IS IN THE PICTURE","KDO JE V OBRAZE"],["SAVED TEAM","ULOŽENÉ DRUŽSTVO"],["NO TEAM (NUMBERS)","BEZ DRUŽSTVA (ČÍSLA)"],["TEAM","DRUŽSTVO"],["✎ EDIT TEAMS","✎ UPRAVIT DRUŽSTVA"],
@@ -3254,6 +3329,8 @@ var R=[
 [/^SAVING FAILED \((.*)\)\. USE THE DOWNLOAD FILE BUTTON\.$/,function(m){return"ULOŽENÍ SELHALO ("+m[1]+"). POUŽIJ TLAČÍTKO STÁHNOUT SOUBOR."}],
 [/^THIS FILE CAN NOT BE SHARED \((.*)\)\. USE THE DOWNLOAD FILE BUTTON\.$/,function(m){return"TENTO SOUBOR NELZE SDÍLET ("+m[1]+"). POUŽIJ TLAČÍTKO STÁHNOUT SOUBOR."}],
 [/^ZOOM (.+?)( \(DIGITAL\))?$/,function(m){return"ZOOM "+m[1]+(m[2]?" (DIGITÁLNÍ)":"")}],
+[/^IPHONE CAMERA CONNECTED( \((\d+X\d+)\))?\. MEASURED DELAY ABOUT (\d+) MS( \(AUTO\))?\. APPLIED: (NO CORRECTION|TABLET PICTURE DELAYED BY (\d+) MS|IPHONE PICTURE DELAYED BY (\d+) MS)(\. THE SECOND ANGLE IS RECORDED AFTER YOU PRESS START\.)?$/,function(m){return"KAMERA IPHONU PŘIPOJENA"+(m[1]||"")+". ZMĚŘENÉ ZPOŽDĚNÍ ASI "+m[3]+" MS"+(m[4]?" (AUTO)":"")+". POUŽITO: "+(m[6]?"OBRAZ TABLETU ZPOŽDĚN O "+m[6]+" MS":m[7]?"OBRAZ IPHONU ZPOŽDĚN O "+m[7]+" MS":"BEZ KOREKCE")+(m[8]?". DRUHÝ ÚHEL SE NAHRAJE PO KLEPNUTÍ NA START.":"")}],
+[/^CAMERA ERROR: (.*)\. ALLOW CAMERA ACCESS\.$/,function(m){return"CHYBA KAMERY: "+m[1]+". POVOL PŘÍSTUP KE KAMEŘE."}],
 [/^DELAYED VIDEO (\d+) S$/,function(m){return"ZPOŽDĚNÉ VIDEO "+m[1]+" S"}],[/^REPLAY LAST (\d+) S$/,function(m){return"OPAKOVÁNÍ POSLEDNÍCH "+m[1]+" S"}],
 [/^SPEED (\d+)%$/,function(m){return"RYCHLOST "+m[1]+"%"}],[/^DELAY (\d+) S$/,function(m){return"ZPOŽDĚNÍ "+m[1]+" S"}],[/^CLIP (\d+) S$/,function(m){return"KLIP "+m[1]+" S"}],
 [/^DELAYED BY (\d+) S$/,function(m){return"ZPOŽDĚNO O "+m[1]+" S"}],[/^SAVING (.+)$/,function(m){return"UKLÁDÁM: "+(T1(m[1])||m[1])}],
