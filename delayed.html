@@ -204,7 +204,7 @@ details#ted-tr{margin-top:18px}details#ted-tr summary{cursor:pointer;font-weight
 <p class="muted" style="margin:0">DRAW ONCE ON THE LIVE PICTURE (PRESS DRAW ON THE PROJECTION SCREEN). THE DRAWING STAYS ON THE SCREEN AND IS BURNED INTO THE CLIPS RECORDED WHILE IT IS ON. CLIPS RECORDED BEFORE KEEP THEIR OLD PICTURE.</p>
 </div>
 <div class="card"><h2>SECOND CAMERA (IPHONE) - TEST</h2>
-<label class="l">RECORD A SECOND ANGLE WITH THE PAIRED IPHONE (MODE 2, DIRECT PAIRING)</label>
+<label class="l">RECORD A SECOND ANGLE WITH THE PAIRED IPHONE (ALL MODES, DIRECT PAIRING)</label>
 <div class="seg" id="s-c2"><button data-v="1">ON</button><button data-v="0">OFF</button></div>
 <label class="l">AUTOMATIC SYNCHRONISATION</label>
 <div class="seg" id="s-c2a"><button data-v="1">ON</button><button data-v="0">OFF</button></div>
@@ -249,7 +249,7 @@ details#ted-tr{margin-top:18px}details#ted-tr summary{cursor:pointer;font-weight
 </div>
 </section>
 <div id="sys" class="muted" style="margin-top:16px;text-align:center"></div>
-<footer class="cp">© 2026 Pavel Starý. All rights reserved. Copying and distribution without permission is prohibited. <b style="white-space:nowrap">· v30</b></footer>
+<footer class="cp">© 2026 Pavel Starý. All rights reserved. Copying and distribution without permission is prohibited. <b style="white-space:nowrap">· v31</b></footer>
 </main>
 
 <div id="proj"><div id="grid"></div>
@@ -2738,7 +2738,7 @@ function press(i,src){if(running&&CFG.mode===1){if(i===0)m1Rec();return}if(runni
   t.state="wait";notify(i,"wait",{d:t.d,l:t.l});t.timer=setTimeout(function(){record(t)},t.d*1000)}
 function reviveCam(){if(!running)return;var old=stream;
   navigator.mediaDevices.getUserMedia(camC()).then(function(s){
-    stream=s;zpStop();if(BUF.v)BUF.v.srcObject=s;tiles.forEach(function(x){x.tl.srcObject=s;x.tl.play().catch(function(){})});if(old)old.getTracks().forEach(function(k){k.stop()})}).catch(function(){})}
+    stream=s;zpStop();if(BUF.v)BUF.v.srcObject=(C2.use&&C2.s)?C2.s:s;tiles.forEach(function(x){x.tl.srcObject=(C2.use&&C2.s)?C2.s:s;x.tl.play().catch(function(){})});if(old)old.getTracks().forEach(function(k){k.stop()})}).catch(function(){})}
 function record(t){if(stream){var vt=stream.getVideoTracks()[0];if(!vt||vt.readyState!=="live"){reviveCam()}}
   var mime=pickMime(),chunks=[],rec;
   try{rec=new MediaRecorder(recSource(),mime?{mimeType:mime,videoBitsPerSecond:CFG.res==1080?10e6:6e6}:{})}catch(e){t.state="idle";t.st.textContent="CAMERA BUSY";return}
@@ -2757,7 +2757,7 @@ var relayOK=false,remoteTs=0,offRdy="CHECKING";
 (function(){if(!("serviceWorker" in navigator)||!/^https?:$/.test(location.protocol)){offRdy="NOT READY";return}
   var pg=location.pathname.split("/").pop()||"delayed.html";
   navigator.serviceWorker.register("delayed-sw.js?page="+encodeURIComponent(pg)).then(function(){return navigator.serviceWorker.ready}).then(function(){return caches.keys()}).then(function(k){offRdy=k.some(function(n){return n.indexOf("echocoach-")===0})?"READY":"NOT READY"}).catch(function(){offRdy="NOT READY"})})();
-function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 30 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e+" · OFFLINE MODE: "+offRdy;
+function diag(){var e=mainChan&&mainChan.err?" ("+mainChan.err+")":"";$("rrelay").textContent="VERSION 31 · CONNECTION TO THE RELAY: "+(relayOK?"ONLINE":"OFFLINE")+e+" · OFFLINE MODE: "+offRdy;
   $("rstat2").textContent=remoteTs?"IPHONE CONNECTED - LAST SIGNAL "+Math.round((Date.now()-remoteTs)/1000)+" S AGO":"NO IPHONE CONNECTED YET."}
 function handleMain(m){
   if(m.t==="hello"){remoteSeen=true;remoteTs=Date.now();if(running||document.visibilityState==="visible")sendCfg();if(running)info();diag();c2Req()}
@@ -2941,7 +2941,7 @@ function drwPaint(x,rx,ry,rw,rh,list){list=list||DRW.s;x.save();x.lineCap="round
       else if(s.k==="c"){x.arc(a[0],a[1],Math.hypot(b[0]-a[0],b[1]-a[1]),0,7);x.stroke()}
       else if(s.k==="r"){x.strokeRect(Math.min(a[0],b[0]),Math.min(a[1],b[1]),Math.abs(b[0]-a[0]),Math.abs(b[1]-a[1]))}}});
   x.restore()}
-function drwBurn(x,w,h){if(drwActive())drwPaint(x,0,0,w,h)}
+function drwBurn(x,w,h){if(!drwActive())return;if(C2.use)drwBoth(x,{x:0,y:0,w:w,h:h});else drwPaint(x,0,0,w,h)}
 function drwChanged(){DRW.v++;if(M1)M1.shown=null;
   if(running&&stream&&CFG.mode===2){if(ZD>1.001||drwActive())recSource();else zpStop()}
   if($("pdrt")){$("pdrt").hidden=!(DRW.s.length||DRW.r.length);$("pdrt").textContent=CFG.draw?"LINES ON":"LINES OFF"}
@@ -2982,9 +2982,9 @@ function frameIdx(a,T){var lo=0,hi=a.length-1,r=-1;while(lo<=hi){var m=(lo+hi)>>
 function bufStart(span){BUF.fr=[];BUF.span=span;BUF.on=true;BUF.pend=0;BUF.last=0;
   var v=document.createElement("video");v.muted=true;v.setAttribute("playsinline","");v.autoplay=true;v.style.cssText="position:fixed;left:0;top:0;width:2px;height:2px;opacity:.01;pointer-events:none";document.body.appendChild(v);v.srcObject=stream;v.play().catch(function(){});BUF.v=v;
   BUF.cv=document.createElement("canvas");BUF.cx=BUF.cv.getContext("2d");
-  var cap=CFG.mode===1&&CFG.ldelay>20?[1024,.7]:[1280,.8];
+  var capN=CFG.mode===1&&CFG.ldelay>20?[1024,.7]:[1280,.8],capD=CFG.mode===1&&CFG.ldelay>20?[1536,.65]:[2048,.78];
   function one(){if(!BUF.on)return;var now=performance.now();
-    if(v.videoWidth&&now-BUF.last>=30&&BUF.pend<3){BUF.last=now;var z=ZD,sw=v.videoWidth/z,sh=v.videoHeight/z,w=Math.min(cap[0],v.videoWidth),h=Math.round(w*v.videoHeight/v.videoWidth);
+    if(v.videoWidth&&now-BUF.last>=30&&BUF.pend<3){BUF.last=now;var cap=C2.use?capD:capN,z=C2.use?1:ZD,sw=v.videoWidth/z,sh=v.videoHeight/z,w=Math.min(cap[0],v.videoWidth),h=Math.round(w*v.videoHeight/v.videoWidth);
       if(BUF.cv.width!==w||BUF.cv.height!==h){BUF.cv.width=w;BUF.cv.height=h}
       BUF.cx.drawImage(v,(v.videoWidth-sw)/2,(v.videoHeight-sh)/2,sw,sh,0,0,w,h);BUF.pend++;
       BUF.cv.toBlob(function(b){BUF.pend--;if(!b||!BUF.on)return;var f={t:now,b:b},a=BUF.fr,k=a.length;while(k>0&&a[k-1].t>now)k--;a.splice(k,0,f);var lim=performance.now()-BUF.span*1000;while(a.length&&a[0].t<lim)a.shift()},"image/jpeg",cap[1])}
@@ -3097,7 +3097,7 @@ window.pairAnswer=pairAnswer;$("pairbtn").onclick=pairStart;$("pairscan").onclic
 var C2={rv:null,lv:null,last:0,lastT:-1,live:false,use:false,cv:null,cx:null,s:null,run:false,ring:[[],[]],auto:0,rtt:0,jb:0,tm:null,st:0,lt:0};
 var C2W=1024,C2H=576;
 function c2On(){return !!CFG.c2&&!!mainChan&&!!mainChan.dc&&mainChan.dc.readyState==="open"}
-function c2Want(){return running&&CFG.mode===2&&c2On()}
+function c2Want(){return running&&c2On()}
 function c2Off(){return Math.max(-500,Math.min(500,(CFG.c2a!==0?C2.auto:0)+(+CFG.c2o||0)))}
 function c2Req(){if(c2On()&&(running||document.visibilityState==="visible"))mainChan.send({t:"c2req"})}
 function c2Toggle(){if(CFG.c2){c2Req()}else if(mainChan&&mainChan.dc&&mainChan.dc.readyState==="open")mainChan.send({t:"c2off"});c2Apply()}
@@ -3112,7 +3112,7 @@ function c2Tick(){var rv=C2.rv,now=performance.now();if(rv&&rv.videoWidth&&rv.cu
   c2Msg()}
 function c2Msg(){var e=$("c2stat");if(!e)return;var o=$("o-c2o");if(o)o.textContent=(CFG.c2o>0?"+":"")+(+CFG.c2o||0)+" MS";
   var t;if(!CFG.c2)t="OFF";else if(!mainChan||!mainChan.dc||mainChan.dc.readyState!=="open")t="NOT READY: PAIR THE IPHONE FIRST (REMOTE TAB, DIRECT PAIRING).";
-  else if(CFG.mode!==2)t="WORKS ONLY IN MODE 2.";else if(!C2.live)t="WAITING FOR THE IPHONE CAMERA... KEEP THE IPHONE APP OPEN WITH ITS SCREEN ON.";
+  else if(!C2.live)t="WAITING FOR THE IPHONE CAMERA... KEEP THE IPHONE APP OPEN WITH ITS SCREEN ON.";
   else t="IPHONE CAMERA CONNECTED"+(C2.rv?" ("+C2.rv.videoWidth+"X"+C2.rv.videoHeight+")":"")+". MEASURED DELAY ABOUT "+C2.auto+" MS"+(CFG.c2a!==0?" (AUTO)":"")+". APPLIED: "+(c2Off()>0?"TABLET PICTURE DELAYED BY "+c2Off()+" MS":(c2Off()<0?"IPHONE PICTURE DELAYED BY "+(-c2Off())+" MS":"NO CORRECTION"))+(running?"":". THE SECOND ANGLE IS RECORDED AFTER YOU PRESS START.");
   e.textContent=t}
 function c2Apply(){var use=c2Want()&&C2.live;
@@ -3121,6 +3121,8 @@ function c2Apply(){var use=c2Want()&&C2.live;
     vw=C2W*2;vh=C2H;if(!C2.run){C2.run=true;c2Loop()}}
   else{C2.run=false;if(stream&&stream.getVideoTracks()[0]){var st=stream.getVideoTracks()[0].getSettings();vw=st.width||1280;vh=st.height||720}}
   C2.use=use;
+  if(BUF.v){var bs=use?C2.s:stream;if(bs&&BUF.v.srcObject!==bs){BUF.v.srcObject=bs;BUF.v.play().catch(function(){})}}
+  if(M1&&M1.el)M1.el.classList.toggle("mir",!use&&CFG.cam==="user");
   tiles.forEach(function(t){var src=use?C2.s:stream;if(t.tl.srcObject!==src){t.tl.srcObject=src;t.tl.play().catch(function(){})}t.el.classList.toggle("mir",!use&&!!CFG.mirror)});
   if(running){layout();info()}c2Msg()}
 function c2Fit(x,v,dx){var w=v.videoWidth||v.width,h=v.videoHeight||v.height;if(!w)return;var k=Math.min(C2W/w,C2H/h),dw=w*k,dh=h*k;x.drawImage(v,dx+(C2W-dw)/2,(C2H-dh)/2,dw,dh)}
@@ -3131,7 +3133,7 @@ function c2Loop(){if(!C2.run)return;requestAnimationFrame(c2Loop);var now=perfor
   var lv=C2.lv;if(stream&&lv.srcObject!==stream){lv.srcObject=stream;lv.play().catch(function(){})}
   var off=c2Off(),cx=C2.cx;cx.fillStyle="#000";cx.fillRect(0,0,C2W*2,C2H);
   var a=c2Side(0,lv,off>0?off:0,now),b=c2Side(1,C2.rv,off<0?-off:0,now);
-  if(a)a.videoWidth!==undefined?c2Fit(cx,a,0):cx.drawImage(a,0,0);if(b)b.videoWidth!==undefined?c2Fit(cx,b,C2W):cx.drawImage(b,C2W,0);if(CFG.draw&&(DRW.s.length||DRW.r.length))drwBoth(cx,{x:0,y:0,w:C2W*2,h:C2H})}
+  if(a)a.videoWidth!==undefined?c2Fit(cx,a,0):cx.drawImage(a,0,0);if(b)b.videoWidth!==undefined?c2Fit(cx,b,C2W):cx.drawImage(b,C2W,0);if(CFG.mode===2&&CFG.draw&&(DRW.s.length||DRW.r.length))drwBoth(cx,{x:0,y:0,w:C2W*2,h:C2H})}
 function c2Offer(m){var pc=ppcI;if(!pc)return;pc.setRemoteDescription({type:"offer",sdp:m.sdp}).then(function(){return pc.createAnswer()}).then(function(a){return pc.setLocalDescription(a)}).then(function(){mainChan.send({t:"c2a",sdp:pc.localDescription.sdp})}).catch(function(e){$("c2stat").textContent="ERROR: "+(e&&e.message||e)})}
 /* iPhone side */
 var C2P={s:null,snd:null};
@@ -3249,7 +3251,7 @@ var Q=function(n,a,b,c){return n===1?a:(n>=2&&n<=4?b:c)};
 var DP=[
 ["NOT READY: PAIR THE IPHONE FIRST (REMOTE TAB, DIRECT PAIRING).","NEPŘIPRAVENO: NEJDŘÍV SPÁRUJ IPHONE (ZÁLOŽKA OVLADAČ, PŘÍMÉ PÁROVÁNÍ)."],["WORKS ONLY IN MODE 2.","FUNGUJE JEN V REŽIMU 2."],["WAITING FOR THE IPHONE CAMERA... KEEP THE IPHONE APP OPEN WITH ITS SCREEN ON.","ČEKÁM NA KAMERU IPHONU... NECH NA IPHONU OTEVŘENOU APLIKACI SE ZAPNUTOU OBRAZOVKOU."],
 ["STARTING THE SECOND CAMERA...","SPOUŠTÍM DRUHOU KAMERU..."],["SECOND CAMERA IS ON - THE IPAD SEES THIS PICTURE. KEEP THIS SCREEN ON AND THE APP OPEN.","DRUHÁ KAMERA JE ZAPNUTÁ - IPAD VIDÍ TENTO OBRAZ. NECH OBRAZOVKU ZAPNUTOU A APLIKACI OTEVŘENOU."],
-["SECOND CAMERA (IPHONE) - TEST","DRUHÁ KAMERA (IPHONE) - TEST"],["RECORD A SECOND ANGLE WITH THE PAIRED IPHONE (MODE 2, DIRECT PAIRING)","NATÁČET DRUHÝ ÚHEL SPÁROVANÝM IPHONEM (REŽIM 2, PŘÍMÉ PÁROVÁNÍ)"],["AUTOMATIC SYNCHRONISATION","AUTOMATICKÁ SYNCHRONIZACE"],["FINE TUNING (MS) - MINUS = THE IPHONE PICTURE IS DELAYED MORE","JEMNÉ DOLADĚNÍ (MS) - MÍNUS = OBRAZ Z IPHONU SE ZPOZDÍ VÍC"],
+["SECOND CAMERA (IPHONE) - TEST","DRUHÁ KAMERA (IPHONE) - TEST"],["RECORD A SECOND ANGLE WITH THE PAIRED IPHONE (ALL MODES, DIRECT PAIRING)","NATÁČET DRUHÝ ÚHEL SPÁROVANÝM IPHONEM (VŠECHNY REŽIMY, PŘÍMÉ PÁROVÁNÍ)"],["AUTOMATIC SYNCHRONISATION","AUTOMATICKÁ SYNCHRONIZACE"],["FINE TUNING (MS) - MINUS = THE IPHONE PICTURE IS DELAYED MORE","JEMNÉ DOLADĚNÍ (MS) - MÍNUS = OBRAZ Z IPHONU SE ZPOZDÍ VÍC"],
 ["BOTH ANGLES ARE RECORDED INTO ONE VIDEO, SIDE BY SIDE (LEFT TABLET, RIGHT IPHONE). PAIR THE IPHONE FIRST ON THE REMOTE TAB. THE IPHONE MUST KEEP ITS SCREEN ON.","OBA ÚHLY SE NAHRÁVAJÍ DO JEDNOHO VIDEA VEDLE SEBE (VLEVO TABLET, VPRAVO IPHONE). NEJDŘÍV SPÁRUJ IPHONE NA ZÁLOŽCE OVLADAČ. IPHONE MUSÍ MÍT ZAPNUTOU OBRAZOVKU."],
 ["DELAYED VIDEO","ZPOŽDĚNÉ VIDEO"],["SETUP","NASTAVENÍ"],["CLIPS","KLIPY"],["REMOTE (IPHONE)","OVLADAČ (IPHONE)"],["MODE","REŽIM"],["MODE 1","REŽIM 1"],
 ["1 · DELAYED VIDEO","1 · ZPOŽDĚNÉ VIDEO"],["2 · SELECT INDIVIDUALS IN ADVANCE","2 · VÝBĚR OSOB PŘEDEM"],["3 · REPLAY AFTER THE ACTION","3 · OPAKOVÁNÍ PO AKCI"],
